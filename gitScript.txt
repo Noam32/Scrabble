@@ -1,0 +1,9 @@
+//for pushing to main/master:
+git status
+git add .
+git commit -m "some notes about the commit"
+git push   OR git push origin main
+
+
+for pulling from main master"
+git pull origin main
