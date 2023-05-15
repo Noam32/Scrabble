@@ -2,6 +2,8 @@ package ModelPackage;
 
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.Random;
+
 import baseScrabble.Tile;
 import baseScrabble.Word;
 
@@ -9,15 +11,20 @@ import baseScrabble.Word;
 // This class is the model for the local host - who stores the game state and does the changes :
 
 public class ModelHost extends Observable implements Model {
-
+	private  GameState gamestate ;
+	
+	public ModelHost(){
+		this.gamestate=new GameState();
+	}
+	
 	//*******************************
 	//Get data method :
 	//*******************************
 	
 	@Override
+	//Is this problematic?
 	public GameState getGameState() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.gamestate;
 	}
 
 	@Override
@@ -67,18 +74,42 @@ public class ModelHost extends Observable implements Model {
 	//Change data method :
 	//*******************************
 	
-	@Override
 	public void addAplayer(String name) {
-		// TODO Auto-generated method stub
+		Player p1=new Player(name);
+		this.gamestate.listOfPlayers.add(p1);
 		
 	}
 
 	@Override
+	//this method should only be called once at the host:
 	public void initGame() {
-		// TODO Auto-generated method stub
+		decideOnOrderOfPlayers();
+		giveAllPlayersSevenTiles();
 		
 	}
+	
+	//helper method to initGame - changes the order of the players in the array list according to a draw /
+	private void decideOnOrderOfPlayers() {
+		int numOfplayers=this.gamestate.listOfPlayers.size();
+		//ArrayList<Player> tilesForDraw=(ArrayList<Player>) this.gamestate.listOfPlayers.clone();
+		Random rand =new Random();
+		this.gamestate.listOfPlayers.sort((Player p1,Player p2)->rand.nextInt(2)-1);
 
+	}
+	
+	//helper method to initGame - we give each player 7 tiles:
+	private void giveAllPlayersSevenTiles() {
+		int howManyTilesToDraw=GameState.numOfTilesForPlayer;
+		//We iterate over all players:
+		for(int i=0;i<this.gamestate.listOfPlayers.size();i++) {
+			//We draw 7 tiles for each player:
+			for(int j=0;j<howManyTilesToDraw;j++) {
+				Tile t1=this.gamestate.bag.getRand();
+				this.gamestate.listOfPlayers.get(i).addTile(t1);
+			}
+		}
+	}
+	
 	@Override
 	public void givePlayerOneTile(int playerId) {
 		// TODO Auto-generated method stub
@@ -86,7 +117,7 @@ public class ModelHost extends Observable implements Model {
 	}
 
 	@Override
-	public void placeWordOnBoard(Word w, Player currPlayer) {
+	public void placeWordOnBoard(Word w) {
 		// TODO Auto-generated method stub
 		
 	}

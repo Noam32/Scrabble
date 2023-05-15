@@ -87,7 +87,7 @@ public class ModelGuest extends Observable implements Model {
 	}
 
 	@Override
-	public void placeWordOnBoard(Word w, Player currPlayer) {
+	public void placeWordOnBoard(Word w) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -103,5 +103,6 @@ public class ModelGuest extends Observable implements Model {
 		// TODO Auto-generated method stub
 		
 	}
-	
+
+
 }

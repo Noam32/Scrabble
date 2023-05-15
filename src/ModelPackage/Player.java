@@ -17,6 +17,7 @@ public class Player {
 		currSerialNum++;
 		this.name=Name;
 		numOfPoints=0;
+		myTiles=new ArrayList<Tile>();
 	}
 	
 	public int getplayerId() {
@@ -41,7 +42,17 @@ public class Player {
 	public void setMyTiles(ArrayList<Tile> myTiles) {
 		this.myTiles = myTiles;
 	}
-	
-	
+	public void addTile(Tile e) {
+		myTiles.add(e);
+	}
+	@Override
+	public String toString() {
+		String s1;
+		s1="{playerId:"+playerId+",name:"+name+",numOfPoints:"+numOfPoints+"}";
+		for(int i=0;i<this.myTiles.size();i++) {
+		}
+		return s1;
+		
+	}
 	
 }
