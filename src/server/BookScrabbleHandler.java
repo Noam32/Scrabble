@@ -37,7 +37,6 @@ public class BookScrabbleHandler implements ClientHandler {
         	char firstChar=inputString.charAt(0);//reading the first char 'Q' or 'C'.
         	inputString=inputString.substring(1);//removing the first char from the string.
         	String [] strings=inputString.split(",");//splitting strings with delimiter ','.
-        	
         	//now we query/challenge according to the first character :
         	boolean result;
         	if(firstChar=='Q') {
@@ -73,30 +72,7 @@ public class BookScrabbleHandler implements ClientHandler {
 
 
     
-//    
-//    public void handleClient_ref(InputStream inFromClient, OutputStream outToClient) {
-//        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inFromClient))) {
-//            String line = reader.readLine();
-//            String[] tokens = line.split(",");
-//            String queryType = tokens[0];
-//            String[] bookNames = Arrays.copyOfRange(tokens, 1, tokens.length - 1);
-//            String word = tokens[tokens.length - 1];
-//            if ("Q".equals(queryType)) {
-//                boolean result = dictionaryManager.query(concatenateBookNames(bookNames), word);
-//                String response = result ? "true\n" : "false\n";
-//                outToClient.write(response.getBytes());
-//            } else if ("C".equals(queryType)) {
-//                boolean result = dictionaryManager.challenge(concatenateBookNames(bookNames), word);
-//                String response = result ? "true\n" : "false\n";
-//                outToClient.write(response.getBytes());
-//            } else {
-//                outToClient.write("Invalid query type\n".getBytes());
-//            }
-//        } catch (IOException e) {
-//            System.err.println("Error handling client: " + e.getMessage());
-//        }
-//    }
-
+//  
 
     
     
