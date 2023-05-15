@@ -6,7 +6,7 @@ import baseScrabble.Word;
 
 
 // This class is the model for the remote client - who doesn't have the game state - therefore it has to send requests 
-//(currently TcpId to the host model!!)  
+//(currently TcpId to the host model!!  
 
 public class ModelGuest extends Observable implements Model {
 
