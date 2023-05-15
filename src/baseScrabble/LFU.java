@@ -2,7 +2,7 @@ package baseScrabble;
 
 import java.util.HashMap;
 import java.util.PriorityQueue;
-
+//This is the LFU class
 public class LFU implements CacheReplacementPolicy{
 
 
