@@ -1,20 +1,26 @@
 package ModelPackage;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
 
 import baseScrabble.Tile;
 import baseScrabble.Word;
+import server.ClientHandler;
+import server.MyServer;
 
 
 // This class is the model for the local host - who stores the game state and does the changes :
 
 public class ModelHost extends Observable implements Model {
 	private  GameState gamestate ;
+	public MyServer localServer;//server that servers the guest players
 	
 	public ModelHost(){
 		this.gamestate=new GameState();
+		initLocalServer();
 	}
 	
 	//*******************************
@@ -136,5 +142,40 @@ public class ModelHost extends Observable implements Model {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
+	/// Create a tcp/ip Server that will listen to guests looking to connect to the game:
+	//should we create another class ? with client handler interface and etc ..?
+	//
+	
+	
+	
+	
+	public void initLocalServer() {
+		int maxNumOfPorts=4;
+		int portTolistenTo=8080;
+		
+
+		
+		this.localServer=new MyServer(portTolistenTo, null, maxNumOfPorts);
+		
+	}
+	
+	//afterwards create a with threadpool? (or as a queue) a client handler 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }
