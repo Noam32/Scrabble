@@ -93,6 +93,9 @@ public class ModelHost extends Observable implements Model {
 		int numOfplayers=this.gamestate.listOfPlayers.size();
 		//ArrayList<Player> tilesForDraw=(ArrayList<Player>) this.gamestate.listOfPlayers.clone();
 		Random rand =new Random();
+		//randomly sorting the listOfplayers twice:
+		this.gamestate.listOfPlayers.sort((Player p1,Player p2)->rand.nextInt(2)-1);
+		//randomly sorting the listOfplayers twice:
 		this.gamestate.listOfPlayers.sort((Player p1,Player p2)->rand.nextInt(2)-1);
 
 	}
