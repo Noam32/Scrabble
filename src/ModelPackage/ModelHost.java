@@ -18,6 +18,11 @@ public class ModelHost extends Observable implements Model {
 	private  GameState gamestate ;
 	public MyServer localServer;//server that servers the guest players
 	
+	private static boolean wasLastPlacementSuccessful=false;
+	
+	public static final int playerIdNotFoundCode=-1;
+	
+	
 	public ModelHost(){
 		this.gamestate=new GameState();
 		initLocalServer();
@@ -34,46 +39,62 @@ public class ModelHost extends Observable implements Model {
 	}
 
 	@Override
-	//Since I am the host 
+	//Since I am the host :
+	//If playerId is not found returns -1;
 	public int getNumOfPointsForPlayer(int playerId) {
-		
-		return 0;
+		int numOfPlayers = this.gamestate.listOfPlayers.size();
+		for (int i = 0; i < numOfPlayers; i++) {
+			if(this.gamestate.listOfPlayers.get(i).playerId==playerId)
+				return this.gamestate.listOfPlayers.get(i).numOfPoints;
+		}
+		return playerIdNotFoundCode;
 	}
 
 	@Override
 	public int getNumOfPointsForPlayer(String name) {
-		// TODO Auto-generated method stub
-		return 0;
+		int numOfPlayers = this.gamestate.listOfPlayers.size();
+		for (int i = 0; i < numOfPlayers; i++) {
+			if(this.gamestate.listOfPlayers.get(i).name.equals(name))
+				return this.gamestate.listOfPlayers.get(i).numOfPoints;
+		}
+		return playerIdNotFoundCode;
 	}
 
 	@Override
 	public ArrayList<Tile> getTilesForPlayer(int playerId) {
-		// TODO Auto-generated method stub
+		int numOfPlayers = this.gamestate.listOfPlayers.size();
+		for (int i = 0; i < numOfPlayers; i++) {
+			if(this.gamestate.listOfPlayers.get(i).playerId==playerId)
+				return this.gamestate.listOfPlayers.get(i).getMyTiles();
+		}
 		return null;
 	}
 
 	@Override
-	public ArrayList<Tile> getTilesForPlayer(String playerId) {
-		// TODO Auto-generated method stub
+	public ArrayList<Tile> getTilesForPlayer(String name) {
+		int numOfPlayers = this.gamestate.listOfPlayers.size();
+		for (int i = 0; i < numOfPlayers; i++) {
+			if(this.gamestate.listOfPlayers.get(i).name.equals(name))
+				return this.gamestate.listOfPlayers.get(i).getMyTiles();
+		}
 		return null;
 	}
 
 	@Override
 	public Player WhoseTurnIsIt() {
-		// TODO Auto-generated method stub
-		return null;
+		int index =gamestate.indexOfCurrentTurnPlayer;
+		return gamestate.listOfPlayers.get(index);
+		 
 	}
 
 	@Override
 	public int WhoseTurnIsIt_Id() {
-		// TODO Auto-generated method stub
-		return 0;
+		return gamestate.indexOfCurrentTurnPlayer;
 	}
 
 	@Override
 	public boolean wasLastPlacementSuccessful() {
-		// TODO Auto-generated method stub
-		return false;
+		return wasLastPlacementSuccessful;
 	}
 
 	//*******************************

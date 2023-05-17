@@ -13,7 +13,7 @@ public interface Model {
 	public int getNumOfPointsForPlayer(int playerId);
 	public int getNumOfPointsForPlayer(String name); //assuming name is unique
 	public ArrayList<Tile> getTilesForPlayer(int playerId);
-	public ArrayList<Tile> getTilesForPlayer(String playerId);//assuming name is unique
+	public ArrayList<Tile> getTilesForPlayer(String name);//assuming name is unique
 	public Player WhoseTurnIsIt(); // returns which player has his turn now(returns player object)
 	public int WhoseTurnIsIt_Id(); //returns which player has his turn now (integer - players Id) 
 	//Important:
@@ -38,6 +38,10 @@ public interface Model {
 	//if a player skips his turn - we just give the turn to the next player:
 	public void skipPlayerTurn(); //
 	
+	
+	public static String[] allMethodNames= {"getGameState", "getNumOfPointsForPlayer", "getTilesForPlayer", "WhoseTurnIsIt",
+			"WhoseTurnIsIt_Id", "wasLastPlacementSuccessful", "addAplayer", "initGame", "givePlayerOneTile",
+			"placeWordOnBoard", "endPlayerTurn", "skipPlayerTurn"};
 	
 	
 }
