@@ -148,6 +148,10 @@ public class GuestClientHandler implements ClientHandler {
 			  }else {
 				  throw exception;
 			  }
+		//////////////////////////////////////
+		case "getTilesForPlayer":
+			
+			
 		
 		}
 		return output;
