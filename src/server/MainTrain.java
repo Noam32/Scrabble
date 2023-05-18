@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Random;
 import java.util.Scanner;
@@ -143,8 +146,31 @@ public class MainTrain {
 			server.close();
 		} catch (IOException e) {
 			System.out.println("your code ran into an IOException (-10)");
+			e.printStackTrace();
+			System.out.println("is port available = " +isTcpPortAvailable(port) );
 		}
 	}
+	
+	public static boolean isTcpPortAvailable(int port) {
+	    try (ServerSocket serverSocket = new ServerSocket()) {
+	        // setReuseAddress(false) is required only on macOS, 
+	        // otherwise the code will not work correctly on that platform          
+	        serverSocket.setReuseAddress(false);
+	        serverSocket.bind(new InetSocketAddress(InetAddress.getByName("localhost"), port), 1);
+	        return true;
+	    } catch (Exception ex) {
+	        return false;
+	    }
+	}  
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public static void testBSCH() {
 		String s1[]=writeFile("s1.txt");
@@ -152,7 +178,9 @@ public class MainTrain {
 		
 		Random r=new Random();
 		int port=6000+r.nextInt(1000);
+		
 		MyServer s=new MyServer(port, new BookScrabbleHandler(),1);
+		System.out.println("testBSCH:is port available = " +isTcpPortAvailable(port) );
 		s.start();
 		runClient(port, "Q,s1.txt,s2.txt,"+s1[1], true);
 		runClient(port, "Q,s1.txt,s2.txt,"+s2[4], true);
