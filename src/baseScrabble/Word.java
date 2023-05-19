@@ -16,7 +16,21 @@ public class Word {
 		this.col = col;
 		this.vertical = vertical;
 	}
-
+	
+	private String arrToString(Tile[] tiles) {
+		String str="[";
+		for(Tile t:tiles) {
+			str+=t.toString();
+		}
+		str+="]";
+		return null;
+	}
+	public String getString() {
+		String str= "{tiles:"+arrToString(this.tiles)+"endArr"+",row:"+row+",col:"+col+",vertical:"+vertical+"}";
+		return str;
+		
+	}
+	
 	public Tile[] getTiles() {
 		return tiles;
 	}

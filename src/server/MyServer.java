@@ -34,7 +34,7 @@ public class MyServer {
 	    public void startserver() {
 	        try {
 	            server = new ServerSocket(port);//server socket creation
-	            server.setSoTimeout(1000);//1000ms=1sec - waiting 1 sec for client to connect
+	            server.setSoTimeout(6*10000);//6*100000ms=60sec - waiting 60 seconds for client to connect
 	            while (!stop) {
 	                try {
 	                    Socket client = server.accept();

@@ -1,12 +1,17 @@
 package ModelPackage;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+
+import baseScrabble.Tile;
+import baseScrabble.Tile.Bag;
 //import ModelPackage.GuestClientHandler;
 
 public class GuestClientHandlerTest {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		System.out.println("testing all GuestClientHandler . testing createCommandStrings() and getMethodName");
 		String[] allMethodNames= {"getGameState", "getNumOfPointsForPlayer", "getTilesForPlayer", "WhoseTurnIsIt",
 				"WhoseTurnIsIt_Id", "wasLastPlacementSuccessful", "addAplayer", "initGame", "givePlayerOneTile",
 				"placeWordOnBoard", "endPlayerTurn", "skipPlayerTurn"};
@@ -25,7 +30,18 @@ public class GuestClientHandlerTest {
 		printStrings(command);
 		System.out.println("the getMethodName() string is="+GuestClientHandler.getMethodName(command[0]));
 		System.out.println();
-
+		Bag b1=new Bag();
+		ArrayList<Tile> tileList=new ArrayList<Tile>();
+		tileList.add(b1.getTile('A'));
+		tileList.add(b1.getTile('D'));
+		tileList.add(b1.getTile('D'));
+		System.out.println("the list is "+tileList.toString());
+		System.out.println("t1 is :"+b1.getRand().toString());
+		
+		System.out.println("get class of Bag is "+b1.getClass());
+		System.out.println("get class of tileList "+tileList.getClass());
+		System.out.println("get class of tileList "+tileList.get(0).getClass());
+		
 		
 		
 	}

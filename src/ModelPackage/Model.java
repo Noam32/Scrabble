@@ -34,6 +34,7 @@ public interface Model {
 	//We need to send notification at the end to let the model view know if the placement succeeded
 	public void placeWordOnBoard(Word w );
 	//sums the points - updates game's state-gives the player tiles (until it has 7 tiles) and moves to the next player.
+	
 	public void endPlayerTurn(); 
 	//if a player skips his turn - we just give the turn to the next player:
 	public void skipPlayerTurn(); //

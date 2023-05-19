@@ -13,11 +13,17 @@ public class Tile {
 		this.letter = letter;
 		this.score = score;
 	}
-
+	
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(letter, score);
 	}
+	public String toString() {
+		String str="{\'"+letter+"\'"+","+score+"}";
+		return str;
+	}
+	
 
 	@Override
 	public boolean equals(Object obj) {
@@ -108,5 +114,5 @@ public class Tile {
 		}
 		
 	}
-	
+
 }

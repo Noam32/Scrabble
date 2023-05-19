@@ -19,9 +19,9 @@ public class ModelHost extends Observable implements Model {
 	public MyServer localServer;//server that servers the guest players
 	
 	private static boolean wasLastPlacementSuccessful=false;
-	
+	private final static int Num_Of_Players=2;
 	public static final int playerIdNotFoundCode=-1;
-	
+	public boolean hasGameEnded=false;
 	
 	public ModelHost(){
 		this.gamestate=new GameState();
@@ -176,11 +176,14 @@ public class ModelHost extends Observable implements Model {
 		int maxNumOfPorts=4;
 		int portTolistenTo=8080;
 		
-
-		
-		this.localServer=new MyServer(portTolistenTo, null, maxNumOfPorts);
+		GuestClientHandler clientHandler_ForModelHost= new GuestClientHandler(this,Num_Of_Players);
+		//passing the handler to handle string requests from the guests:
+		this.localServer=new MyServer(portTolistenTo, clientHandler_ForModelHost, maxNumOfPorts);
 		
 	}
+	
+
+	
 	
 	//afterwards create a with threadpool? (or as a queue) a client handler 
 	

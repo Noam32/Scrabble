@@ -6,7 +6,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
+import baseScrabble.Tile;
 import server.ClientHandler;
 
 
@@ -20,6 +22,7 @@ import server.ClientHandler;
 public class GuestClientHandler implements ClientHandler {
 	 private PrintWriter out=null;
 	 private ModelHost theHost;
+	 private int numOfPlayers;
 	 
 	 public static final Exception exception=new Exception("Error parsing Command");
 	 
@@ -28,8 +31,9 @@ public class GuestClientHandler implements ClientHandler {
 		 
 	 }
 	 
-	 public GuestClientHandler(ModelHost theHost) {
+	 public GuestClientHandler(ModelHost theHost,int numOfPlayers) {
 		 this.theHost=theHost;
+		 this.numOfPlayers=numOfPlayers;
 	 }
 	 
 	 
@@ -82,23 +86,77 @@ public class GuestClientHandler implements ClientHandler {
 	public void handleClient(InputStream inFromclient, OutputStream outToClient) {
         //try-with-resources statement -ensures that the buffer will be closed.
     	try (BufferedReader reader = new BufferedReader(new InputStreamReader(inFromclient))) {
-        	out=new PrintWriter(outToClient,true);
-        	String inputString=reader.readLine();//reading the first line
-        	String methodName=getMethodName(inputString);
-        	try {
-        		Object output=executeCommand(methodName,reader);
-        	}
-        	catch(Exception e){
-        		
-        	}
-
+    		out=new PrintWriter(outToClient,true);
+    		//Firstly we need to get the name of the the player:
+    		String nameOfPlayer=ConnectingNewPlayer(out, reader);
+    		//now we 'busy wait' until the number of connected players is equal to the defined numOfPlayers:
+    		while(this.numOfPlayers!=theHost.getGameState().listOfPlayers.size()) {
+    			try {Thread.sleep(500);} //wait for 0.5 seconds then check again
+    			catch (InterruptedException e) {e.printStackTrace();}
+    		}
+    		
+    		out.println("player "+nameOfPlayer+" is in the game -good luck!");
+    		//Now the player can send commands:
         	
-        	
+        	while(!theHost.hasGameEnded) {
+        		String inputString=reader.readLine();//reading the first line
+        		String methodName=getMethodName(inputString);
+	        	try {
+	        		Object output=executeCommand(methodName,reader);
+	        		//Send output back to the client (i.e. to the model of the guest):
+	        		
+	        	}
+	        	catch(Exception e){
+	        		
+	        	}
+        	}
+        out.println("Game has ended.Goodbye!");
+        //everything will be closed by the server - do not close here!
+        	 	
     	}
     	catch(IOException e){
     		
     	}
 	}
+	
+	
+	//@TODO
+	public void sendOutputToClient(Object output){
+		//
+		Boolean b1;
+		if(output instanceof GameState ) {//problematic! maybe try to serialize?
+			//send game state over tcIP
+		}
+		if(output instanceof Integer ) {
+			//send string Integer over tcIP
+		}
+		if(output instanceof ArrayList) {//problematic! maybe try to serialize?
+			//send arrayList<tile> over tcp/Ip  //Player
+		}
+		if(output instanceof Player) {//problematic! maybe try to serialize?
+		//send Player over TCP / IP 
+		}
+		if(output instanceof Boolean) {
+			//send Boolean over TCP / IP 
+			}
+		
+		
+	}
+	
+	
+	
+	//Connects the new player to the game .returns the name of the player
+	public String ConnectingNewPlayer(PrintWriter out , BufferedReader reader) throws IOException {
+		out.println("Welcome to the game:please send your name");
+		//waiting for client to send us the name.
+		String inputString=reader.readLine();//reading name line:
+		//now we add a player to the game (using host model methods):
+		theHost.addAplayer(inputString);
+		out.println(inputString+" is connected.waiting for players to connect");
+		return inputString;
+	}
+	
+	
 	
 	
 	//private get
@@ -131,18 +189,18 @@ public class GuestClientHandler implements ClientHandler {
 		String []splitString;
 		String typeString;
 		String valueString;
+		//All methods currently have just one variable - therefore we will only read one line and parse it: 
+		firstVarLine=reader.readLine();
+		splitString=firstVarLine.split(":");
+		typeString=splitString[indexOfTypeString];
+		valueString=splitString[indexOfValueString];
 		//switch case for all methods:
 		switch(methodName) {
 		case "getNumOfPointsForPlayer":
-			  //read next line:
-			  firstVarLine=reader.readLine();
-			  splitString=firstVarLine.split(":");
-			  typeString=splitString[indexOfTypeString];
-			  valueString=splitString[indexOfValueString];
-			  //this method has two options - so i am 
+			  //this method has two options - so we will check both options:
 			  if(typeString=="int") {
-				int val=Integer.parseInt(valueString);
-				return (Integer)theHost.getNumOfPointsForPlayer(val);
+				int input=Integer.parseInt(valueString);
+				return (Integer)theHost.getNumOfPointsForPlayer(input);
 			  }else if(typeString=="String") {
 				  return (Integer)theHost.getNumOfPointsForPlayer(valueString);
 			  }else {
@@ -150,7 +208,26 @@ public class GuestClientHandler implements ClientHandler {
 			  }
 		//////////////////////////////////////
 		case "getTilesForPlayer":
+			ArrayList<Tile> tilesList;
+			 if(typeString=="int") {
+					int val=Integer.parseInt(valueString);
+					return (ArrayList<Tile>)theHost.getTilesForPlayer(val);
+			}
+			 else if(typeString=="String") {
+					return (ArrayList<Tile>)theHost.getTilesForPlayer(valueString);
+			}else {
+					 throw exception;
+				  }
+		case "addAplayer":
+			theHost.addAplayer(valueString);
+			return null;
 			
+		case "givePlayerOneTile": 
+			int input=Integer.parseInt(valueString);
+			theHost.givePlayerOneTile(input);
+			return null;
+		
+		case "placeWordOnBoard"://Challenging !
 			
 		
 		}
@@ -161,25 +238,34 @@ public class GuestClientHandler implements ClientHandler {
 
 	private Object executeCommand_methodsWithNoInputs(String methodName,BufferedReader reader)throws Exception {
 		String output=null;
+		String []methodsWhitoutInputs= {"getGameState","WhoseTurnIsIt","WhoseTurnIsIt_Id","wasLastPlacementSuccessful","endPlayerTurn", "skipPlayerTurn"};
 		switch(methodName) {
 		  	case "getGameState":
-			  return theHost.getGameState();
-		  	case "a":
-		  		
-		  		
-		  		
-		  	case "b":
-		  		
+				  return theHost.getGameState();
+		  	case "WhoseTurnIsIt":
+				  return theHost.WhoseTurnIsIt();
+			case "WhoseTurnIsIt_Id":
+				return (Integer)theHost.WhoseTurnIsIt_Id();
+			case "wasLastPlacementSuccessful":
+				return theHost.wasLastPlacementSuccessful();
+			case "endPlayerTurn":
+				 theHost.endPlayerTurn();
+				 return null;
+			case "skipPlayerTurn":
+				 theHost.skipPlayerTurn();
+				 return null;
 		  	default:
+		  		throw exception; // notifying that the parsing of the command failed. 
 		  		
 		}
-		return output;
+		//return output;
 	}
-	
 	
 	@Override
 	public void close() {
 		// TODO Auto-generated method stub
+		if(out!=null)
+			out.close();
 
 	}
 	
