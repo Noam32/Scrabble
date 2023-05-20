@@ -1,10 +1,12 @@
 package baseScrabble;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Board {
+public class Board implements Serializable {
 
-	
+
+	private static final long serialVersionUID = 1L;
 	// indexes
 	final byte dl=2;	// double letter
 	final byte tl=3;	// triple letter
@@ -37,6 +39,22 @@ public class Board {
 		tiles=new Tile[15][15];
 		isEmpty=true;
 	}	
+	
+	public String toString() {
+		String str="{The Board 2d tile array:\n";
+		for(int i=0;i<15;i++) {
+			for(int j=0;j<15;j++) {
+				Tile currTile=tiles[i][j];
+				if(currTile==null)
+					str+="{null}";
+				else
+					str+=currTile.toString();
+			}
+			str+="\n";
+		}
+		str+="}";
+		return str;
+	}
 	
 	public Tile[][] getTiles() {
 		return tiles.clone();

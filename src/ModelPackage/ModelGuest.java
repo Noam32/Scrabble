@@ -23,7 +23,6 @@ public class ModelGuest extends Observable implements Model {
 	@Override
 	//Since I am the host 
 	public int getNumOfPointsForPlayer(int playerId) {
-		
 		return 0;
 	}
 

@@ -1,10 +1,12 @@
 package baseScrabble;
 
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.Random;
 
-public class Tile {
+public class Tile implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	public final char letter;
 	public final int score;
 	
@@ -37,7 +39,8 @@ public class Tile {
 		return letter == other.letter && score == other.score;
 	}
 	
-	public static class Bag{
+	public static class Bag implements Serializable {
+		private static final long serialVersionUID = 1L;
 		private int[] maxQuantities = {9,2,2,4,12,2,3,2,9,1,1,4,2,6,8,2,1,6,4,6,4,2,2,1,2,1};
 		private int[] quantities = maxQuantities.clone();
 		private Tile[] tiles = {
@@ -111,6 +114,14 @@ public class Tile {
 		
 		public int[] getQuantities() {
 			return quantities.clone();
+		}
+		
+		public String toString() {
+			String str="{";
+			for(Tile t:tiles)
+				str+=t.toString()+",";
+			str+="}";
+			return str;
 		}
 		
 	}

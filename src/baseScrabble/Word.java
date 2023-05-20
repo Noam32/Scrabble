@@ -1,10 +1,13 @@
 package baseScrabble;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Word {
+public class Word implements Serializable{
 
+
+	private static final long serialVersionUID = 1L;
 	private Tile[] tiles;
 	private int row,col;
 	private boolean vertical;
@@ -23,7 +26,7 @@ public class Word {
 			str+=t.toString();
 		}
 		str+="]";
-		return null;
+		return str;
 	}
 	public String getString() {
 		String str= "{tiles:"+arrToString(this.tiles)+"endArr"+",row:"+row+",col:"+col+",vertical:"+vertical+"}";

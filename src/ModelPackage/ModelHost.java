@@ -142,7 +142,12 @@ public class ModelHost extends Observable implements Model {
 	
 	@Override
 	public void givePlayerOneTile(int playerId) {
-		// TODO Auto-generated method stub
+		 int numOfPlayers = this.gamestate.listOfPlayers.size();
+		  Tile t1=this.gamestate.bag.getRand();
+		  for (int i = 0; i < numOfPlayers; i++) {
+		   if(this.gamestate.listOfPlayers.get(i).playerId==playerId)
+		    this.gamestate.listOfPlayers.get(i).addTile(t1);
+		  }
 		
 	}
 

@@ -99,11 +99,12 @@ public class GuestClientHandler implements ClientHandler {
     		//Now the player can send commands:
         	
         	while(!theHost.hasGameEnded) {
-        		String inputString=reader.readLine();//reading the first line
+        		String inputString=reader.readLine();//reading the first line-that has the method name:
         		String methodName=getMethodName(inputString);
 	        	try {
 	        		Object output=executeCommand(methodName,reader);
 	        		//Send output back to the client (i.e. to the model of the guest):
+	        		sendOutputToClient(output); //@TODO
 	        		
 	        	}
 	        	catch(Exception e){
@@ -121,14 +122,18 @@ public class GuestClientHandler implements ClientHandler {
 	
 	
 	//@TODO
+	//Sends string or byte array :
+	//if  it is a string the format is :<Type>:<Value> 
 	public void sendOutputToClient(Object output){
 		//
-		Boolean b1;
 		if(output instanceof GameState ) {//problematic! maybe try to serialize?
 			//send game state over tcIP
 		}
 		if(output instanceof Integer ) {
 			//send string Integer over tcIP
+			Integer num=(Integer) output;
+			out.println("Integer:"+num.toString());
+			
 		}
 		if(output instanceof ArrayList) {//problematic! maybe try to serialize?
 			//send arrayList<tile> over tcp/Ip  //Player
@@ -137,10 +142,13 @@ public class GuestClientHandler implements ClientHandler {
 		//send Player over TCP / IP 
 		}
 		if(output instanceof Boolean) {
-			//send Boolean over TCP / IP 
+			//send Boolean over TCP / IP
+			Boolean b1=(Boolean)output;
+			//send String to the client:
+			out.println("Boolean:"+b1.toString());
+			
 			}
-		
-		
+
 	}
 	
 	
@@ -159,8 +167,10 @@ public class GuestClientHandler implements ClientHandler {
 	
 	
 	
-	//private get
 	
+	//Method to decode the command received through the tcp/ip connection from the guest.
+	//Will parse the string and return the output if there is any. (if the method returns void - null will be returned)
+	//Also, if there is a parsing error because of bad input/connection problem we will throw an exception.
 	private Object executeCommand(String methodName,BufferedReader reader) throws Exception {
 		final int  indexOfTypeString=1;
 		final int  indexOfValueString=2;
@@ -179,7 +189,7 @@ public class GuestClientHandler implements ClientHandler {
 	}
 	
 	
-	
+	//helper method that takes care of methods 
 	private Object executeCommand_methodsWithInputs(String methodName,BufferedReader reader) throws Exception{
 		final int  indexOfTypeString=1;
 		final int  indexOfValueString=2;
@@ -235,7 +245,7 @@ public class GuestClientHandler implements ClientHandler {
 	}
 	
 	
-
+	//Helper method to excecute 
 	private Object executeCommand_methodsWithNoInputs(String methodName,BufferedReader reader)throws Exception {
 		String output=null;
 		String []methodsWhitoutInputs= {"getGameState","WhoseTurnIsIt","WhoseTurnIsIt_Id","wasLastPlacementSuccessful","endPlayerTurn", "skipPlayerTurn"};

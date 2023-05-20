@@ -2,7 +2,6 @@ package ModelPackage;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import baseScrabble.Tile;
 import baseScrabble.Tile.Bag;
 //import ModelPackage.GuestClientHandler;

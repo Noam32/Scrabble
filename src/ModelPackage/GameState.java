@@ -1,12 +1,15 @@
 package ModelPackage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import baseScrabble.Board;
 import baseScrabble.Tile;
 import baseScrabble.Tile.Bag;
 
 //Data object that contains all the data about the game in it's current state:
-public class GameState {
+public class GameState implements Serializable {
+	private static final long serialVersionUID = 1L;
+	//
 	public static final int numOfTilesForPlayer=7; // game rule - 7 tiles for each player!
 	final Bag bag;
 	ArrayList<Player> listOfPlayers;
