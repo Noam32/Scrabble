@@ -1,6 +1,8 @@
 package baseScrabble;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
@@ -38,6 +40,26 @@ public class Tile implements Serializable {
 		Tile other = (Tile) obj;
 		return letter == other.letter && score == other.score;
 	}
+	
+	public static Tile[] arrayList_Tile_To_Arr(ArrayList<Tile> list) {
+		if(list==null||list.isEmpty())
+			return null;
+		Tile [] arr=new Tile[list.size()];
+		for(int i=0;i<arr.length;i++) {
+			arr[i]=list.get(i); // shallow copy - they need to be the same tile. Not a copy!
+		}
+		return arr;
+	}
+	
+	public static ArrayList<Tile> array_Tile_To_ArrayListTile(Tile [] arr){
+		if(arr==null||arr.length==0)
+			return null;
+		ArrayList<Tile> list=new ArrayList<Tile>( Arrays.asList(arr));
+		return list;
+		
+	}
+	
+	
 	
 	public static class Bag implements Serializable {
 		private static final long serialVersionUID = 1L;
