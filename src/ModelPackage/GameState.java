@@ -14,10 +14,14 @@ public class GameState implements Serializable {
 	final Bag bag;
 	ArrayList<Player> listOfPlayers;
 	Board gameBoard;
-	int indexOfCurrentTurnPlayer;
+	private int indexOfCurrentTurnPlayer;
 	
 	
 	
+	public int getIndexOfCurrentTurnPlayer() {
+		return indexOfCurrentTurnPlayer;
+	}
+
 	public GameState() {
 		this.listOfPlayers= new ArrayList<Player>();
 		bag=new Bag();

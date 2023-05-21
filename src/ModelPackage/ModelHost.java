@@ -22,10 +22,14 @@ public class ModelHost extends Observable implements Model {
 	private final static int Num_Of_Players=2;
 	public static final int playerIdNotFoundCode=-1;
 	public boolean hasGameEnded=false;
+	public Player myPlayer; //the player controlled by this Model
 	
 	public ModelHost(){
 		this.gamestate=new GameState();
+		this.addAplayer("HostPlayer");
+		this.myPlayer=this.gamestate.listOfPlayers.get(0);
 		initLocalServer();
+		
 	}
 	
 	//*******************************
@@ -82,14 +86,16 @@ public class ModelHost extends Observable implements Model {
 
 	@Override
 	public Player WhoseTurnIsIt() {
-		int index =gamestate.indexOfCurrentTurnPlayer;
-		return gamestate.listOfPlayers.get(index);
+		int index =gamestate.getIndexOfCurrentTurnPlayer();
+		return gamestate.listOfPlayers.get(index); //returns Player object
 		 
 	}
 
 	@Override
 	public int WhoseTurnIsIt_Id() {
-		return gamestate.indexOfCurrentTurnPlayer;
+		int index=gamestate.getIndexOfCurrentTurnPlayer();
+		int id=gamestate.listOfPlayers.get(index).playerId;
+		return id; //returns integer id.
 	}
 
 	@Override
@@ -184,6 +190,7 @@ public class ModelHost extends Observable implements Model {
 		GuestClientHandler clientHandler_ForModelHost= new GuestClientHandler(this,Num_Of_Players);
 		//passing the handler to handle string requests from the guests:
 		this.localServer=new MyServer(portTolistenTo, clientHandler_ForModelHost, maxNumOfPorts);
+		this.localServer.start();
 		
 	}
 	

@@ -46,7 +46,7 @@ public class GuestClientHandlerTest {
 	}
 
 	
-	private static void printStrings(String ...strings ) {
+	public static void printStrings(String ...strings ) {
 		if(strings==null)
 			return;
 		for(int i=0;i<strings.length;i++) {

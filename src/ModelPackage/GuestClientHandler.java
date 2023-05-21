@@ -96,10 +96,13 @@ public class GuestClientHandler implements ClientHandler {
     		}
     		
     		out.println("player "+nameOfPlayer+" is in the game -good luck!");
+    		//Now we initialize the game:
+    		theHost.initGame();
     		//Now the player can send commands:
         	
         	while(!theHost.hasGameEnded) {
         		String inputString=reader.readLine();//reading the first line-that has the method name:
+        		System.out.println("Server says:I received the command :"+inputString);
         		String methodName=getMethodName(inputString);
 	        	try {
 	        		Object output=executeCommand(methodName,reader);
@@ -204,14 +207,16 @@ public class GuestClientHandler implements ClientHandler {
 		splitString=firstVarLine.split(":");
 		typeString=splitString[indexOfTypeString];
 		valueString=splitString[indexOfValueString];
+		System.out.println("(executeCommand)server says:firstVarLine is:"+firstVarLine);
 		//switch case for all methods:
 		switch(methodName) {
 		case "getNumOfPointsForPlayer":
 			  //this method has two options - so we will check both options:
-			  if(typeString=="int") {
+			  if(typeString.equals("int")) {
 				int input=Integer.parseInt(valueString);
 				return (Integer)theHost.getNumOfPointsForPlayer(input);
-			  }else if(typeString=="String") {
+			  }else if(typeString.equals("String")) {
+				  System.out.println("(executeCommand)server says:typeString==\"String\"");
 				  return (Integer)theHost.getNumOfPointsForPlayer(valueString);
 			  }else {
 				  throw exception;
@@ -219,11 +224,11 @@ public class GuestClientHandler implements ClientHandler {
 		//////////////////////////////////////
 		case "getTilesForPlayer":
 			ArrayList<Tile> tilesList;
-			 if(typeString=="int") {
+			 if(typeString.equals("int")) {
 					int val=Integer.parseInt(valueString);
 					return (ArrayList<Tile>)theHost.getTilesForPlayer(val);
 			}
-			 else if(typeString=="String") {
+			 else if(typeString.equals("String")) {
 					return (ArrayList<Tile>)theHost.getTilesForPlayer(valueString);
 			}else {
 					 throw exception;

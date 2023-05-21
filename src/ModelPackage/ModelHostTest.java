@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 import baseScrabble.Board;
 import baseScrabble.Tile;
@@ -63,7 +65,7 @@ public class ModelHostTest {
 		 GameState gameState=model.getGameState();
 		 //model.givePlayerOneTile(0);
 		 model.initGame();
-		 gameState.indexOfCurrentTurnPlayer++;
+		 gameState.inc_indexOfCurrentTurnPlayer();
 		 System.out.println(gameState.listOfPlayers.get(0).getMyTiles().size());
 		 System.out.println("game state before");
 		 printGameState(gameState);
@@ -77,7 +79,7 @@ public class ModelHostTest {
 	     ObjectInputStream oInputStream = new ObjectInputStream(bis);
 	     GameState restoredGameState = (GameState) oInputStream.readObject();  
 	     //
-	     System.out.println(restoredGameState.indexOfCurrentTurnPlayer);
+	     System.out.println(restoredGameState.getIndexOfCurrentTurnPlayer());
 	     System.out.println(restoredGameState.listOfPlayers.get(0).getMyTiles().size());
 	     
 	     System.out.println("game state after");
@@ -109,15 +111,67 @@ public class ModelHostTest {
 		 Word restoredWord=(Word)oInputStream.readObject();
 		 System.out.println("word AFTER sending ="+restoredWord.getString());
 		 System.out.println("restoredWord =" +restoredWord.createSimpleString());
+		 if(restoredWord.createSimpleString().equals(word.createSimpleString()))
+			 if(word.getRow()==restoredWord.getRow()&&word.getCol()==restoredWord.getCol()&&word.isVertical()==restoredWord.isVertical())
+				 System.out.println("Sending Words worked");
+		 ////closing :
+		 baos.close();
+		 oos.close();
+		 bis.close();//closing prev stream
+		 oInputStream.close();
+		 
+		 
+		 ///Now testing  Array list Tile serialization by itself:
+		 System.out.println("**Now testing  Array list Tile serialization**");
+		 //sending listOfTiles :
+		 
+		 System.out.println("end of TestSerialization");
+		 System.out.println("************************");
+		 
+	 }
+	 
+	 public static void initObjectOutStreams() {
+		// baos = new ByteArrayOutputStream();
+		 //oos = new ObjectOutputStream(baos);
+		 
+	 }
+	 
+	 
+	 
+	 public static class ObjectStream{
+		 //output;
+		 ByteArrayOutputStream baos;
+		 ObjectOutputStream oos;
+		 //input:
+		 ByteArrayInputStream bis;
+		 ObjectInputStream oInputStream;
+		 //socket to init objects:
+		 Socket mySocket;
+		 
+		 
+		 
+		 public ObjectStream(Socket s) {
+			 this.mySocket=s;
+		 }
+		 
+		 public void initOutputStreams() throws IOException {
+			 baos = new ByteArrayOutputStream();
+		     oos = new ObjectOutputStream(baos);
+		 }
+		 public void writeObjectOut(Object obj) throws IOException {
+			 oos.writeObject(obj);
+		 }
+		 
 		 
 		 
 	 }
+	 
 	 
 	 private static void printGameState(GameState game) {
 		 Bag bag=game.bag;
 		 ArrayList<Player> listOfPlayers=game.listOfPlayers;
 		 Board board=game.gameBoard;
-		 int indexOfCurrentTurnPlayer=game.indexOfCurrentTurnPlayer;
+		 int indexOfCurrentTurnPlayer=game.getIndexOfCurrentTurnPlayer();
 		 System.out.println("-------------------------------------");
 		 System.out.println("bag :"+bag.toString());
 		 System.out.println("listOfPlayers :"+listOfPlayers.toString());
