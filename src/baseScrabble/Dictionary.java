@@ -15,14 +15,16 @@ public class Dictionary {
 		exists=new CacheManager(400, new LRU());
 		notExists=new CacheManager(100, new LFU());
 		bf = new BloomFilter(256, "MD5","SHA1");
-		
+		//System.out.println("Dictionary constructor says :filenames are "+fileNames[0]);
 		for(String fn : fileNames) {
 			try {
 				Scanner s=new Scanner(new File(fn));
 				while(s.hasNext())
 					bf.add(s.next());
 				s.close();
-			}catch(Exception e) {}
+			}catch(Exception e) {
+				System.out.println("Dictionary constructor says - failed to open files!");
+			}
 		}		
 		searcher=new ParIOSearcher();
 	}
@@ -34,6 +36,7 @@ public class Dictionary {
 			return false;
 		
 		boolean doesExist = bf.contains(word);
+		//System.out.println("Dictionary.query("+word+") says :doesExist= "+doesExist);
 		if(doesExist)
 			exists.add(word);
 		else
@@ -44,6 +47,7 @@ public class Dictionary {
 	
 	public boolean challenge(String word) {
 		boolean doesExist = searcher.search(word, fileNames);
+		//System.out.println("*Dictionary.challenge*("+word+") says :doesExist= "+doesExist);
 		if(doesExist)
 			exists.add(word);
 		else

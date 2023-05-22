@@ -7,15 +7,18 @@ import baseScrabble.Word;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+//This class implements the board which now has tcp/ip connectivity :
+
 public class ConnectedBoard extends Board implements Serializable {
 
-    public boolean dictionaryLegal(Word w, ModelHost model) throws Exception{
+	private static final long serialVersionUID = 1L;
+	public boolean dictionaryLegal(Word w) throws Exception{
         String word = w.createSimpleString();
-        Boolean queryRes = model.runClientToDictionaryServer(8000,word);
+        Boolean queryRes = ModelHost.runClientToDictionaryServer(8000,'C',word);
         return queryRes;
     }
-
-    public int tryPlaceWord(Word w, ModelHost model) throws Exception {
+    //Overriding the methods used for word checking to include the new methods
+    public int tryPlaceWord(Word w) throws Exception {
 
         Tile[] ts = w.getTiles();
         int row=w.getRow();
@@ -33,7 +36,7 @@ public class ConnectedBoard extends Board implements Serializable {
         if(boardLegal(test) ) {
             ArrayList<Word> newWords=getWords(test);
             for(Word nw : newWords) {
-                if(dictionaryLegal(nw, model))
+                if(dictionaryLegal(nw))
                     sum+=getScore(nw);
                 else
                     return 0;

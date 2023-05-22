@@ -13,7 +13,7 @@ public class Board implements Serializable {
 	final byte dw=20;	// double word
 	final byte tw=30;	// triple word
 	
-	private byte[][] bonus= {
+	public byte[][] bonus= {
 			{tw,0,0,dl,0,0,0,tw,0,0,0,dl,0,0,tw},
 			{0,dw,0,0,0,tl,0,0,0,tl,0,0,0,dw,0},
 			{0,0,dw,0,0,0,dl,0,dl,0,0,0,dw,0,0},
@@ -31,9 +31,9 @@ public class Board implements Serializable {
 			{tw,0,0,dl,0,0,0,tw,0,0,0,dl,0,0,tw}	
 	};
 	
-	Tile[][] tiles;
+	public Tile[][] tiles;
 	
-	boolean isEmpty;
+	public boolean isEmpty;
 	
 	public Board() {
 		tiles=new Tile[15][15];
@@ -138,9 +138,9 @@ public class Board implements Serializable {
 	}
 	
 	
-	//change this method!!!//functionality
-	public boolean dictionaryLegal(Word w) {
-		System.out.println("dictionaryLegal doesnot have functionality - change me please!!");
+	//Deprecated
+	public boolean dictionaryLegal(Word w) throws Exception {
+		System.out.println("Deprecated: this method shouldnt run ! Board.dictionaryLegal doesnot have functionality - change me please!!");
 		return  true;
 		
 	}
@@ -229,7 +229,7 @@ public class Board implements Serializable {
 
 	}
 	
-	public int tryPlaceWord(Word w) {
+	public int tryPlaceWord(Word w) throws Exception {
 		
 		Tile[] ts = w.getTiles();
 		int row=w.getRow();

@@ -13,7 +13,7 @@ public class GameState implements Serializable {
 	public static final int numOfTilesForPlayer=7; // game rule - 7 tiles for each player!
 	final Bag bag;
 	ArrayList<Player> listOfPlayers;
-	Board gameBoard;
+	ConnectedBoard gameBoard;
 	private int indexOfCurrentTurnPlayer;
 	
 	
@@ -25,7 +25,7 @@ public class GameState implements Serializable {
 	public GameState() {
 		this.listOfPlayers= new ArrayList<Player>();
 		bag=new Bag();
-		gameBoard=new Board();
+		gameBoard=new ConnectedBoard();
 		indexOfCurrentTurnPlayer=0;
 	}
 	//increments the value of indexOfCurrentTurnPlayer - if we reached the end of the array -we return to zero(first player)

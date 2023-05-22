@@ -73,6 +73,8 @@ public class ModelGuestTest {
         else {
             System.out.println(gs.listOfPlayers.toString());
         }
+        
+        myHost.localServer.close();
 
     }
 }

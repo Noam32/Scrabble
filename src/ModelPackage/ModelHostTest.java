@@ -7,8 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.stream.Stream;
 
 import baseScrabble.Board;
@@ -20,7 +22,11 @@ public class ModelHostTest {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		TestQuery();
+		try {Thread.sleep(3000);} catch (InterruptedException e1) {e1.printStackTrace();}
+		
 		testInitGame();
+		
 		try {
 			TestSerialization();
 			
@@ -140,7 +146,7 @@ public class ModelHostTest {
 	 
 	 public static class ObjectStream{
 		 //output;
-		 ByteArrayOutputStream baos;
+		 OutputStream os ;
 		 ObjectOutputStream oos;
 		 //input:
 		 ByteArrayInputStream bis;
@@ -155,12 +161,18 @@ public class ModelHostTest {
 		 }
 		 
 		 public void initOutputStreams() throws IOException {
-			 baos = new ByteArrayOutputStream();
-		     oos = new ObjectOutputStream(baos);
+			 //baos = new ByteArrayOutputStream();
+			 OutputStream os = mySocket.getOutputStream();
+		     oos = new ObjectOutputStream(os);
 		 }
 		 public void writeObjectOut(Object obj) throws IOException {
 			 oos.writeObject(obj);
 		 }
+		 
+		 public void closeOutputStreams() {
+			 
+		 }
+		 
 		 
 		 
 		 
@@ -181,7 +193,41 @@ public class ModelHostTest {
 		 
 		
 	 }
-	
+	 //testing the sending of strings to the server:
+	 private static void TestQuery() {
+		 System.out.println("***Testing the querying to the Dictionary server :runClientToDictionaryServer(8000,\"hi\" ) ***");
+		 String str="hi";
+		 Boolean b1;
+		 try {
+			b1=ModelHost.runClientToDictionaryServer(8000,'C',str);
+			System.out.println("runClientToDictionaryServer: for \""+str+"\" is :" +b1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 TestchallengeFromConsoleInput();
+		 System.out.println("***ended TestQuery()***\n");
+	 }
+	 
+	 private static void TestchallengeFromConsoleInput() {
+		 Scanner scan =new Scanner(System.in);
+		 System.out.println("<Now input you query to the server:>");
+		 String str=scan.next();
+		 while(!str.equals("stop")) {
+			 Boolean b1;
+			 try {
+				b1=ModelHost.runClientToDictionaryServer(8000,'C' ,str);
+				System.out.println("runClientToDictionaryServer: for \""+str+"\" is :" +b1);
+				System.out.println("<Now input you query to the server:> (type \"stop\" <enter> to exit)");
+				str=scan.next();
+			} catch (Exception e) {e.printStackTrace();}
+		 }
+		 System.out.println("< Ended: Getting inputs from user in TestQueryFromConsoleInput()   >");
+		 scan.close();
+	 }
+	 
+	 
+	 
 //Template:
 	 /*
 	 try 

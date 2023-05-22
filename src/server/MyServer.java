@@ -72,12 +72,14 @@ public class MyServer {
 	    }
 
 	    public void stop() {
-	        stop = true;
+	        System.out.println("Server was stopped .The client handler is of type :"+ch.getClass().getSimpleName());
+	    	stop = true;
 	    }
 
 		// This method shuts down the thread pool and closes the server socket.
 	    public void close() {
 	        stop();//ensure that the server stops listening for new connections before shutting down the thread pool 
+	        System.out.println("Server is closed .The client handler was of type :"+ch.getClass().getSimpleName());
 	        try {
 	            threadPool.shutdown();
 	            if(server.isClosed())

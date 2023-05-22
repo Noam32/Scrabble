@@ -1,10 +1,17 @@
 package ModelPackage;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
+import java.util.Scanner;
 
 import baseScrabble.Tile;
 import baseScrabble.Word;
@@ -119,6 +126,7 @@ public class ModelHost extends Observable implements Model {
 		decideOnOrderOfPlayers();
 		giveAllPlayersSevenTiles();
 		
+		
 	}
 	
 	//helper method to initGame - changes the order of the players in the array list according to a draw /
@@ -157,10 +165,32 @@ public class ModelHost extends Observable implements Model {
 		
 	}
 
+	//Unfinished!
 	@Override
 	public void placeWordOnBoard(Word w) {
-		// TODO Auto-generated method stub
-		
+		int numOfPoints = 0;//not finished!!! need to to dictionaryLegal!!
+		try {
+			numOfPoints = this.gamestate.gameBoard.tryPlaceWord(w);
+		} catch (Exception e) {
+			throw new RuntimeException(e);//we didn't take care of the Exception!!
+		}
+		if (numOfPoints == 0) {
+			wasLastPlacementSuccessful = false;
+		}
+		else {
+			wasLastPlacementSuccessful = true;
+			//update player's points
+			int indexOfCurrentTurnPlayer = this.gamestate.getIndexOfCurrentTurnPlayer();
+			Player CurrentTurnPlayer = this.gamestate.listOfPlayers.get(indexOfCurrentTurnPlayer);
+			CurrentTurnPlayer.numOfPoints+=numOfPoints;
+			//update his tiles array after place on board.
+			ArrayList<Tile> MyTilesInHand = CurrentTurnPlayer.getMyTiles();
+			Tile [] MyWordTiles = w.getTiles();
+			for(int i=0;i<MyWordTiles.length;i++){
+				MyTilesInHand.remove(MyWordTiles[i]);
+			}
+		}
+		endPlayerTurn();
 	}
 
 	@Override
@@ -194,6 +224,47 @@ public class ModelHost extends Observable implements Model {
 		
 	}
 	
+	
+	//This method creates a client that will communicate with the Dictionary 'remote' server.
+	//Q_or_C = 'Q' for query and 'C' for challenge
+	public static Boolean runClientToDictionaryServer(int port,char Q_or_C ,String stringTosearch) throws Exception{
+		String bookNames="mobydick.txt";
+		try {
+			Socket server=new Socket("localhost",port);
+			PrintWriter out=new PrintWriter(server.getOutputStream());
+			Scanner in=new Scanner(server.getInputStream());
+			//template is : "Q,bookNames1,bookName2,...,stringTosearch"
+			String stringToSend=Q_or_C+","+bookNames+","+stringTosearch;
+			out.println(stringToSend);//here we are sending the query/challenge string to the Client handler server
+			out.flush();
+			//System.out.println("in.hasNext()= "  +in.hasNext());
+			String res=in.next();//here we are receiving the query/challenge *result* string from the Client handler server
+			Boolean boolRes=Boolean.parseBoolean(res);
+			//closing :
+			in.close();
+			out.close();
+			server.close();
+			///returning :
+			return boolRes;
+		} catch (IOException e) {
+			System.out.println("your code ran into an IOException ");
+			e.printStackTrace();
+			System.out.println("is port available = " +isTcpPortAvailable(port) );
+			throw e;//query failed
+		}
+	}
+	
+	private static boolean isTcpPortAvailable(int port) {
+		try (ServerSocket serverSocket = new ServerSocket()) {
+			// setReuseAddress(false) is required only on macOS,
+			// otherwise the code will not work correctly on that platform
+			serverSocket.setReuseAddress(false);
+			serverSocket.bind(new InetSocketAddress(InetAddress.getByName("localhost"), port), 1);
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
+	}
 
 	
 	
