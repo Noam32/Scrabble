@@ -15,15 +15,16 @@ public class Dictionary {
 		exists=new CacheManager(400, new LRU());
 		notExists=new CacheManager(100, new LFU());
 		bf = new BloomFilter(256, "MD5","SHA1");
-		//System.out.println("Dictionary constructor says :filenames are "+fileNames[0]);
+		System.out.println("Dictionary constructor says :filenames are "+fileNames[0]);
 		for(String fn : fileNames) {
 			try {
 				Scanner s=new Scanner(new File(fn));
 				while(s.hasNext())
 					bf.add(s.next());
 				s.close();
+				System.out.println("Dictionary constructor says:file "+fileNames[0]+" read and closed succefully! ");
 			}catch(Exception e) {
-				System.out.println("Dictionary constructor says - failed to open files!");
+				System.out.println("Dictionary constructor says-no file opened yet.Give a valid book name!");
 			}
 		}		
 		searcher=new ParIOSearcher();

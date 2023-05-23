@@ -1,6 +1,6 @@
 package ModelPackage;
 
-import java.awt.PrintGraphics;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -22,7 +22,7 @@ public class ModelHostTest {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		TestQuery();
+		TestChallenge();
 		try {Thread.sleep(3000);} catch (InterruptedException e1) {e1.printStackTrace();}
 		
 		testInitGame();
@@ -194,13 +194,13 @@ public class ModelHostTest {
 		
 	 }
 	 //testing the sending of strings to the server:
-	 private static void TestQuery() {
+	 private static void TestChallenge() {
 		 System.out.println("***Testing the querying to the Dictionary server :runClientToDictionaryServer(8000,\"hi\" ) ***");
 		 String str="hi";
 		 Boolean b1;
 		 try {
 			b1=ModelHost.runClientToDictionaryServer(8000,'C',str);
-			System.out.println("runClientToDictionaryServer: for \""+str+"\" is :" +b1);
+			System.out.println("runClientToDictionaryServer: for \""+str+"\" returned :" +b1);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
