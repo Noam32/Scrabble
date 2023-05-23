@@ -23,8 +23,8 @@ import server.MyServer;
 
 public class ModelHost extends Observable implements Model {
 	private  GameState gamestate ;
-	public MyServer localServer;//server that servers the guest players
-	
+	public MyServer localServer;//server that servers the guest players  
+	private static boolean errorInLast_communication=false;//was there an error in the last TCP/IP communication
 	private static boolean wasLastPlacementSuccessful=false;
 	private final static int Num_Of_Players=2;
 	public static final int playerIdNotFoundCode=-1;
@@ -109,7 +109,11 @@ public class ModelHost extends Observable implements Model {
 	public boolean wasLastPlacementSuccessful() {
 		return wasLastPlacementSuccessful;
 	}
-
+	@Override
+	public boolean wasThereAnErrorAtLastCommunication() {
+		return errorInLast_communication;
+	}
+	
 	//*******************************
 	//Change data method :
 	//*******************************
@@ -159,7 +163,7 @@ public class ModelHost extends Observable implements Model {
 		 int numOfPlayers = this.gamestate.listOfPlayers.size();
 		  Tile t1=this.gamestate.bag.getRand();
 		  for (int i = 0; i < numOfPlayers; i++) {
-		   if(this.gamestate.listOfPlayers.get(i).playerId==playerId)
+		   if(this.gamestate.listOfPlayers.get(i).playerId==playerId &&t1!=null)
 		    this.gamestate.listOfPlayers.get(i).addTile(t1);
 		  }
 		
@@ -172,7 +176,9 @@ public class ModelHost extends Observable implements Model {
 		try {
 			numOfPoints = this.gamestate.gameBoard.tryPlaceWord(w);
 		} catch (Exception e) {
-			throw new RuntimeException(e);//we didn't take care of the Exception!!
+			//take care of the Exception:if there was an exception it means that we failed to connect to the remote server.
+			//Therfore we notify the user of the program that there was a communication error:
+			
 		}
 		if (numOfPoints == 0) {
 			wasLastPlacementSuccessful = false;
@@ -195,14 +201,23 @@ public class ModelHost extends Observable implements Model {
 
 	@Override
 	public void endPlayerTurn() {
-		// TODO Auto-generated method stub
-		
+		// making sure that the player has 7 tiles:
+		fillPlayersTileListToSeven(this.gamestate.getIndexOfCurrentTurnPlayer());
+		//Advancing the turn to the next player
+		this.gamestate.inc_indexOfCurrentTurnPlayer();
+		//notify every one that the turn is over .
+		//change data:
+		setChanged();
+		this.notifyObservers();
 	}
 
+	
 	@Override
 	public void skipPlayerTurn() {
 		// TODO Auto-generated method stub
-		
+		this.gamestate.inc_indexOfCurrentTurnPlayer();
+		setChanged();
+		this.notifyObservers();
 	}
 	
 	
@@ -210,7 +225,16 @@ public class ModelHost extends Observable implements Model {
 	//should we create another class ? with client handler interface and etc ..?
 	//
 	
-	
+	private void fillPlayersTileListToSeven(int player_Id) {
+		int indexInList=this.gamestate.getIndexOfPlayerWithId(player_Id);
+		Player p1=this.gamestate.listOfPlayers.get(indexInList);
+		int currNumOftile=p1.getMyTiles().size();
+		int numOfTilesToAdd=7-currNumOftile;
+		for(int i=0;i<numOfTilesToAdd;i++) {
+			givePlayerOneTile(player_Id);
+		}
+		
+	}
 	
 	
 	public void initLocalServer() {
@@ -227,6 +251,7 @@ public class ModelHost extends Observable implements Model {
 	
 	//This method creates a client that will communicate with the Dictionary 'remote' server.
 	//Q_or_C = 'Q' for query and 'C' for challenge
+	//throws exception if connection to the DictionaryServer failed !
 	public static Boolean runClientToDictionaryServer(int port,char Q_or_C ,String stringTosearch) throws Exception{
 		String bookNames="mobydick.txt";
 		try {

@@ -16,7 +16,7 @@ import java.util.Observable;
 //(currently TcpId to the host model!!  
 
 public class ModelGuest extends Observable implements Model {
-
+	private static boolean errorInLast_communication=false;
 	private  GameState gamestate;
 	String name;
 	public Socket client;// the guest player
@@ -184,6 +184,7 @@ public class ModelGuest extends Observable implements Model {
 		System.out.println("message received from server:"+inputString);
 		}
 		catch (IOException e) {
+			errorInLast_communication=true;
 			throw new RuntimeException(e);
 		}
 	}
@@ -195,7 +196,10 @@ public class ModelGuest extends Observable implements Model {
 		}
 	}
 
-	
+	@Override
+	public boolean wasThereAnErrorAtLastCommunication() {
+		return errorInLast_communication;
+	}
 	
 	public String getMessageFromHost() {
 		String inputString;

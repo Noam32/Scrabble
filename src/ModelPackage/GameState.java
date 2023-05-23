@@ -39,6 +39,17 @@ public class GameState implements Serializable {
 	protected int getCurrentNumOfPlayers() {
 		return this.listOfPlayers.size();
 	}
+	
+	public int getIndexOfPlayerWithId(int id) {
+		int numOfPlayers =this.listOfPlayers.size();
+
+		for (int i = 0; i < numOfPlayers; i++) {
+			   if(this.listOfPlayers.get(i).playerId==id) {
+				   return i;
+			   }
+		}
+		return -1; // if not found in players list.
+	}
 
 
 }

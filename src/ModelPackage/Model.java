@@ -19,7 +19,8 @@ public interface Model {
 	//Important:
 	//After the view Model calls placeWordOnBoard() - waits to be notified and then checks if the placement succeeded
 	public boolean wasLastPlacementSuccessful();
-	
+	//Returns true if there was a communication exception in the model while running the TCP/ip communication
+	public boolean wasThereAnErrorAtLastCommunication() ;
 	//*******************************
 	//change data:
 	//*******************************
