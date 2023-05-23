@@ -44,6 +44,9 @@ public class MyServer {
 	                catch (SocketTimeoutException e) {
 	                    // ignore and continue waiting for connections
 	                }
+	                catch(Exception e) {
+	                	
+	                }
 	            }
 	        }
 	        catch (IOException e) {
@@ -54,7 +57,7 @@ public class MyServer {
 	        }
 	    }
 
-	    private void handleClient(Socket client) {
+	    private void handleClient(Socket client) throws Exception {
 	        try {
 	            ch.handleClient(client.getInputStream(), client.getOutputStream());
 	        } catch (IOException e) {

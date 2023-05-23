@@ -32,14 +32,12 @@ public class ConnectedBoard extends Board implements Serializable {
         Word test=new Word(ts, w.getRow(), w.getCol(), w.isVertical());
 
         int sum=0;
-
         if(boardLegal(test) ) {
             ArrayList<Word> newWords=getWords(test);
             for(Word nw : newWords) {
-                if(dictionaryLegal(nw))
-                    sum+=getScore(nw);
-                else
-                    return 0;
+                if(dictionaryLegal(nw)){
+                    sum+=getScore(nw);}
+                else{return 0;}
             }
         }
 

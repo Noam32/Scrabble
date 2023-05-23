@@ -22,10 +22,11 @@ public class ModelGuest extends Observable implements Model {
 	public Socket client;// the guest player
 	PrintWriter outToServer;
 	BufferedReader inFromServer;
+	private ObjectStream myObjectStream;//ObjectStream:class for sending (Serializable)objects through TCP/IP:
 
 
 	public ModelGuest(String name){
-		this.gamestate=new GameState();
+		//this.gamestate=new GameState();
 		this.name=name;
 		initConnectiontoServer();
 	}
@@ -35,12 +36,21 @@ public class ModelGuest extends Observable implements Model {
 	//Get data method :
 	//*******************************
 
-	@Override //Unfinished
+	@Override //Unfinished ????????????untested!
 	public GameState getGameState() {
 		String []command=GuestClientHandler.createCommandStrings("getGameState");
 		sendAllString(command,outToServer);//sending request to host
-		getMessageFromHost();//reading response message from host:
-		return null;
+		//getMessageFromHost();//reading response message from host:
+		//reading object sent from host:
+		Object objectSentFromHost=null;
+		try {
+			objectSentFromHost = getObjectOver_TCP_IP();
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+		//now we try to covert the object to "GameState" object: (if fails -an exception will be thrown)
+		GameState state=(GameState)objectSentFromHost;
+		return state;
 	}
 
 	@Override
@@ -69,29 +79,53 @@ public class ModelGuest extends Observable implements Model {
 		return intRes;
 	}
 
-	@Override//Unfinished
+	@Override//Unfinished???untested!
 	public ArrayList<Tile> getTilesForPlayer(int playerId) {
 		String strPlayerId = ""+playerId;
 		String [] command=GuestClientHandler.createCommandStrings("getTilesForPlayer","String","strPlayerId");
 		sendAllString(command,outToServer);//sending request to host
-		getMessageFromHost();//reading respone message from host:
-		return null;
+		//getMessageFromHost();//reading respone message from host:
+		Object objectSentFromHost=null;
+		try {
+			objectSentFromHost = getObjectOver_TCP_IP();
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+		//now we try to covert the object to "ArrayList<Tile> " object: (if fails -an exception will be thrown)
+		ArrayList<Tile> list=(ArrayList<Tile>)objectSentFromHost;
+		return list;
 	}
 
-	@Override//Unfinished
+	@Override//Unfinished???untested!
 	public ArrayList<Tile> getTilesForPlayer(String playerId) {
 		String [] command=GuestClientHandler.createCommandStrings("getTilesForPlayer","String","1");
 		sendAllString(command,outToServer);//sending request to host
-		getMessageFromHost();//reading response message from host:
-		return null;
+		//reading object sent from host:
+		Object objectSentFromHost=null;
+		try {
+			objectSentFromHost = getObjectOver_TCP_IP();
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+		//now we try to covert the object to "ArrayList<Tile> " object: (if fails -an exception will be thrown)
+		ArrayList<Tile> list=(ArrayList<Tile>)objectSentFromHost;
+		return list;
 	}
 
-	@Override//Unfinished
+	@Override//Unfinished????untested!
 	public Player WhoseTurnIsIt() {
 		String []command=GuestClientHandler.createCommandStrings("WhoseTurnIsIt");
 		sendAllString(command,outToServer);//sending request to host
-		getMessageFromHost();//reading response message from host:
-		return null;
+		//getMessageFromHost();//reading response message from host:
+		Object objectSentFromHost=null;
+		try {
+			objectSentFromHost = getObjectOver_TCP_IP();
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+		//now we try to covert the object to class "Player " object: (if fails -an exception will be thrown)
+		Player p1=(Player)objectSentFromHost;
+		return p1;
 	}
 
 	@Override
@@ -145,12 +179,14 @@ public class ModelGuest extends Observable implements Model {
 		String strPlayerId = ""+playerId;
 		String [] command=GuestClientHandler.createCommandStrings("givePlayerOneTile","String","strPlayerId");
 		sendAllString(command,outToServer);//sending request to host
-		getMessageFromHost();//reading response message from host:
+		//getMessageFromHost();//reading response message from host:
+		
 	}
 
 	@Override
 	public void placeWordOnBoard(Word w) {
 		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -170,9 +206,10 @@ public class ModelGuest extends Observable implements Model {
 
 	public void initConnectiontoServer() {
 		try {
-			this.client=new Socket("localhost",8080);
-
-
+		this.client=new Socket("localhost",8080);
+		//initializing object sending/receiving object:
+		myObjectStream=new ObjectStream(client);//passing the socket to the Serializable object sender
+		//initializing string senders / receivers objects:
 		this.outToServer=new PrintWriter(client.getOutputStream(),true);
 		this.inFromServer=new BufferedReader(new InputStreamReader(client.getInputStream()));
 		String inputString=inFromServer.readLine();//reading welcome from host:
@@ -195,6 +232,11 @@ public class ModelGuest extends Observable implements Model {
 			outToServer.println(command[i]);//sending every part of the String []command
 		}
 	}
+	
+	private Object getObjectOver_TCP_IP() throws ClassNotFoundException, IOException {
+		Object obj =myObjectStream.readObject();
+		return obj;
+	}
 
 	@Override
 	public boolean wasThereAnErrorAtLastCommunication() {
@@ -207,6 +249,12 @@ public class ModelGuest extends Observable implements Model {
 			inputString = inFromServer.readLine();//reading response message from host:
 		} catch (IOException e) {
 			throw new RuntimeException(e);
+		}
+		if(inputString==null) {
+			System.out.println("ModelGuest says:error communicating with host.errorInLast_communication=true");
+			errorInLast_communication=true;
+		}else{
+			errorInLast_communication=false;
 		}
 		return inputString;
 	}

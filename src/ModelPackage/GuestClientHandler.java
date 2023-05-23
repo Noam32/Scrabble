@@ -23,12 +23,13 @@ public class GuestClientHandler implements ClientHandler {
 	 private PrintWriter out=null;
 	 private ModelHost theHost;
 	 private int numOfPlayers;
+	 private ObjectStream myObjectStream;//ObjectStream:class for sending ((Serializable))objects through TCP/IP:
 	 
 	 public static final Exception exception=new Exception("Error parsing Command");
 	 
 	 
 	 public GuestClientHandler() {
-		 
+		 myObjectStream=new ObjectStream();
 	 }
 	 
 	 public GuestClientHandler(ModelHost theHost,int numOfPlayers) {
@@ -83,8 +84,12 @@ public class GuestClientHandler implements ClientHandler {
 	 
 	 
 	@Override
-	public void handleClient(InputStream inFromclient, OutputStream outToClient) {
-        //try-with-resources statement -ensures that the buffer will be closed.
+	public void handleClient(InputStream inFromclient, OutputStream outToClient) throws IOException {
+        //initializing the object sender object:
+		System.out.println("GuestClientHandler handleClient has started");
+		myObjectStream.initInputStream(inFromclient);
+		myObjectStream.initOutputStreams(outToClient);
+		//try-with-resources statement -ensures that the buffer will be closed.
     	try (BufferedReader reader = new BufferedReader(new InputStreamReader(inFromclient))) {
     		out=new PrintWriter(outToClient,true);
     		//Firstly we need to get the name of the the player:
@@ -127,10 +132,14 @@ public class GuestClientHandler implements ClientHandler {
 	//@TODO
 	//Sends string or byte array :
 	//if  it is a string the format is :<Type>:<Value> 
-	public void sendOutputToClient(Object output){
-		//
+	public void sendOutputToClient(Object output) throws IOException{
+		//if output is null this means that there were no exceptions and there is no value to return (void method) 
+		if(output==null) {
+			out.println("command completed successfully:no return values");
+		}
 		if(output instanceof GameState ) {//problematic! maybe try to serialize?
 			//send game state over tcIP
+			myObjectStream.writeObjectOut(output);
 		}
 		if(output instanceof Integer ) {
 			//send string Integer over tcIP
@@ -140,9 +149,11 @@ public class GuestClientHandler implements ClientHandler {
 		}
 		if(output instanceof ArrayList) {//problematic! maybe try to serialize?
 			//send arrayList<tile> over tcp/Ip  //Player
+			myObjectStream.writeObjectOut(output);
 		}
 		if(output instanceof Player) {//problematic! maybe try to serialize?
 		//send Player over TCP / IP 
+			myObjectStream.writeObjectOut(output);
 		}
 		if(output instanceof Boolean) {
 			//send Boolean over TCP / IP
@@ -161,6 +172,7 @@ public class GuestClientHandler implements ClientHandler {
 		out.println("Welcome to the game:please send your name");
 		//waiting for client to send us the name.
 		String inputString=reader.readLine();//reading name line:
+		System.out.println("GuestClientHandler.ConnectingNewPlayer says:inputString is "+inputString);
 		//now we add a player to the game (using host model methods):
 		theHost.addAplayer(inputString);
 		out.println(inputString+" is connected.waiting for players to connect");

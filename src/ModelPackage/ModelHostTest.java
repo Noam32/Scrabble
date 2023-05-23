@@ -144,39 +144,6 @@ public class ModelHostTest {
 	 
 	 
 	 
-	 public static class ObjectStream{
-		 //output;
-		 OutputStream os ;
-		 ObjectOutputStream oos;
-		 //input:
-		 ByteArrayInputStream bis;
-		 ObjectInputStream oInputStream;
-		 //socket to init objects:
-		 Socket mySocket;
-		 
-		 
-		 
-		 public ObjectStream(Socket s) {
-			 this.mySocket=s;
-		 }
-		 
-		 public void initOutputStreams() throws IOException {
-			 //baos = new ByteArrayOutputStream();
-			 OutputStream os = mySocket.getOutputStream();
-		     oos = new ObjectOutputStream(os);
-		 }
-		 public void writeObjectOut(Object obj) throws IOException {
-			 oos.writeObject(obj);
-		 }
-		 
-		 public void closeOutputStreams() {
-			 
-		 }
-		 
-		 
-		 
-		 
-	 }
 	 
 	 
 	 private static void printGameState(GameState game) {

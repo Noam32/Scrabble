@@ -236,7 +236,7 @@ public class ModelHost extends Observable implements Model {
 		
 	}
 	
-	
+	//initializing the server that will handle requests from the guest players:
 	public void initLocalServer() {
 		int maxNumOfPorts=4;
 		int portTolistenTo=8080;

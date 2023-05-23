@@ -1,6 +1,7 @@
 package baseScrabble;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -19,6 +20,17 @@ public class Word implements Serializable{
 		this.col = col;
 		this.vertical = vertical;
 	}
+	
+	public Word(ArrayList<Tile> tiles, int row, int col, boolean vertical) {
+		  super();
+		  Tile [] tilesArr = Tile.arrayList_Tile_To_Arr(tiles);
+		  this.tiles = tilesArr;
+		  this.row = row;
+		  this.col = col;
+		  this.vertical = vertical;
+		 }
+	
+	
 	
 	private String arrToString(Tile[] tiles) {
 		String str="[";
