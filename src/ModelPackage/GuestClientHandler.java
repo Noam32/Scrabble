@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -91,7 +92,8 @@ public class GuestClientHandler implements ClientHandler {
 		myObjectStream.initOutputStreams(outToClient);
 		//try-with-resources statement -ensures that the buffer will be closed.
     	try (BufferedReader reader = new BufferedReader(new InputStreamReader(inFromclient))) {
-    		out=new PrintWriter(outToClient,true);
+    		out =new PrintWriter(new OutputStreamWriter(outToClient), true);
+    		//out=new PrintWriter(outToClient,true);
     		//Firstly we need to get the name of the the player:
     		String nameOfPlayer=ConnectingNewPlayer(out, reader);
     		//now we 'busy wait' until the number of connected players is equal to the defined numOfPlayers:
@@ -104,7 +106,7 @@ public class GuestClientHandler implements ClientHandler {
     		//Now we initialize the game:
     		theHost.initGame();
     		//Now the player can send commands:
-        	
+
         	while(!theHost.hasGameEnded) {
         		String inputString=reader.readLine();//reading the first line-that has the method name:
         		System.out.println("Server says:I received the command :"+inputString);
@@ -116,7 +118,7 @@ public class GuestClientHandler implements ClientHandler {
 	        		
 	        	}
 	        	catch(Exception e){
-	        		
+	        		e.printStackTrace();
 	        	}
         	}
         out.println("Game has ended.Goodbye!");
@@ -124,7 +126,7 @@ public class GuestClientHandler implements ClientHandler {
         	 	
     	}
     	catch(IOException e){
-    		
+    		e.printStackTrace();
     	}
 	}
 	

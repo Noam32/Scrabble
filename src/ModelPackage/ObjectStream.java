@@ -42,6 +42,11 @@ import java.net.Socket;
 			 oos.writeObject(obj);
 		 }
 		 
+		 public void sendString(String str) throws IOException {
+			 oos.writeObject(str);
+		 }
+		
+		 
 		 public void closeOutputStreams() throws IOException{
 				oos.close(); //do not use ! will close socket!
 				os.close();
@@ -62,6 +67,9 @@ import java.net.Socket;
 		 public Object readObject() throws ClassNotFoundException, IOException {
 			 Object obj=objectInputStream.readObject();
 			 return obj;
+		 }
+		 public String readString() throws ClassNotFoundException,IOException{
+			 return (String)this.readObject();
 		 }
 		 
 		 public void closeInputStream() throws IOException{

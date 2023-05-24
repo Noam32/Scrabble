@@ -215,7 +215,7 @@ public class ModelGuest extends Observable implements Model {
 		String inputString=inFromServer.readLine();//reading welcome from host:
 		System.out.println("message received from server:"+inputString);
 		outToServer.println(this.name);
-		inputString=inFromServer.readLine();//reading waiting for players from host:
+		inputString=inFromServer.readLine();//reading waiting for players message from host:
 		System.out.println("message received from server:"+inputString);
 		inputString=inFromServer.readLine();//reading good luck message for players from host:
 		System.out.println("message received from server:"+inputString);
