@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.BoardController">
+<BorderPane xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ViewPackage.BoardController">
    <center>
-      <GridPane fx:id="board" gridLinesVisible="true" maxHeight="900" maxWidth="900" minHeight="500.0" minWidth="500.0" onMouseEntered="#mouseEntered" prefHeight="700.0" prefWidth="700.0" BorderPane.alignment="CENTER">
+      <GridPane fx:id="board" gridLinesVisible="true" maxHeight="900" maxWidth="900" minHeight="500.0" minWidth="500.0" prefHeight="700.0" prefWidth="700.0" BorderPane.alignment="CENTER">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -52,7 +52,7 @@
       </GridPane>
    </center>
    <bottom>
-      <GridPane fx:id="player" gridLinesVisible="true" BorderPane.alignment="CENTER" alignment="CENTER">      
+      <GridPane fx:id="player" alignment="CENTER" gridLinesVisible="true" BorderPane.alignment="CENTER">      
         <columnConstraints>
           <ColumnConstraints />
             <ColumnConstraints />
@@ -63,7 +63,7 @@
             <ColumnConstraints />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints/>
+          <RowConstraints />
         </rowConstraints>
          <BorderPane.margin>
             <Insets top="20.0" />

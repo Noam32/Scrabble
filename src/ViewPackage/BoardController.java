@@ -4,11 +4,17 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import javafx.beans.binding.Bindings;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -28,7 +34,11 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 
 public class BoardController {
@@ -119,6 +129,8 @@ public class BoardController {
 	        -10.0, 30.0
 	    });
 	    star.setFill(Color.GOLD);
+        DataFormat StackPaneFormat = new DataFormat("StackPane");
+
 		for (int row = 0; row < 15; row++) {				//filling board with squares
             for (int col = 0; col < 15; col++) {
             	Rectangle square = new Rectangle();
@@ -142,10 +154,10 @@ public class BoardController {
                 		break;
                 	case 5: color = Color.YELLOW;
 							text = new Text("");
-							//star.scaleXProperty().bind(square.widthProperty().divide(80));
-							//star.scaleYProperty().bind(square.heightProperty().divide(80));
-							star.scaleXProperty().bind(square.widthProperty().divide(100));
-							star.scaleYProperty().bind(square.heightProperty().divide(100));
+							star.scaleXProperty().bind(square.widthProperty().divide(80));
+							star.scaleYProperty().bind(square.heightProperty().divide(80));
+							//star.scaleXProperty().bind(square.widthProperty().divide(100));
+							//star.scaleYProperty().bind(square.heightProperty().divide(100));
                 		break;
                 }
                 square.setFill(color);
@@ -158,19 +170,87 @@ public class BoardController {
                 	stackPane.getChildren().addAll(square,text);
                 }
                 else {
-                	stackPane.getChildren().addAll(square, text, star);
-                	//StackPane.setAlignment(star, Pos.CENTER);
-                	StackPane.setAlignment(square, Pos.CENTER);
+                	stackPane.getChildren().addAll(square, star);
+                	square.setTranslateX(-12);
+                	star.setTranslateX(-12);
+
                 }
                 final int colum = col;
                 final int rows=row;
                 board.add(stackPane, col, row);
                 stack[col][row] = stackPane;
 
+                /**
+                 * view model get  array of letter of player
+                 */
 
-                //stackPane.setOnMousePressed(evt -> this.mouseDown(evt));
+
+                stackPane.setOnMousePressed(evt -> this.mouseDown(evt));
                 //stackPane.setOnDragDropped(e->e.acceptTransferModes(TransferMode.ANY));
-            }
+               /* stackPane.setOnDragDetected(new EventHandler<MouseEvent>() {
+                    public void handle(MouseEvent event) {
+                        /* drag was detected, start a drag-and-drop gesture*/
+                        /* allow any transfer mode */
+                /*
+                        Dragboard db = stackPane.startDragAndDrop(TransferMode.ANY);
+                        
+                        /* Put a string on a dragboard */
+    /*                    ClipboardContent content = new ClipboardContent();
+                        //content.putString(stackPane.getText());
+                        content.put(StackPaneFormat, stackPane);
+                        db.setContent(content);
+                        
+                        event.consume();
+                    }
+                });
+                stackPane.setOnDragDropped(new EventHandler<DragEvent>() {
+                    public void handle(DragEvent event) {
+                        /* data dropped */
+                        /* if there is a StackPane on the dragboard, read it and use it */
+      /*                  Dragboard db = event.getDragboard();
+                        boolean success = false;
+                        if (db.hasContent(StackPaneFormat)) {
+                            StackPane droppedStackPane = (StackPane) db.getContent(StackPaneFormat);
+                            
+                            // Remove the dropped StackPane from its original location
+                            GridPane sourceGridPane = (GridPane) droppedStackPane.getParent();
+                            sourceGridPane.getChildren().remove(droppedStackPane);
+                            
+                            // Add the dropped StackPane to the target location
+                            GridPane targetGridPane = (GridPane) stackPane.getParent();
+                            int targetColumnIndex = GridPane.getColumnIndex(stackPane);
+                            int targetRowIndex = GridPane.getRowIndex(stackPane);
+                            targetGridPane.add(droppedStackPane, targetColumnIndex, targetRowIndex);
+                            
+                            success = true;
+                        }
+                        /* let the source know whether the StackPane was successfully transferred and used */
+      /*                  event.setDropCompleted(success);
+                        
+                        event.consume();
+                    }
+                });
+                
+                stackPane.setOnDragOver(new EventHandler<DragEvent>() {
+                    public void handle(DragEvent event) {
+                        /* data is dragged over the target */
+                        /* accept it only if it is not dragged from the same node 
+                         * and if it has a StackPane data */
+       /*                 if (event.getGestureSource() != stackPane &&
+                                event.getDragboard().hasContent(StackPaneFormat)) {
+                            /* allow for moving */
+      /*                      event.acceptTransferModes(TransferMode.MOVE);
+                        }
+                        
+                        event.consume();
+                    }
+                });
+        */        
+                
+                
+                
+                }
+            
 		}
 		board.setGridLinesVisible(true);
 		player.setGridLinesVisible(true);
@@ -265,7 +345,73 @@ public class BoardController {
 		Integer col = board.getColumnIndex(n1);
 		Integer row = board.getRowIndex(n1);
 		System.out.println("row" + row +"column" + col);
+		/*
 		
+		
+		Dialog<String> inputDialog = new Dialog<>();
+        inputDialog.setTitle("Input Dialog");
+        inputDialog.setHeaderText("Enter your inputs:");
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField wordField = new TextField();
+        wordField.setPromptText("Word");
+        CheckBox orientationBox = new CheckBox("Vertical");
+
+        grid.add(new Label("Word:"), 0, 0);
+        grid.add(wordField, 1, 0);
+        grid.add(new Label("Orientation:"), 0, 1);
+        grid.add(orientationBox, 1, 1);
+
+        inputDialog.getDialogPane().setContent(grid);
+        inputDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        inputDialog.showAndWait();
+        String word = wordField.getText();
+        boolean isVertical = orientationBox.isSelected();
+        System.out.println("User entered: " + word + ", " + (isVertical ? "Vertical" : "Horizontal"));
+        */
+        
+
+        Dialog<String> inputDialog = new Dialog<>();
+        inputDialog.setTitle("Input Dialog");
+        inputDialog.setHeaderText("Enter your inputs:");
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+        
+        TextField wordField = new TextField();
+        wordField.setPromptText("Word");
+
+        ToggleGroup group = new ToggleGroup();
+        RadioButton verticalButton = new RadioButton("Vertical");
+        verticalButton.setToggleGroup(group);
+        verticalButton.setSelected(true);
+        RadioButton horizontalButton = new RadioButton("Horizontal");
+        horizontalButton.setToggleGroup(group);
+
+        HBox orientationBox = new HBox(10, verticalButton, horizontalButton);
+
+        grid.add(new Label("Word:"), 0, 0);
+        grid.add(wordField, 1, 0);
+        grid.add(new Label("Orientation:"), 0, 1);
+        grid.add(orientationBox, 1, 1);
+
+        inputDialog.getDialogPane().setContent(grid);
+        inputDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        inputDialog.showAndWait();
+        String word = wordField.getText();
+        boolean isVertical = verticalButton.isSelected();
+        System.out.println("User entered: " + word + ", " + (isVertical ? "Vertical" : "Horizontal"));
+        
+    
+		/*
 		// create a label
         Label label = new Label("This is a Popup");
    
@@ -317,7 +463,7 @@ public class BoardController {
         label.setMinWidth(80);
         label.setMinHeight(50);
         
-        popup.show(this.stage);
+        popup.show(this.stage);*/
 	}
 	public void mouseUp(MouseEvent me) {
 		if(mousePress) {
