@@ -43,9 +43,10 @@ public class MyServer {
 	                	}
 	                catch (SocketTimeoutException e) {
 	                    // ignore and continue waiting for connections
+	                	System.err.println("time out exception in MyServer.startserver()");
 	                }
 	                catch(Exception e) {
-	                	
+	                	e.printStackTrace();
 	                }
 	            }
 	        }
@@ -59,9 +60,12 @@ public class MyServer {
 
 	    private void handleClient(Socket client) throws Exception {
 	        try {
+	        	System.out.println("**My server:handleClient:trying to run ch.handleClient**");
 	            ch.handleClient(client.getInputStream(), client.getOutputStream());
+	            System.out.println("**My server:HERE!!!!**");
 	        } catch (IOException e) {
-	            e.printStackTrace();
+	            System.out.println("**My server:handleClient:IO exception tring to run handleClient**");
+	        	e.printStackTrace();
 	        }
 	        //Here we are closing the interaction with the client after 1 query/challenge as instructed.
 	        finally {

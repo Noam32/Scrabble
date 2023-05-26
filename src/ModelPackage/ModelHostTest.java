@@ -19,9 +19,16 @@ import baseScrabble.Tile.Bag;
 import baseScrabble.Word;
 
 public class ModelHostTest {
-
+	
+	private static ModelHost model_host;
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		RunModelHost();
+		System.out.println("Model host will run for 20 seconds");
+		try {Thread.sleep(30000);} catch (InterruptedException e1) {e1.printStackTrace();}
+		
+		/*
 		TestChallenge();
 		try {Thread.sleep(3000);} catch (InterruptedException e1) {e1.printStackTrace();}
 		
@@ -33,12 +40,12 @@ public class ModelHostTest {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		
+		*/
 	}
 	
 	 static void testInitGame() {
 		//testing init game:
-		ModelHost model_host=new ModelHost();
+		ModelHostTest.model_host=new ModelHost();
 		System.out.println(model_host.getGameState().listOfPlayers);
 		model_host.addAplayer("player1");
 		model_host.addAplayer("player2");
@@ -62,7 +69,7 @@ public class ModelHostTest {
 	 public static void TestSerialization() throws IOException, ClassNotFoundException {
 		 System.out.println("\n \n*******************\nTesting serialazation of objects");
 		 //creating the objects:
-		 ModelHost model=new ModelHost();
+		 ModelHost model=ModelHostTest.model_host;//previously created
 		 Player p1=new Player("player1_moshe");
 		 //Player p1=new Player("player3_natan");
 		 model.addAplayer("player4");
@@ -194,7 +201,10 @@ public class ModelHostTest {
 	 }
 	 
 	 
-	 
+	 private static void RunModelHost() {
+		 model_host=new ModelHost();
+		 
+	 }
 //Template:
 	 /*
 	 try 

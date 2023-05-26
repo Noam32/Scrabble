@@ -6,6 +6,8 @@ import server.MyServer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -20,10 +22,12 @@ public class ModelGuest extends Observable implements Model {
 	private  GameState gamestate;
 	String name;
 	public Socket client;// the guest player
-	PrintWriter outToServer;
-	BufferedReader inFromServer;
+	//PrintWriter outToServer;
+	private ObjectOutputStream outToServer;
+	//BufferedReader inFromServer;
+	private ObjectInputStream inFromServer;
 	private ObjectStream myObjectStream;//ObjectStream:class for sending (Serializable)objects through TCP/IP:
-
+	
 
 	public ModelGuest(String name){
 		//this.gamestate=new GameState();
@@ -39,7 +43,7 @@ public class ModelGuest extends Observable implements Model {
 	@Override //Unfinished ????????????untested!
 	public GameState getGameState() {
 		String []command=GuestClientHandler.createCommandStrings("getGameState");
-		sendAllString(command,outToServer);//sending request to host
+		sendAllString(command);//sending request to host
 		//getMessageFromHost();//reading response message from host:
 		//reading object sent from host:
 		Object objectSentFromHost=null;
@@ -57,7 +61,7 @@ public class ModelGuest extends Observable implements Model {
 	public int getNumOfPointsForPlayer(int playerId) {
 		String strPlayerId = ""+playerId;
 		String [] command=GuestClientHandler.createCommandStrings("getNumOfPointsForPlayer","String",strPlayerId);
-		sendAllString(command,outToServer);//sending request to host
+		sendAllString(command);//sending request to host
 		String inputString = getMessageFromHost();//reading response message from host:
 		String [] splitString= inputString.split(":");
 		String res=splitString[1];
@@ -70,7 +74,7 @@ public class ModelGuest extends Observable implements Model {
 		String [] command=GuestClientHandler.createCommandStrings("getNumOfPointsForPlayer","String",name);
 		System.out.println("message sent to server:");
 		GuestClientHandlerTest.printStrings(command);
-		sendAllString(command,outToServer);//sending request to host
+		sendAllString(command);//sending request to host
 		String inputString = getMessageFromHost();//reading response message from host:
 		System.out.println("message got from server:"+inputString);
 		String [] splitString= inputString.split(":");
@@ -83,7 +87,7 @@ public class ModelGuest extends Observable implements Model {
 	public ArrayList<Tile> getTilesForPlayer(int playerId) {
 		String strPlayerId = ""+playerId;
 		String [] command=GuestClientHandler.createCommandStrings("getTilesForPlayer","String","strPlayerId");
-		sendAllString(command,outToServer);//sending request to host
+		sendAllString(command);//sending request to host
 		//getMessageFromHost();//reading respone message from host:
 		Object objectSentFromHost=null;
 		try {
@@ -99,7 +103,7 @@ public class ModelGuest extends Observable implements Model {
 	@Override//Unfinished???untested!
 	public ArrayList<Tile> getTilesForPlayer(String playerId) {
 		String [] command=GuestClientHandler.createCommandStrings("getTilesForPlayer","String","1");
-		sendAllString(command,outToServer);//sending request to host
+		sendAllString(command);//sending request to host
 		//reading object sent from host:
 		Object objectSentFromHost=null;
 		try {
@@ -115,7 +119,7 @@ public class ModelGuest extends Observable implements Model {
 	@Override//Unfinished????untested!
 	public Player WhoseTurnIsIt() {
 		String []command=GuestClientHandler.createCommandStrings("WhoseTurnIsIt");
-		sendAllString(command,outToServer);//sending request to host
+		sendAllString(command);//sending request to host
 		//getMessageFromHost();//reading response message from host:
 		Object objectSentFromHost=null;
 		try {
@@ -131,7 +135,7 @@ public class ModelGuest extends Observable implements Model {
 	@Override
 	public int WhoseTurnIsIt_Id() {
 		String []command=GuestClientHandler.createCommandStrings("WhoseTurnIsIt_Id");
-		sendAllString(command,outToServer);//sending request to host
+		sendAllString(command);//sending request to host
 		String inputString = getMessageFromHost();//reading response message from host:
 		String [] splitString= inputString.split(":");
 		String res=splitString[1];
@@ -142,7 +146,7 @@ public class ModelGuest extends Observable implements Model {
 	@Override
 	public boolean wasLastPlacementSuccessful() {
 		String []command=GuestClientHandler.createCommandStrings("wasLastPlacementSuccessful");
-		sendAllString(command,outToServer);//sending request to host
+		sendAllString(command);//sending request to host
 		String inputString = getMessageFromHost();//reading respone message from host:
 		String [] splitString= inputString.split(":");
 		String res=splitString[1];
@@ -158,14 +162,14 @@ public class ModelGuest extends Observable implements Model {
 	@Override
 	public void addAplayer(String name) {
 		String [] command=GuestClientHandler.createCommandStrings("addAplayer","String","player1");
-		sendAllString(command,outToServer);//sending request to host
+		sendAllString(command);//sending request to host
 		getMessageFromHost();//reading response message from host:
 	}
 
 	@Override
 	public void initGame() {
 		String []command=GuestClientHandler.createCommandStrings("initGame");
-		sendAllString(command,outToServer);//sending request to host
+		sendAllString(command);//sending request to host
 		getMessageFromHost();//reading response message from host:
 		/*try {
 			String inputString = inFromServer.readLine();//reading approval message from host that everything was good and finished:
@@ -178,7 +182,7 @@ public class ModelGuest extends Observable implements Model {
 	public void givePlayerOneTile(int playerId) {
 		String strPlayerId = ""+playerId;
 		String [] command=GuestClientHandler.createCommandStrings("givePlayerOneTile","String","strPlayerId");
-		sendAllString(command,outToServer);//sending request to host
+		sendAllString(command);//sending request to host
 		//getMessageFromHost();//reading response message from host:
 		
 	}
@@ -193,43 +197,66 @@ public class ModelGuest extends Observable implements Model {
 	@Override
 	public void endPlayerTurn() {
 		String []command=GuestClientHandler.createCommandStrings("endPlayerTurn");
-		sendAllString(command,outToServer);//sending request to host
+		sendAllString(command);//sending request to host
 		getMessageFromHost();//reading response message from host:
 	}
 
 	@Override
 	public void skipPlayerTurn() {
 		String []command=GuestClientHandler.createCommandStrings("skipPlayerTurn");
-		sendAllString(command,outToServer);//sending request to host
+		sendAllString(command);//sending request to host
 		getMessageFromHost();//reading response message from host:
 	}
 
 	public void initConnectiontoServer() {
 		try {
-		this.client=new Socket("localhost",8080);
+			int port=ModelHost.Host_PortFor_Communicating_With_Guests;
+		this.client=new Socket("localhost",port);
 		//initializing object sending/receiving object:
 		myObjectStream=new ObjectStream(client);//passing the socket to the Serializable object sender
 		//initializing string senders / receivers objects:
-		this.outToServer=new PrintWriter(client.getOutputStream(),true);
-		this.inFromServer=new BufferedReader(new InputStreamReader(client.getInputStream()));
-		String inputString=inFromServer.readLine();//reading welcome from host:
+		//this.outToServer=new PrintWriter(client.getOutputStream(),true);
+		//this.inFromServer=new BufferedReader(new InputStreamReader(client.getInputStream()));
+		
+		//Found a solution here :https://stackoverflow.com/questions/14217245/socket-objectoutpustream-objectinputstream
+		//have both side start their streams in reverse order (out then in vs in and then out)
+		//Initialize the "myObjectStream"
+		System.out.println("initConnectiontoServer started");
+		myObjectStream.initOutputStreams();
+		myObjectStream.oos.flush();
+		myObjectStream.initInputStream();
+		
+		System.out.println("initConnectiontoServer :myObjectStream initialized");
+		System.out.println("initConnectiontoServer :myObjectStream initialization - done!");
+		Thread.sleep(1000);
+		String inputString=myObjectStream.readString();//reading welcome from host:
 		System.out.println("message received from server:"+inputString);
-		outToServer.println(this.name);
-		inputString=inFromServer.readLine();//reading waiting for players message from host:
+		myObjectStream.sendString(this.name); // sending the name to the host
+		inputString=myObjectStream.readString();;//reading waiting for players message from host:
 		System.out.println("message received from server:"+inputString);
-		inputString=inFromServer.readLine();//reading good luck message for players from host:
+		inputString=myObjectStream.readString();//reading good luck message for players from host:
 		System.out.println("message received from server:"+inputString);
 		}
 		catch (IOException e) {
 			errorInLast_communication=true;
-			throw new RuntimeException(e);
+			//throw new RuntimeException(e);
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
 
-	public void sendAllString(String []command, PrintWriter outToServer){
+	public void sendAllString(String []command){
 		for(int i=0;i< command.length;i++){
-			outToServer.println(command[i]);//sending every part of the String []command
+			try {
+				myObjectStream.sendString(command[i]);
+			} catch (IOException e) {
+			};//sending every part of the String []command
 		}
 	}
 	
@@ -246,8 +273,8 @@ public class ModelGuest extends Observable implements Model {
 	public String getMessageFromHost() {
 		String inputString;
 		try {
-			inputString = inFromServer.readLine();//reading response message from host:
-		} catch (IOException e) {
+			inputString = myObjectStream.readString();//reading response message from host:
+		} catch (IOException | ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
 		if(inputString==null) {

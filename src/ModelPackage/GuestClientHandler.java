@@ -1,12 +1,12 @@
 package ModelPackage;
 
-import java.io.BufferedReader;
+//import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+//import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+//import java.io.OutputStreamWriter;
+//import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import baseScrabble.Tile;
@@ -21,7 +21,7 @@ import server.ClientHandler;
 //send confirmation to the clients. 
 
 public class GuestClientHandler implements ClientHandler {
-	 private PrintWriter out=null;
+	 //private PrintWriter out=null;
 	 private ModelHost theHost;
 	 private int numOfPlayers;
 	 private ObjectStream myObjectStream;//ObjectStream:class for sending ((Serializable))objects through TCP/IP:
@@ -36,6 +36,7 @@ public class GuestClientHandler implements ClientHandler {
 	 public GuestClientHandler(ModelHost theHost,int numOfPlayers) {
 		 this.theHost=theHost;
 		 this.numOfPlayers=numOfPlayers;
+		 myObjectStream=new ObjectStream();
 	 }
 	 
 	 
@@ -88,31 +89,39 @@ public class GuestClientHandler implements ClientHandler {
 	public void handleClient(InputStream inFromclient, OutputStream outToClient) throws IOException {
         //initializing the object sender object:
 		System.out.println("GuestClientHandler handleClient has started");
+		if(myObjectStream==null) {//
+			System.err.println("***problem!!!myObjectStream=null. was it not initialized");
+		}
 		myObjectStream.initInputStream(inFromclient);
+		System.out.println("GuestClientHandler initInputStream is done");
 		myObjectStream.initOutputStreams(outToClient);
+		myObjectStream.os.flush();
+		System.out.println("GuestClientHandler initOutputStreams is done (also flushed)");
+		
 		//try-with-resources statement -ensures that the buffer will be closed.
-    	try (BufferedReader reader = new BufferedReader(new InputStreamReader(inFromclient))) {
-    		out =new PrintWriter(new OutputStreamWriter(outToClient), true);
+    	try  {
+    		//out =new PrintWriter(new OutputStreamWriter(outToClient), true);
     		//out=new PrintWriter(outToClient,true);
     		//Firstly we need to get the name of the the player:
-    		String nameOfPlayer=ConnectingNewPlayer(out, reader);
+    		String nameOfPlayer=ConnectingNewPlayer();
     		//now we 'busy wait' until the number of connected players is equal to the defined numOfPlayers:
     		while(this.numOfPlayers!=theHost.getGameState().listOfPlayers.size()) {
     			try {Thread.sleep(500);} //wait for 0.5 seconds then check again
     			catch (InterruptedException e) {e.printStackTrace();}
     		}
-    		
-    		out.println("player "+nameOfPlayer+" is in the game -good luck!");
+    		String Start_Of_Game_String="player "+nameOfPlayer+" is in the game -good luck!";
+    		myObjectStream.sendString(Start_Of_Game_String);
     		//Now we initialize the game:
     		theHost.initGame();
     		//Now the player can send commands:
 
         	while(!theHost.hasGameEnded) {
-        		String inputString=reader.readLine();//reading the first line-that has the method name:
+        		String inputString;//reader.readLine();//reading the first line-that has the method name:
+        		inputString=myObjectStream.readString();
         		System.out.println("Server says:I received the command :"+inputString);
         		String methodName=getMethodName(inputString);
 	        	try {
-	        		Object output=executeCommand(methodName,reader);
+	        		Object output=executeCommand(methodName);
 	        		//Send output back to the client (i.e. to the model of the guest):
 	        		sendOutputToClient(output); //@TODO
 	        		
@@ -121,13 +130,18 @@ public class GuestClientHandler implements ClientHandler {
 	        		e.printStackTrace();
 	        	}
         	}
-        out.println("Game has ended.Goodbye!");
+        //out.println("Game has ended.Goodbye!");
+        String goodbyeMsg="Game has ended.Goodbye!";
+        myObjectStream.sendString(goodbyeMsg);
         //everything will be closed by the server - do not close here!
         	 	
     	}
     	catch(IOException e){
     		e.printStackTrace();
-    	}
+    	} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	
 	
@@ -135,9 +149,11 @@ public class GuestClientHandler implements ClientHandler {
 	//Sends string or byte array :
 	//if  it is a string the format is :<Type>:<Value> 
 	public void sendOutputToClient(Object output) throws IOException{
+		String output_str;
 		//if output is null this means that there were no exceptions and there is no value to return (void method) 
 		if(output==null) {
-			out.println("command completed successfully:no return values");
+			String Action_ACK="command completed successfully:no return values";
+			myObjectStream.sendString(Action_ACK);
 		}
 		if(output instanceof GameState ) {//problematic! maybe try to serialize?
 			//send game state over tcIP
@@ -146,7 +162,8 @@ public class GuestClientHandler implements ClientHandler {
 		if(output instanceof Integer ) {
 			//send string Integer over tcIP
 			Integer num=(Integer) output;
-			out.println("Integer:"+num.toString());
+			output_str="Integer:"+num.toString();
+			myObjectStream.sendString(output_str);
 			
 		}
 		if(output instanceof ArrayList) {//problematic! maybe try to serialize?
@@ -161,7 +178,8 @@ public class GuestClientHandler implements ClientHandler {
 			//send Boolean over TCP / IP
 			Boolean b1=(Boolean)output;
 			//send String to the client:
-			out.println("Boolean:"+b1.toString());
+			output_str ="Boolean:"+b1.toString();
+			myObjectStream.sendString(output_str);
 			
 			}
 
@@ -170,15 +188,29 @@ public class GuestClientHandler implements ClientHandler {
 	
 	
 	//Connects the new player to the game .returns the name of the player
-	public String ConnectingNewPlayer(PrintWriter out , BufferedReader reader) throws IOException {
-		out.println("Welcome to the game:please send your name");
+	public String ConnectingNewPlayer( ) throws IOException {
+		String welcomeMsg="Welcome to the game:please send your name";
+		myObjectStream.sendString(welcomeMsg);
+		//out.println("Welcome to the game:please send your name");
 		//waiting for client to send us the name.
-		String inputString=reader.readLine();//reading name line:
-		System.out.println("GuestClientHandler.ConnectingNewPlayer says:inputString is "+inputString);
-		//now we add a player to the game (using host model methods):
-		theHost.addAplayer(inputString);
-		out.println(inputString+" is connected.waiting for players to connect");
-		return inputString;
+		//String inputString=reader.readLine();//reading name line:
+		String inputString=null;
+		try {
+			inputString = myObjectStream.readString();
+			System.out.println("GuestClientHandler.ConnectingNewPlayer says:inputString is "+inputString);
+			//now we add a player to the game (using host model methods):
+			theHost.addAplayer(inputString);
+			//out.println(inputString+" is connected.waiting for players to connect");
+			String connected_ACK=inputString+" is connected.waiting for players to connect";
+			myObjectStream.sendString(connected_ACK);
+			return inputString;
+		}
+		catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 	
 	
@@ -188,7 +220,7 @@ public class GuestClientHandler implements ClientHandler {
 	//Method to decode the command received through the tcp/ip connection from the guest.
 	//Will parse the string and return the output if there is any. (if the method returns void - null will be returned)
 	//Also, if there is a parsing error because of bad input/connection problem we will throw an exception.
-	private Object executeCommand(String methodName,BufferedReader reader) throws Exception {
+	private Object executeCommand(String methodName) throws Exception {
 		final int  indexOfTypeString=1;
 		final int  indexOfValueString=2;
 		//------------------------------------
@@ -198,16 +230,16 @@ public class GuestClientHandler implements ClientHandler {
 		String []methodsWhitoutInputs= {"getGameState","WhoseTurnIsIt","WhoseTurnIsIt_Id","wasLastPlacementSuccessful","endPlayerTurn", "skipPlayerTurn"};
 		boolean isWithInputs=contatinsStrArr(methodsWithInputs,methodName);
 		if(isWithInputs)
-			output=executeCommand_methodsWithInputs(methodName,reader);
+			output=executeCommand_methodsWithInputs(methodName);
 		else
-			output=executeCommand_methodsWithNoInputs(methodName,reader);
+			output=executeCommand_methodsWithNoInputs(methodName);
 			
 		return output;
 	}
 	
 	
 	//helper method that takes care of methods 
-	private Object executeCommand_methodsWithInputs(String methodName,BufferedReader reader) throws Exception{
+	private Object executeCommand_methodsWithInputs(String methodName) throws Exception{
 		final int  indexOfTypeString=1;
 		final int  indexOfValueString=2;
 		//------------------------------------
@@ -217,7 +249,8 @@ public class GuestClientHandler implements ClientHandler {
 		String typeString;
 		String valueString;
 		//All methods currently have just one variable - therefore we will only read one line and parse it: 
-		firstVarLine=reader.readLine();
+		//firstVarLine=reader.readLine();
+		firstVarLine=myObjectStream.readString();
 		splitString=firstVarLine.split(":");
 		typeString=splitString[indexOfTypeString];
 		valueString=splitString[indexOfValueString];
@@ -265,7 +298,7 @@ public class GuestClientHandler implements ClientHandler {
 	
 	
 	//Helper method to excecute 
-	private Object executeCommand_methodsWithNoInputs(String methodName,BufferedReader reader)throws Exception {
+	private Object executeCommand_methodsWithNoInputs(String methodName)throws Exception {
 		String output=null;
 		String []methodsWhitoutInputs= {"getGameState","WhoseTurnIsIt","WhoseTurnIsIt_Id","wasLastPlacementSuccessful","endPlayerTurn", "skipPlayerTurn"};
 		switch(methodName) {
@@ -293,8 +326,16 @@ public class GuestClientHandler implements ClientHandler {
 	@Override
 	public void close() {
 		// TODO Auto-generated method stub
-		if(out!=null)
-			out.close();
+		System.out.println("****guest client handler :closed was called****");
+		if(myObjectStream!=null) {
+			try {
+			myObjectStream.closeInputStream();
+			myObjectStream.closeOutputStreams();
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
+		}
+			
 
 	}
 	

@@ -28,7 +28,10 @@ public class ObjectStreamTest {
         System.out.println("Server says: client connected to server.");
         //Create the ObjectStream:
         ObjectStream objStream=new ObjectStream(clientSocket);
+       //Important:starting the streams in reverse order in server and client.
+        //server:in then out.client:out then in
         objStream.initInputStream();
+        objStream.initOutputStreams();
         System.out.println("******************");
         System.out.println("server says : trying to read ArrayList<Tile> object");
         Object obj=objStream.readObject();
@@ -57,7 +60,7 @@ public class ObjectStreamTest {
         if(obj instanceof GameState ) {
         	System.out.println("obj is of type GameState");
         	GameState state=(GameState)obj;
-        	System.out.println("GameState receieved by server is :");
+        	System.out.println("GameState receieved by server is : ");
         	printGameState(state);
         }
         System.out.println("******************");
@@ -71,8 +74,10 @@ public class ObjectStreamTest {
         	Player p1=(Player)obj;
         	System.out.println("Player received by server is :"+p1.toString());
         }
-        System.out.println("******************");
-        
+        System.out.println("******************%%%%%");
+        System.out.println("\nserver says : trying to read String object");
+        String stringFromStream= objStream.readString();
+        System.out.println("String(object) received by server is :"+stringFromStream.toString());
         objStream.closeInputStream();
 	}
 	
@@ -88,6 +93,7 @@ public class ObjectStreamTest {
         //creating stream object to send:
         ObjectStream objStream=new ObjectStream(server);
         objStream.initOutputStreams();
+        objStream.initInputStream();
         System.out.println("client says : sending ArrayList<Tile> to server:");
         objStream.writeObjectOut(list);
         //
@@ -109,6 +115,10 @@ public class ObjectStreamTest {
         Player p2=new Player("Moshiko");
         objStream.writeObjectOut(p2);
         //closing
+        System.out.println("client says : sending String (object) to server:");
+        String str="test for string sending through object stream \nsecond line\nthirdlind";
+        objStream.sendString(str);
+        
          objStream.closeOutputStreams();
         
 	}
@@ -186,6 +196,7 @@ public class ObjectStreamTest {
 			}
 		});
         serverThread.start();
+        try {Thread.sleep(2000);} catch (InterruptedException e1) {e1.printStackTrace();}
         clientThread.start();
         
 	}

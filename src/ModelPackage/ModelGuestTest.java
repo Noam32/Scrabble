@@ -2,6 +2,7 @@ package ModelPackage;
 
 import baseScrabble.Tile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 //this test has to create a host and a guest, and communicate between them.
@@ -10,7 +11,8 @@ public class ModelGuestTest {
 
 
     public static void main(String[] args) {
-        ModelHost myHost =new ModelHost();
+ 
+    	ModelHost myHost =new ModelHost();
         ModelGuest myGuest=new ModelGuest("Moshe");
         try {
             Thread.sleep(500);}
@@ -77,4 +79,30 @@ public class ModelGuestTest {
         myHost.localServer.close();
 
     }
+ 
+    
+    public static void  anotherTest() {
+    	ModelGuest myGuest=new ModelGuest("Moshe");
+    	myGuest.addAplayer("hi");
+    	int res =myGuest.getNumOfPointsForPlayer("Moshe");
+    	System.out.println("res is..."+res);
+    	
+        try {
+            Thread.sleep(5000);}
+         catch (InterruptedException e) {throw new RuntimeException(e);}
+        
+    }
+    
+    /*
+        	Thread clientThread = new Thread(() -> {
+			anotherTest();
+		});
+    	clientThread.start();
+    	
+    	try {Thread.sleep(30000);} catch (InterruptedException e1) {e1.printStackTrace();}
+    	
+     */
+    
+    
+    
 }

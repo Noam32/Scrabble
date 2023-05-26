@@ -30,6 +30,7 @@ public class ModelHost extends Observable implements Model {
 	public static final int playerIdNotFoundCode=-1;
 	public boolean hasGameEnded=false;
 	public Player myPlayer; //the player controlled by this Model
+	public static int Host_PortFor_Communicating_With_Guests =8080;// Communicate
 	
 	public ModelHost(){
 		this.gamestate=new GameState();
@@ -239,7 +240,7 @@ public class ModelHost extends Observable implements Model {
 	//initializing the server that will handle requests from the guest players:
 	public void initLocalServer() {
 		int maxNumOfPorts=4;
-		int portTolistenTo=8080;
+		int portTolistenTo=Host_PortFor_Communicating_With_Guests;
 		
 		GuestClientHandler clientHandler_ForModelHost= new GuestClientHandler(this,Num_Of_Players);
 		//passing the handler to handle string requests from the guests:
