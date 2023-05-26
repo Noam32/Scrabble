@@ -32,14 +32,14 @@ import java.net.Socket;
 		 public void initOutputStreams() throws IOException {
 			  os = mySocket.getOutputStream();
 		     oos = new ObjectOutputStream(os);
-		     System.out.println("initOutputStreams() created - probably the client");
+		     
 		 }
 		 //Output
 		 protected void initOutputStreams(OutputStream outputStream) throws IOException {
-			 System.out.println("initOutputStreams called"); 
+			  
 			 os = outputStream;
 		     oos = new ObjectOutputStream(os);
-		     System.out.println("ObjectOutputStream created-- probably the server");
+		     
 		 }
 		 public void writeObjectOut(Object obj) throws IOException {
 			 oos.writeObject(obj);
@@ -60,15 +60,13 @@ import java.net.Socket;
 		 public void initInputStream() throws IOException { 
 			 input_stream=mySocket.getInputStream(); 
 			  objectInputStream = new ObjectInputStream(input_stream);
-			  System.out.println("initInputStream() -has been create (probably client)");
+			  
 		 }
 		 
 		 protected void initInputStream(InputStream inputStream) throws IOException {
-			 System.out.println("initInputStream was called -probably server"); 
-			 input_stream=inputStream;
-			  System.out.println("initInputStream was called ");
-			  objectInputStream = new ObjectInputStream(input_stream);
-			  System.out.println("initInputStream finished ");
+			 input_stream=inputStream; 
+			 objectInputStream = new ObjectInputStream(input_stream);
+			  
 		 }
 		 
 		 public Object readObject() throws ClassNotFoundException, IOException {
