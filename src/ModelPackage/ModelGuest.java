@@ -191,12 +191,14 @@ public class ModelGuest extends Observable implements Model {
 	public void placeWordOnBoard(Word w) throws Exception {
 		// TODO Auto-generated method stub
 		//Special communication : here we only send the method name and after that we send the object!
-		String [] command=GuestClientHandler.createCommandStrings("placeWordOnBoard");
+		String [] command=GuestClientHandler.createCommandStrings("placeWordOnBoard","Word","Object");
 		sendAllString(command);
+		getMessageFromHost();//reading response message from host - will ask us to send the Word object
 		//send word object:
 		myObjectStream.writeObjectOut(w);
 		//wait for response:
-		
+		String ack_or_error_msg=getMessageFromHost();//reading response message from host(eeither an ACK or exception string)
+		System.out.println("modelguest.placeWordOnBoard() ack_or_error_msg = "+ack_or_error_msg);
 
 	}
 

@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 import baseScrabble.Tile;
+import baseScrabble.Word;
 import server.ClientHandler;
 
 
@@ -84,6 +85,19 @@ public class GuestClientHandler implements ClientHandler {
 		 return res;
 	 }
 	 
+	 private  Word getWordFromClient()   {
+		 Word wordFromGuest;
+		 Object obj=null;
+		 try {
+			myObjectStream.sendString("Please send the Word object");
+		} catch (IOException e) {e.printStackTrace();}
+		 try {
+			 obj=myObjectStream.readObject();
+		} catch (ClassNotFoundException | IOException e) {e.printStackTrace();}
+		 
+		 wordFromGuest=(Word)obj;//if this fails an exception will be thrown
+		 return wordFromGuest;
+	 }
 	 
 	@Override
 	public void handleClient(InputStream inFromclient, OutputStream outToClient) throws IOException {
@@ -290,7 +304,11 @@ public class GuestClientHandler implements ClientHandler {
 			return null;
 		
 		case "placeWordOnBoard"://Challenging !
-			
+			if(typeString.equals("Word")||typeString.equals("word")) {
+				//we need to ask the guest to send us the object:
+				Word wordFromGuest=getWordFromClient();
+				theHost.placeWordOnBoard(wordFromGuest);
+			}
 		
 		}
 		return output;
@@ -347,6 +365,7 @@ public class GuestClientHandler implements ClientHandler {
 		}
 		return false;
 	}
+	
 	
 
 }
