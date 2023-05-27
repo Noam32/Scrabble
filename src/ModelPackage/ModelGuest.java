@@ -219,23 +219,23 @@ public class ModelGuest extends Observable implements Model {
 		//this.inFromServer=new BufferedReader(new InputStreamReader(client.getInputStream()));
 		
 		//Found a solution here :https://stackoverflow.com/questions/14217245/socket-objectoutpustream-objectinputstream
-		//have both side start their streams in reverse order (out then in vs in and then out)
+		//have both side start their streams in reverse order (Guest:out then in vs Host(guestclienthandler): in and then out)
 		//Initialize the "myObjectStream"
 		System.out.println("initConnectiontoServer started");
 		myObjectStream.initOutputStreams();
 		myObjectStream.oos.flush();
 		myObjectStream.initInputStream();
-		
 		System.out.println("initConnectiontoServer :myObjectStream initialized");
 		System.out.println("initConnectiontoServer :myObjectStream initialization - done!");
 		Thread.sleep(1000);
-		String inputString=myObjectStream.readString();//reading welcome from host:
-		System.out.println("message received from server:"+inputString);
+		//Now we can start to communicate: 
+		String inputString=myObjectStream.readString();//reading welcome  message from host:
+		System.out.println("ModelGuest says :message received from server:"+inputString);
 		myObjectStream.sendString(this.name); // sending the name to the host
 		inputString=myObjectStream.readString();;//reading waiting for players message from host:
-		System.out.println("message received from server:"+inputString);
+		System.out.println("ModelGuest says :message received from server:"+inputString);
 		inputString=myObjectStream.readString();//reading good luck message for players from host:
-		System.out.println("message received from server:"+inputString);
+		System.out.println("ModelGuest says :message received from server:"+inputString);
 		}
 		catch (IOException e) {
 			errorInLast_communication=true;
