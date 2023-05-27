@@ -78,6 +78,15 @@ public class ObjectStreamTest {
         System.out.println("\nserver says : trying to read String object");
         String stringFromStream= objStream.readString();
         System.out.println("String(object) received by server is :"+stringFromStream.toString());
+        
+        System.out.println("\n*********!!!!!!!*********%%%%%");
+        System.out.println("\nserver says : trying to read tile[][] object");
+        Tile[][] tileArr= (Tile[][])objStream.readObject();
+        System.out.println("Tile[][](object) received by server is :");
+        System.out.println(printdArr(tileArr));
+        
+        /// cahnging the board inside gameState and sending it
+        
         objStream.closeInputStream();
 	}
 	
@@ -118,6 +127,20 @@ public class ObjectStreamTest {
         System.out.println("client says : sending String (object) to server:");
         String str="test for string sending through object stream \nsecond line\nthirdlind";
         objStream.sendString(str);
+        
+        System.err.println("client says : sending Tile[][] (object) to server:");
+        Tile [][]tilesArr=new Tile[15][15];
+        Tile t1=new Tile('S',1);
+        tilesArr[7][7]=t1;
+        t1=new Tile('H',1);
+        tilesArr[8][7]=t1;
+        t1=new Tile('I',1);
+        tilesArr[9][7]=t1;
+        t1=new Tile('P',1);
+        tilesArr[10][7]=t1;
+        System.err.println("client says : Im sending this arr +"+printdArr(tilesArr));
+        objStream.writeObjectOut(tilesArr);
+        
         
          objStream.closeOutputStreams();
         
@@ -201,6 +224,24 @@ public class ObjectStreamTest {
         
 	}
 
+	
+	public static String printdArr(Tile [] []tiles) {
+		String str="{The Board 2d tile array:\n";
+		for(int i=0;i<15;i++) {
+			for(int j=0;j<15;j++) {
+				Tile currTile=tiles[i][j];
+				if(currTile==null) {
+					str+="{null}";
+				}
+				else {
+					str+=currTile.toString();
+				}
+			}
+			str+="\n";
+		}
+		str+="}";
+		return str;
+	}
 	
 
 }

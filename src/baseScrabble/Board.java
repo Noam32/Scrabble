@@ -45,10 +45,11 @@ public class Board implements Serializable {
 		for(int i=0;i<15;i++) {
 			for(int j=0;j<15;j++) {
 				Tile currTile=tiles[i][j];
-				if(currTile==null)
-					str+="{null}";
-				else
+				if(currTile==null) {
+					str+="{null}";}
+				else {
 					str+=currTile.toString();
+				}
 			}
 			str+="\n";
 		}

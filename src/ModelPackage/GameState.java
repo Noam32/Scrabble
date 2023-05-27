@@ -39,6 +39,11 @@ public class GameState implements Serializable {
 	protected int getCurrentNumOfPlayers() {
 		return this.listOfPlayers.size();
 	}
+	protected int getIdOfCurrentTurnPlayer() {
+		int indexInList=this.indexOfCurrentTurnPlayer;
+		int id=this.listOfPlayers.get(indexInList).playerId;
+		return id;
+	}
 	
 	public int getIndexOfPlayerWithId(int id) {
 		int numOfPlayers =this.listOfPlayers.size();
@@ -51,5 +56,6 @@ public class GameState implements Serializable {
 		return -1; // if not found in players list.
 	}
 
+	
 
 }

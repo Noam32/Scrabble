@@ -12,7 +12,7 @@ public class Tile implements Serializable {
 	public final char letter;
 	public final int score;
 	
-	private Tile(char letter, int score) {
+	public Tile(char letter, int score) {
 		super();
 		this.letter = letter;
 		this.score = score;

@@ -205,7 +205,7 @@ public class ModelHost extends Observable implements Model {
 	@Override
 	public void endPlayerTurn() {
 		// making sure that the player has 7 tiles:
-		fillPlayersTileListToSeven(this.gamestate.getIndexOfCurrentTurnPlayer());
+		fillPlayersTileListToSeven(this.gamestate.getIdOfCurrentTurnPlayer());
 		//Advancing the turn to the next player
 		this.gamestate.inc_indexOfCurrentTurnPlayer();
 		//notify every one that the turn is over .
