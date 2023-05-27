@@ -60,7 +60,7 @@ public class ModelGuest extends Observable implements Model {
 	@Override
 	public int getNumOfPointsForPlayer(int playerId) {
 		String strPlayerId = ""+playerId;
-		String [] command=GuestClientHandler.createCommandStrings("getNumOfPointsForPlayer","String",strPlayerId);
+		String [] command=GuestClientHandler.createCommandStrings("getNumOfPointsForPlayer","Integer",strPlayerId);
 		sendAllString(command);//sending request to host
 		String inputString = getMessageFromHost();//reading response message from host:
 		String [] splitString= inputString.split(":");
@@ -86,7 +86,7 @@ public class ModelGuest extends Observable implements Model {
 	@Override//Unfinished???untested!
 	public ArrayList<Tile> getTilesForPlayer(int playerId) {
 		String strPlayerId = ""+playerId;
-		String [] command=GuestClientHandler.createCommandStrings("getTilesForPlayer","String","strPlayerId");
+		String [] command=GuestClientHandler.createCommandStrings("getTilesForPlayer","Integer",strPlayerId);
 		sendAllString(command);//sending request to host
 		//getMessageFromHost();//reading respone message from host:
 		Object objectSentFromHost=null;
@@ -101,8 +101,8 @@ public class ModelGuest extends Observable implements Model {
 	}
 
 	@Override//Unfinished???untested!
-	public ArrayList<Tile> getTilesForPlayer(String playerId) {
-		String [] command=GuestClientHandler.createCommandStrings("getTilesForPlayer","String","1");
+	public ArrayList<Tile> getTilesForPlayer(String name) {
+		String [] command=GuestClientHandler.createCommandStrings("getTilesForPlayer","String",name);
 		sendAllString(command);//sending request to host
 		//reading object sent from host:
 		Object objectSentFromHost=null;
@@ -161,7 +161,7 @@ public class ModelGuest extends Observable implements Model {
 
 	@Override
 	public void addAplayer(String name) {
-		String [] command=GuestClientHandler.createCommandStrings("addAplayer","String","player1");
+		String [] command=GuestClientHandler.createCommandStrings("addAplayer","String",name);
 		sendAllString(command);//sending request to host
 		getMessageFromHost();//reading response message from host:
 	}
@@ -181,15 +181,21 @@ public class ModelGuest extends Observable implements Model {
 	@Override
 	public void givePlayerOneTile(int playerId) {
 		String strPlayerId = ""+playerId;
-		String [] command=GuestClientHandler.createCommandStrings("givePlayerOneTile","String","strPlayerId");
+		String [] command=GuestClientHandler.createCommandStrings("givePlayerOneTile","String",strPlayerId);
 		sendAllString(command);//sending request to host
 		//getMessageFromHost();//reading response message from host:
 		
 	}
 
 	@Override
-	public void placeWordOnBoard(Word w) {
+	public void placeWordOnBoard(Word w) throws Exception {
 		// TODO Auto-generated method stub
+		//Special communication : here we only send the method name and after that we send the object!
+		String [] command=GuestClientHandler.createCommandStrings("placeWordOnBoard");
+		sendAllString(command);
+		//send word object:
+		myObjectStream.writeObjectOut(w);
+		//wait for response:
 		
 
 	}

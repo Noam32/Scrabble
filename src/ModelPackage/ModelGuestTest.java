@@ -1,6 +1,8 @@
 package ModelPackage;
 
+import baseScrabble.Board;
 import baseScrabble.Tile;
+import baseScrabble.Tile.Bag;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,11 +31,11 @@ public class ModelGuestTest {
 
         //test for wasLastPlacementSuccessful
         boolean b1 = myGuest.wasLastPlacementSuccessful();
-        System.out.println("wasLastPlacementSuccessful =:"+b1);
+        System.out.println("wasLastPlacementSuccessful returned ="+b1);
 
         //test for WhoseTurnIsIt_Id
         int turn = myGuest.WhoseTurnIsIt_Id();
-        System.out.println("now it's"+" "+turn+" "+"turn");
+        System.out.println("now it's"+" the player with id = "+turn+" "+"turn");
 
         //until here works.
         //test for WhoseTurnIsIt
@@ -73,25 +75,42 @@ public class ModelGuestTest {
             System.out.println("null was returned");
         }
         else {
-            System.out.println(gs.listOfPlayers.toString());
+           printGameState(gs);
         }
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        //Closing
         myHost.localServer.close();
-
+ 
+        System.out.println("test ended successfully!");
     }
  
     
-    public static void  anotherTest() {
-    	ModelGuest myGuest=new ModelGuest("Moshe");
-    	myGuest.addAplayer("hi");
-    	int res =myGuest.getNumOfPointsForPlayer("Moshe");
-    	System.out.println("res is..."+res);
-    	
-        try {
-            Thread.sleep(5000);}
-         catch (InterruptedException e) {throw new RuntimeException(e);}
-        
-    }
+
+    
+    private static void printGameState(GameState game) {
+		 Bag bag=game.bag;
+		 ArrayList<Player> listOfPlayers=game.listOfPlayers;
+		 Board board=game.gameBoard;
+		 int indexOfCurrentTurnPlayer=game.getIndexOfCurrentTurnPlayer();
+		 System.out.println("-------------------------------------");
+		 System.out.println("bag :"+bag.toString());
+		 System.out.println("listOfPlayers :"+listOfPlayers.toString());
+		 System.out.println("board"+board.toString());
+		 System.out.println("indexOfCurrentTurnPlayer: "+indexOfCurrentTurnPlayer);
+		 System.out.println("-------------------------------------");
+		 
+		
+	 }
+   
     
     /*
         	Thread clientThread = new Thread(() -> {
@@ -104,5 +123,18 @@ public class ModelGuestTest {
      */
     
     
+    /* public static void  anotherTest() {
+	ModelGuest myGuest=new ModelGuest("Moshe");
+	myGuest.addAplayer("hi");
+	int res =myGuest.getNumOfPointsForPlayer("Moshe");
+	System.out.println("res is..."+res);
+	
+    try {
+        Thread.sleep(5000);}
+     catch (InterruptedException e) {throw new RuntimeException(e);}
+    
+}*/
+   
+   
     
 }

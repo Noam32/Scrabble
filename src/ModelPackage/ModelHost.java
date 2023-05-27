@@ -172,13 +172,15 @@ public class ModelHost extends Observable implements Model {
 
 	//Unfinished!
 	@Override
-	public void placeWordOnBoard(Word w) {
-		int numOfPoints = 0;//not finished!!! need to to dictionaryLegal!!
+	public void placeWordOnBoard(Word w) throws Exception {
+		int numOfPoints = 0;
 		try {
 			numOfPoints = this.gamestate.gameBoard.tryPlaceWord(w);
 		} catch (Exception e) {
 			//take care of the Exception:if there was an exception it means that we failed to connect to the remote server.
-			//Therfore we notify the user of the program that there was a communication error:
+			//Therefore we notify the user of the program that there was a communication error:
+			String error_msg="error communicating with Dictionary server -cannot complete placeWordOnBoard() action";
+			throw (new Exception (error_msg));
 			
 		}
 		if (numOfPoints == 0) {

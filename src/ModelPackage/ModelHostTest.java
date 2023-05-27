@@ -24,11 +24,9 @@ public class ModelHostTest {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		RunModelHost();
-		System.out.println("Model host will run for 20 seconds");
-		try {Thread.sleep(30000);} catch (InterruptedException e1) {e1.printStackTrace();}
 		
-		/*
+		
+		
 		TestChallenge();
 		try {Thread.sleep(3000);} catch (InterruptedException e1) {e1.printStackTrace();}
 		
@@ -40,7 +38,7 @@ public class ModelHostTest {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		*/
+		
 	}
 	
 	 static void testInitGame() {

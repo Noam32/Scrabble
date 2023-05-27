@@ -146,7 +146,7 @@ public class GuestClientHandler implements ClientHandler {
 	
 	
 	//@TODO
-	//Sends string or byte array :
+	//Sends string or Object :
 	//if  it is a string the format is :<Type>:<Value> 
 	public void sendOutputToClient(Object output) throws IOException{
 		String output_str;
@@ -259,7 +259,7 @@ public class GuestClientHandler implements ClientHandler {
 		switch(methodName) {
 		case "getNumOfPointsForPlayer":
 			  //this method has two options - so we will check both options:
-			  if(typeString.equals("int")) {
+			  if(typeString.equals("int")||typeString.equals("Integer")) {
 				int input=Integer.parseInt(valueString);
 				return (Integer)theHost.getNumOfPointsForPlayer(input);
 			  }else if(typeString.equals("String")) {
@@ -271,7 +271,7 @@ public class GuestClientHandler implements ClientHandler {
 		//////////////////////////////////////
 		case "getTilesForPlayer":
 			ArrayList<Tile> tilesList;
-			 if(typeString.equals("int")) {
+			 if(typeString.equals("int")||typeString.equals("Integer")) {
 					int val=Integer.parseInt(valueString);
 					return (ArrayList<Tile>)theHost.getTilesForPlayer(val);
 			}

@@ -33,7 +33,7 @@ public interface Model {
 	//---During the game - turn by turn : ---
 	public void givePlayerOneTile(int playerId);
 	//We need to send notification at the end to let the model view know if the placement succeeded
-	public void placeWordOnBoard(Word w );
+	public void placeWordOnBoard(Word w ) throws Exception;
 	//sums the points - updates game's state-gives the player tiles (until it has 7 tiles) and moves to the next player.
 	
 	public void endPlayerTurn(); 

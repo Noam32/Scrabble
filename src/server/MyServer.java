@@ -62,7 +62,7 @@ public class MyServer {
 	        try {
 	        	System.out.println("**My server:handleClient:trying to run ch.handleClient**");
 	            ch.handleClient(client.getInputStream(), client.getOutputStream());
-	            System.out.println("**My server:HERE!!!!**");
+	            //System.out.println("**My server:HERE!!!!**");
 	        } catch (IOException e) {
 	            System.out.println("**My server:handleClient:IO exception tring to run handleClient**");
 	        	e.printStackTrace();
