@@ -1,10 +1,13 @@
 package ModelPackage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import baseScrabble.Tile;
 
-public class Player {
+public class Player implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private static int currSerialNum=1;
 	final int playerId;
 	String name;

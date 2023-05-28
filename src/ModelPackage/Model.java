@@ -19,7 +19,8 @@ public interface Model {
 	//Important:
 	//After the view Model calls placeWordOnBoard() - waits to be notified and then checks if the placement succeeded
 	public boolean wasLastPlacementSuccessful();
-	
+	//Returns true if there was a communication exception in the model while running the TCP/ip communication
+	public boolean wasThereAnErrorAtLastCommunication() ;
 	//*******************************
 	//change data:
 	//*******************************
@@ -32,8 +33,9 @@ public interface Model {
 	//---During the game - turn by turn : ---
 	public void givePlayerOneTile(int playerId);
 	//We need to send notification at the end to let the model view know if the placement succeeded
-	public void placeWordOnBoard(Word w );
+	public void placeWordOnBoard(Word w ) throws Exception;
 	//sums the points - updates game's state-gives the player tiles (until it has 7 tiles) and moves to the next player.
+	
 	public void endPlayerTurn(); 
 	//if a player skips his turn - we just give the turn to the next player:
 	public void skipPlayerTurn(); //

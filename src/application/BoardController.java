@@ -1,121 +1,88 @@
-package ViewPackage;
+package application;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Observer;
 
-import javafx.animation.Animation;
-import javafx.animation.Timeline;
+import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.MapProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleMapProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import viewModel.viewModel;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
 
 @SuppressWarnings("deprecation")
-public class BoardController implements Observer {
+public class BoardController implements Observer{
 	
 	viewModel vm;
-	private StringProperty wordFromUser;
-	private BooleanProperty isvertical,isvalid,isHost;
-	private IntegerProperty row,col,numberOfPlayers;
-	private MapProperty<StringProperty, IntegerProperty> userScore;
-	public ObjectProperty<Character>[] userTiles = new ObjectProperty[7];
-	public IntegerProperty[] userTilesScore = new IntegerProperty[7];
-	char[] word;
-	int[] score;
-	
+	public StringProperty wordFromUser,userTiles;
+	public BooleanProperty isvertical,isvalid,isHost;
+	public IntegerProperty userScore,row,col;
 	@FXML
 	GridPane board;
 	@FXML
 	GridPane player;
 	@FXML
 	BorderPane borderPane;
-	@FXML
-    private Label timerLabel;
-	private static final int STARTTIME = 0;
-    private final IntegerProperty timeSeconds = new SimpleIntegerProperty(STARTTIME);
-
-    private Timeline timeline;
 	
-    
-    
-    private void updateTime() {
-        // increment seconds
-        int seconds = timeSeconds.get();
-        timeSeconds.set(seconds + 1);
-    }
-
-    public void handle(ActionEvent event) {
-     //   timeline = new Timeline(new KeyFrame(Duration.seconds(1), evt -> updateTime()));
-        timeline.setCycleCount(Animation.INDEFINITE); // repeat over and over again
-        timeSeconds.set(STARTTIME);
-        timeline.play();
-    }
 	public BoardController() {
 		this.wordFromUser = new SimpleStringProperty();
+		this.userTiles = new SimpleStringProperty();
 		this.isvertical = new SimpleBooleanProperty();
 		this.isHost = new SimpleBooleanProperty();
 		this.isvalid = new SimpleBooleanProperty();
-		this.userScore = new SimpleMapProperty<>();
+		this.userScore = new SimpleIntegerProperty();
 		this.row = new SimpleIntegerProperty();
 		this.col=new SimpleIntegerProperty();
-		this.numberOfPlayers = new SimpleIntegerProperty();
-
-		for (int i = 0; i < userTiles.length; i++) {
-			userTiles[i] = new SimpleObjectProperty<>();
-		}
-
-		for (int i = 0; i < userTilesScore.length; i++) {
-			userTilesScore[i] = new SimpleIntegerProperty();
-		}
 	}
 	
 	void init(viewModel vm) {
 		this.vm=vm;
-		vm.addObserver(this);
 		vm.wordFromUser.bind(wordFromUser);
 		vm.isvertical.bind(isvertical);
 		vm.isHost.bind(isHost);
+		vm.isvalid.bind(isvalid);
 		vm.row.bind(row);
 		vm.col.bind(col);
-		userScore.bind(vm.userScore);
-		isvalid.bind(vm.isvalid);
-		numberOfPlayers.bind(vm.numberOfPlayers);
-		for(int i=0;i<userTiles.length;i++) {
-			userTiles[i].bind(vm.userTiles[i]);
-			userTilesScore[i].bind(vm.userTilesScore[i]);
-		}
-		
 	}
 	
 	/*	This array holds values for representing the board, including special cells. 
@@ -148,49 +115,40 @@ public class BoardController implements Observer {
 	StackPane[] tiles = new StackPane[26];
 	boolean mousePress;
 	LinkedHashMap<Character, StackPane> map = new  LinkedHashMap<Character, StackPane>();
-
+	@SuppressWarnings("static-access")
 	public void redraw() {
-		if(this.word!=null) {
-	    for (int i=0;i<this.word.length;i++) {
-	    	char letter = this.word[i];
-	        int value = this.score[i];
-	    	Rectangle square = new Rectangle();
+		char letter = 'A';
+		
+		int score =5;
+		if (!map.containsKey(letter)) {
+			Rectangle square = new Rectangle(40,40);
 			Color color = Color.ANTIQUEWHITE;
-			Text letterText = new Text(Character.toString(letter));
-		    letterText.setFont(Font.font("BN Matan", FontWeight.BOLD, 20));
-		    Text scoreText = new Text(Integer.toString(value));
-		    scoreText.setFont(Font.font("BN Matan", FontWeight.BOLD, 16));
-
-	        square.setFill(color);
-	        StackPane temp = new StackPane(square,letterText,scoreText);
-	     // Bind square size to cell size
-	        square.widthProperty().bind(board.widthProperty().divide(15));
-	        square.heightProperty().bind(board.heightProperty().divide(15));
-	        square.setStroke(Color.BLACK); // Add black border
-	        square.setStrokeWidth(1); // Set border width
-	        
-	        // Bind text size to square size
-	        letterText.fontProperty().bind(Bindings.createObjectBinding(() ->
-	                Font.font("BN Matan", FontWeight.BOLD, square.getWidth() / 3), square.widthProperty()));
-	        scoreText.fontProperty().bind(Bindings.createObjectBinding(() ->
-	                Font.font("BN Matan", FontWeight.BOLD, square.getWidth() / 4), square.widthProperty()));
-
-	        temp.setAlignment(scoreText, Pos.BOTTOM_RIGHT);
-
-	        scoreText.setTranslateX(-5);
-	        scoreText.setTranslateY(-5);    
-			player.add(temp, this.col.getValue(), this.row.getValue());
-	    }
+            Text letterText = new Text(Character.toString(letter));
+            Text scoreText = new Text(Integer.toString(score));
+    		letterText.setFont(Font.font("BN Matan", FontWeight.BOLD, 20));
+    		scoreText.setFont(Font.font("BN Matan", FontWeight.BOLD, 16));
+            //Font f = new Font(score);
+            square.setFill(color);
+            StackPane temp = new StackPane(square,letterText,scoreText);
+            square.widthProperty().bind(board.widthProperty().divide(15));
+            square.heightProperty().bind(board.heightProperty().divide(15));
+            temp.setAlignment(scoreText, Pos.BOTTOM_RIGHT);
+            map.put(letter, temp);
 		}
+		
+		board.add(map.get(letter), 7, 7);
+		//f.bi
+        //f.heightProperty().bind(board.heightProperty().divide(15));
+		
 	}
-	Stage primaryStage;
+	Stage stage;
 	public void setStage(Stage stage){
-		this.primaryStage=stage;
+		this.stage=stage;
 		}
 	
 	
 	@SuppressWarnings("static-access")
-	public void paint() {
+	public void initialize() {
 		mousePress = false;
 	    stack = new StackPane[15][15]; // Initialize the stack array
 	    Polygon star = new Polygon();
@@ -207,7 +165,7 @@ public class BoardController implements Observer {
 	        -10.0, 30.0
 	    });
 	    star.setFill(Color.GOLD);
-     //   DataFormat StackPaneFormat = new DataFormat("StackPane");
+        DataFormat StackPaneFormat = new DataFormat("StackPane");
 
 		for (int row = 0; row < 15; row++) {				//filling board with squares
             for (int col = 0; col < 15; col++) {
@@ -340,8 +298,34 @@ public class BoardController implements Observer {
 
 		//board.setHgap(5);
 		//board.setVgap(5);
-	
 		/*
+         double W = board.getWidth();
+         double H = board.getHeight();
+         double w = W / boardData[0].length;
+         double h = H / boardData.length;
+		 for (int row = 0; row <= 15; row++) {
+		        for (int col = 0; col <= 15; col++) {
+		            // Adding horizontal lines
+		            Line horizontalLine = new Line();
+		            horizontalLine.setStroke(Color.BLACK);
+		            horizontalLine.setStartX(0);
+		            horizontalLine.setEndX(W);
+		            horizontalLine.setStartY(h * row);
+		            horizontalLine.setEndY(h * row);
+		            board.getChildren().add(horizontalLine);
+
+		            // Adding vertical lines
+		            Line verticalLine = new Line();
+		            verticalLine.setStroke(Color.BLACK);
+		            verticalLine.setStartX(w * col);
+		            verticalLine.setEndX(w * col);
+		            verticalLine.setStartY(0);
+		            verticalLine.setEndY(H);
+		            board.getChildren().add(verticalLine);
+		        }
+	    }*/
+		//redraw();
+		
 		for(int j=0;j<7;j++) {
 			
 			Rectangle square = new Rectangle();
@@ -377,50 +361,8 @@ public class BoardController implements Observer {
 			player.add(temp, j, 0);
 		}
 		
-		*/
-		updateTiles();
-		time();
+		
 	}
-	
-
-    public void time() {
-       
-    }
-	// In your BoardController class
-	
-	public void updateTiles() {
-	    for (int i=0;i<userTiles.length;i++) {
-	    	char letter = userTiles[i].getValue();
-	        int value = userTilesScore[i].getValue();
-	    	Rectangle square = new Rectangle();
-			Color color = Color.ANTIQUEWHITE;
-			Text letterText = new Text(Character.toString(letter));
-		    letterText.setFont(Font.font("BN Matan", FontWeight.BOLD, 20));
-		    Text scoreText = new Text(Integer.toString(value));
-		    scoreText.setFont(Font.font("BN Matan", FontWeight.BOLD, 16));
-
-	        square.setFill(color);
-	        StackPane temp = new StackPane(square,letterText,scoreText);
-	     // Bind square size to cell size
-	        square.widthProperty().bind(board.widthProperty().divide(15));
-	        square.heightProperty().bind(board.heightProperty().divide(15));
-	        square.setStroke(Color.BLACK); // Add black border
-	        square.setStrokeWidth(1); // Set border width
-	        
-	        // Bind text size to square size
-	        letterText.fontProperty().bind(Bindings.createObjectBinding(() ->
-	                Font.font("BN Matan", FontWeight.BOLD, square.getWidth() / 3), square.widthProperty()));
-	        scoreText.fontProperty().bind(Bindings.createObjectBinding(() ->
-	                Font.font("BN Matan", FontWeight.BOLD, square.getWidth() / 4), square.widthProperty()));
-
-	        temp.setAlignment(scoreText, Pos.BOTTOM_RIGHT);
-
-	        scoreText.setTranslateX(-5);
-	        scoreText.setTranslateY(-5);    
-			player.add(temp, i, 0);
-	    }
-	}
-
 	public void mouseEntered(MouseEvent me) {
 		Node n1 = (Node)me.getSource();
 		Integer col = board.getColumnIndex(n1);
@@ -470,6 +412,7 @@ public class BoardController implements Observer {
         inputDialog.showAndWait();
         String word = wordField.getText();
         //put the thin
+        this.wordFromUser.set(wordField.getText());
         this.isvertical.set(verticalButton.isSelected());
         Node n1 = (Node)me.getSource();
 		//Integer col = board.getColumnIndex(n1);
@@ -477,28 +420,10 @@ public class BoardController implements Observer {
 		//System.out.println("row" + row +"column" + col);
         this.row.set(board.getRowIndex(n1));
         this.col.set(board.getColumnIndex(n1));
-        this.word = new char[word.length()];
-        this.score = new int[word.length()];
-        for(int i=0;i<word.length();i++) {
-            this.word[i]=word.charAt(i);
-            for(int j=0;j<userTiles.length;j++) {
-    				if (this.word[i]==userTiles[j].get()) {
-    					this.score[i]=userTilesScore[j].getValue();
-    					break;
-    				}
-        this.wordFromUser.set(word);
-        
-    			
-            
-            
-        }
-        
-        
-	}
         boolean isVertical = verticalButton.isSelected();
         System.out.println("User entered: " + word + ", " + (isVertical ? "Vertical" : "Horizontal"));
+        
 	}
-	
 	public void mouseUp(MouseEvent me) {
 		if(mousePress) {
 			mousePress=false;
@@ -506,51 +431,11 @@ public class BoardController implements Observer {
 		}
 	}
 
+
 	@Override
 	public void update(java.util.Observable o, Object arg) {
-
-		System.out.println("barakaaaaaaaaaaa");
-		//if (o==vm) {
-			if(isvalid.getValue()) {
-				updateTiles();
-				redraw();
-		//	}
-
-		}		
-	}
-
-	public void pauseScreen() {
-
-        
-      
-        
+		// TODO Auto-generated method stub
 		
-		// Wait for players to join
-		//while (numberOfPlayers.getValue() < 2) {
-			Dialog<String> inputDialog = new Dialog<>();
-	        inputDialog.setTitle("waiting zone");
-
-	        GridPane grid = new GridPane();
-	        grid.setHgap(10);
-	        grid.setVgap(10);
-	        grid.setPadding(new Insets(20, 150, 10, 10));
-	        
-
-	  
-
-	        grid.add(new Label("Waiting for players..."), 0, 0);
-	        
-	        inputDialog.getDialogPane().setContent(grid);
-	        inputDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-	        inputDialog.showAndWait();
-	        try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		//}
 	}
 	
 }
