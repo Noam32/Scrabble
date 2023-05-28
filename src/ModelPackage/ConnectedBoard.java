@@ -44,11 +44,13 @@ public class ConnectedBoard extends Board implements Serializable {
         // the placement
         row=w.getRow();
         col=w.getCol();
-        for(Tile t : w.getTiles()) {
-            tiles[row][col]=t;
-            if(w.isVertical()) row++; else col++;
+        if(sum!=0) {
+        	for(Tile t : w.getTiles() ) {
+                tiles[row][col]=t;
+                if(w.isVertical()) row++; else col++;
+            }
         }
-
+        
         if(isEmpty) {
             isEmpty=false;
             bonus[7][7]=0;
