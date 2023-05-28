@@ -44,7 +44,7 @@ import java.net.Socket;
 		 
 		 public void writeObjectOut(Object obj) throws IOException {
 			 //solution :https://stackoverflow.com/questions/12341086/java-socket-serialization-object-wont-update
-			 //to avoid creating a reference to previous objects:
+			 //to avoid creating a reference to previous objects: reset the out stream before sending
 			 oos.reset();
 			 oos.writeObject(obj);
 		 }

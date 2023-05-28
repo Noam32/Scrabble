@@ -111,7 +111,6 @@ public class GuestClientHandler implements ClientHandler {
 		myObjectStream.initOutputStreams(outToClient);
 		myObjectStream.os.flush();
 		System.out.println("GuestClientHandler initOutputStreams is done (also flushed)");
-		
 		//try-with-resources statement -ensures that the buffer will be closed.
     	try  {
     		//out =new PrintWriter(new OutputStreamWriter(outToClient), true);
