@@ -16,7 +16,7 @@ public class GameStateTest {
 		index= gs.getIndexOfPlayerWithId(1);
 		System.out.println("getIndexOfPlayerWithId return = "+index);
 		System.out.println(board.toString());
-		System.out.println("player"+gs.listOfPlayers.get(index));
+		System.out.println("player"+"index is "+index+" ."+gs.listOfPlayers.get(index));
 		Player p2 =new Player("yossi");
 		gs.listOfPlayers.add(p1);
 		gs.inc_indexOfCurrentTurnPlayer();

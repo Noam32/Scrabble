@@ -15,7 +15,9 @@ public class ConnectedBoard extends Board implements Serializable {
 	public boolean dictionaryLegal(Word w) throws Exception{
         String word = w.createSimpleString();
         Boolean queryRes = ModelHost.runClientToDictionaryServer(8000,'C',word);
-        return queryRes;
+        Boolean queryRes_lowerCase = ModelHost.runClientToDictionaryServer(8000,'C',word.toLowerCase());
+        //we try for both lower and upper case:
+        return (queryRes||queryRes_lowerCase);
     }
     //Overriding the methods used for word checking to include the new methods
     public int tryPlaceWord(Word w) throws Exception {

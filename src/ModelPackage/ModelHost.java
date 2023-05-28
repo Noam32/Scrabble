@@ -264,6 +264,8 @@ public class ModelHost extends Observable implements Model {
 			//template is : "Q,bookNames1,bookName2,...,stringTosearch"
 			String stringToSend=Q_or_C+","+bookNames+","+stringTosearch;
 			System.out.println("runClientToDictionaryServer:sending \""+ stringToSend+"\"");
+			//We send 2 string - one is all upper case - and one is all lower case 
+			//- if one of the challenges returns true-we return true:
 			out.println(stringToSend);//here we are sending the query/challenge string to the Client handler server
 			out.flush();
 			//System.out.println("in.hasNext()= "  +in.hasNext());
