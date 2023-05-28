@@ -62,5 +62,15 @@ public class GameState implements Serializable {
 	}
 
 	
+	public Player getPlayerWithName(String name) {
+		//Player p1;
+		for(Player p : this.listOfPlayers) {
+			if(p!=null&&p.name.equals(name)) {
+				return p;
+			}
+		}
+		return null;
+	}
+	
 
 }
