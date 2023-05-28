@@ -11,12 +11,17 @@ public class GameState implements Serializable {
 	private static final long serialVersionUID = 1L;
 	//
 	public static final int numOfTilesForPlayer=7; // game rule - 7 tiles for each player!
-	final Bag bag;
-	ArrayList<Player> listOfPlayers;
-	ConnectedBoard gameBoard;
+	public final Bag bag;
+	public ArrayList<Player> listOfPlayers;
+	public ConnectedBoard gameBoard;
 	private int indexOfCurrentTurnPlayer;
 	
 	
+	
+	
+	public ConnectedBoard getBoard() {
+		return this.gameBoard;
+	}
 	
 	public int getIndexOfCurrentTurnPlayer() {
 		return indexOfCurrentTurnPlayer;
