@@ -199,6 +199,9 @@ public class ModelGuest extends Observable implements Model {
 		//wait for response:
 		String ack_or_error_msg=getMessageFromHost();//reading response message from host(eeither an ACK or exception string)
 		System.out.println("modelguest.placeWordOnBoard() ack_or_error_msg = "+ack_or_error_msg);
+		//change data:
+		setChanged();
+		this.notifyObservers();
 
 	}
 
@@ -207,6 +210,8 @@ public class ModelGuest extends Observable implements Model {
 		String []command=GuestClientHandler.createCommandStrings("endPlayerTurn");
 		sendAllString(command);//sending request to host
 		getMessageFromHost();//reading response message from host:
+		setChanged();
+		this.notifyObservers();
 	}
 
 	@Override
@@ -214,6 +219,8 @@ public class ModelGuest extends Observable implements Model {
 		String []command=GuestClientHandler.createCommandStrings("skipPlayerTurn");
 		sendAllString(command);//sending request to host
 		getMessageFromHost();//reading response message from host:
+		setChanged();
+		this.notifyObservers();
 	}
 
 	public void initConnectiontoServer() {

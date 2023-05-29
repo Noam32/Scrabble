@@ -85,5 +85,9 @@ public class GameState implements Serializable {
 		Integer id=this.hashmap_name_to_id.get(playerName);
 		return (int)id;
 	}
+/*	public String getStringOfPlayersAndTheirPoints() {
+		String [] strArr=new String[this.listOfPlayers.size()];
+		
+	}*/
 
 }
