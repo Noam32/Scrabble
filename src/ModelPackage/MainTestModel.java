@@ -5,8 +5,8 @@ public class MainTestModel {
 	//This test assumes that the dictionary server is already running
 	public static void main(String[]args) throws Exception {
 		System.out.println("this is the test for Model package");
-		firstTestBatch(args);
-		//secondTest(args);
+		//firstTestBatch(args);
+		secondTest(args);
 		
 	}
 	public static void firstTestBatch(String[]args) throws Exception {

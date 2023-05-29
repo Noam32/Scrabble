@@ -2,6 +2,8 @@ package ModelPackage;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import baseScrabble.Board;
 import baseScrabble.Tile;
 import baseScrabble.Tile.Bag;
@@ -16,7 +18,7 @@ public class GameState implements Serializable {
 	public ConnectedBoard gameBoard;
 	private int indexOfCurrentTurnPlayer;
 	
-	
+	public HashMap<String,Integer> hashmap_name_to_id;
 	
 	
 	public ConnectedBoard getBoard() {
@@ -29,6 +31,7 @@ public class GameState implements Serializable {
 
 	public GameState() {
 		this.listOfPlayers= new ArrayList<Player>();
+		hashmap_name_to_id=new HashMap<>();
 		bag=new Bag();
 		gameBoard=new ConnectedBoard();
 		indexOfCurrentTurnPlayer=0;
@@ -72,5 +75,15 @@ public class GameState implements Serializable {
 		return null;
 	}
 	
+	public void addAPlayer(String name) {
+		Player p1=new Player(name);
+		this.listOfPlayers.add(p1);
+		//Adding to the hashmap
+		this.hashmap_name_to_id.put(name, p1.playerId);
+	}
+	public int getIdofPlayerName(String playerName) {
+		Integer id=this.hashmap_name_to_id.get(playerName);
+		return (int)id;
+	}
 
 }

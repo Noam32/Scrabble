@@ -120,8 +120,10 @@ public class ModelHost extends Observable implements Model {
 	//*******************************
 	
 	public void addAplayer(String name) {
-		Player p1=new Player(name);
-		this.gamestate.listOfPlayers.add(p1);
+		//Player p1=new Player(name);
+		//this.gamestate.listOfPlayers.add(p1);
+		//Changed the method to be inside the game state object:
+		this.gamestate.addAPlayer(name);
 		
 	}
 
