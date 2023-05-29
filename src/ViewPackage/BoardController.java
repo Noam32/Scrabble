@@ -21,12 +21,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -47,6 +42,9 @@ public class BoardController implements Observer {
 	viewModel vm;
 	private StringProperty wordFromUser;
 	private BooleanProperty isvertical,isvalid,isHost;
+
+	private BooleanProperty skipPush;
+	private BooleanProperty endPush;
 	private IntegerProperty row,col,numberOfPlayers;
 	private MapProperty<StringProperty, IntegerProperty> userScore;
 	public ObjectProperty<Character>[] userTiles = new ObjectProperty[7];
@@ -62,6 +60,10 @@ public class BoardController implements Observer {
 	BorderPane borderPane;
 	@FXML
     private Label timerLabel;
+	@FXML
+	Button skipButton;
+	@FXML
+	Button endButton;
 	private static final int STARTTIME = 0;
     private final IntegerProperty timeSeconds = new SimpleIntegerProperty(STARTTIME);
 
@@ -131,6 +133,8 @@ public class BoardController implements Observer {
 			this.row = new SimpleIntegerProperty();
 			this.col=new SimpleIntegerProperty();
 			this.numberOfPlayers = new SimpleIntegerProperty();
+			this.skipPush = new SimpleBooleanProperty();
+			this.endPush = new SimpleBooleanProperty();
 
 			for (int i = 0; i < userTiles.length; i++) {
 				userTiles[i] = new SimpleObjectProperty<>();
@@ -155,9 +159,14 @@ public class BoardController implements Observer {
 			vm.isHost.bind(isHost);
 			vm.row.bind(row);
 			vm.col.bind(col);
+			vm.skipPush.bind(skipPush);
+			vm.endPush.bind(endPush);
 			userScore.bind(vm.userScore);
 			isvalid.bind(vm.isvalid);
 			numberOfPlayers.bind(vm.numberOfPlayers);
+			skipPush.bind(vm.skipPush);
+			endPush.bind(vm.endPush);
+
 			for(int i=0;i<userTiles.length;i++) {
 				userTiles[i].bind(vm.userTiles[i]);
 				userTilesScore[i].bind(vm.userTilesScore[i]);
@@ -202,7 +211,7 @@ public class BoardController implements Observer {
 
 	        scoreText.setTranslateX(-5);
 	        scoreText.setTranslateY(-5);    
-			player.add(temp, this.col.getValue(), this.row.getValue());
+			board.add(temp, this.col.getValue(), this.row.getValue());
 	    	}
 		}
 	}
@@ -439,9 +448,11 @@ public class BoardController implements Observer {
 	                this.score[i] = userTilesScore[j].getValue();
 	                break;
 	            }
-	            this.wordFromUser.set(word);
+		        
 	        }
 	    }
+	    redraw();
+        this.wordFromUser.set(word);
 	}
 
 	
@@ -450,6 +461,14 @@ public class BoardController implements Observer {
 			mousePress=false;
 			System.out.println("up");
 		}
+	}
+
+	public void skipHandler(){
+		this.skipPush.set(true);
+	}
+
+	public void endHandler(){
+		this.endPush.set(true);
 	}
 	
 	/*
@@ -463,8 +482,8 @@ public class BoardController implements Observer {
 	    // Check if the isvalid property is true
 	    if (isvalid.getValue()) {
 	        // Update the tiles and redraw the board
-	        updateTiles();
-	        redraw();
+	        //updateTiles();
+	        //redraw();
 	    }
 	}
 

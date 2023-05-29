@@ -80,8 +80,8 @@
    <right>
       <VBox spacing="5.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" text="Skip Turn" />
-            <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="66.0" text="End Turn" />
+            <Button fx:id="skipButton" mnemonicParsing="false" onAction="#skipHandler" prefHeight="25.0" prefWidth="76.0" text="Skip Turn" />
+            <Button fx:id="endButton" mnemonicParsing="false" onAction="#endHandler" prefHeight="26.0" prefWidth="77.0" text="End Turn" />
             <Label fx:id="timerLabel" alignment="CENTER" prefHeight="54.0" prefWidth="66.0" text="time">
                <font>
                   <Font size="20.0" />
