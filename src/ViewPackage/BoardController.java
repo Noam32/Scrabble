@@ -1,8 +1,11 @@
 package ViewPackage;
 
 import java.util.LinkedHashMap;
+import static javafx.beans.binding.Bindings.bindBidirectional;
 import java.util.Observer;
 
+import baseScrabble.Tile;
+import baseScrabble.Tile.Bag;
 import javafx.animation.Animation;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
@@ -16,12 +19,20 @@ import javafx.beans.property.SimpleMapProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -41,10 +52,7 @@ public class BoardController implements Observer {
 	
 	viewModel vm;
 	private StringProperty wordFromUser;
-	private BooleanProperty isvertical,isvalid,isHost;
-
-	private BooleanProperty skipPush;
-	private BooleanProperty endPush;
+	private BooleanProperty isvertical,isvalid,isHost,skipPush,endPush;
 	private IntegerProperty row,col,numberOfPlayers;
 	private MapProperty<StringProperty, IntegerProperty> userScore;
 	public ObjectProperty<Character>[] userTiles = new ObjectProperty[7];
@@ -60,10 +68,10 @@ public class BoardController implements Observer {
 	BorderPane borderPane;
 	@FXML
     private Label timerLabel;
-	@FXML
-	Button skipButton;
-	@FXML
-	Button endButton;
+    @FXML
+    Button skipButton;
+    @FXML
+    Button endButton;
 	private static final int STARTTIME = 0;
     private final IntegerProperty timeSeconds = new SimpleIntegerProperty(STARTTIME);
 
@@ -133,8 +141,9 @@ public class BoardController implements Observer {
 			this.row = new SimpleIntegerProperty();
 			this.col=new SimpleIntegerProperty();
 			this.numberOfPlayers = new SimpleIntegerProperty();
-			this.skipPush = new SimpleBooleanProperty();
-			this.endPush = new SimpleBooleanProperty();
+            this.skipPush = new SimpleBooleanProperty();
+            this.endPush = new SimpleBooleanProperty();
+
 
 			for (int i = 0; i < userTiles.length; i++) {
 				userTiles[i] = new SimpleObjectProperty<>();
@@ -159,14 +168,11 @@ public class BoardController implements Observer {
 			vm.isHost.bind(isHost);
 			vm.row.bind(row);
 			vm.col.bind(col);
-			vm.skipPush.bind(skipPush);
-			vm.endPush.bind(endPush);
 			userScore.bind(vm.userScore);
 			isvalid.bind(vm.isvalid);
+            skipPush.bindBidirectional(vm.skipPush);
+            endPush.bindBidirectional(vm.endPush);
 			numberOfPlayers.bind(vm.numberOfPlayers);
-			skipPush.bind(vm.skipPush);
-			endPush.bind(vm.endPush);
-
 			for(int i=0;i<userTiles.length;i++) {
 				userTiles[i].bind(vm.userTiles[i]);
 				userTilesScore[i].bind(vm.userTilesScore[i]);
@@ -181,40 +187,49 @@ public class BoardController implements Observer {
 	Functionality: Redraws the board with the current word and scores.
 	*/
 	
-	public void redraw() {
-		if(this.word!=null) {
-	    for (int i=0;i<this.word.length;i++) {
-	    	char letter = this.word[i];
-	        int value = this.score[i];
-	    	Rectangle square = new Rectangle();
-			Color color = Color.ANTIQUEWHITE;
-			Text letterText = new Text(Character.toString(letter));
-		    letterText.setFont(Font.font("BN Matan", FontWeight.BOLD, 20));
-		    Text scoreText = new Text(Integer.toString(value));
-		    scoreText.setFont(Font.font("BN Matan", FontWeight.BOLD, 16));
+	public void redraw(Tile[][] tilesBoard) {
+		for (int i = 0; i < tilesBoard.length; i++) {
+            for (int j = 0; j < tilesBoard[i].length; j++) {
+            	if(tilesBoard[i][j]==null)continue;
+            	char letter = tilesBoard[i][j].letter;
+     	        int value = tilesBoard[i][j].score;
+     	        final int row = i;
+     	        final int col = j;
 
-	        square.setFill(color);
-	        StackPane temp = new StackPane(square,letterText,scoreText);
-	     // Bind square size to cell size
-	        square.widthProperty().bind(board.widthProperty().divide(15));
-	        square.heightProperty().bind(board.heightProperty().divide(15));
-	        square.setStroke(Color.BLACK); // Add black border
-	        square.setStrokeWidth(1); // Set border width
-	        
-	        // Bind text size to square size
-	        letterText.fontProperty().bind(Bindings.createObjectBinding(() ->
-	                Font.font("BN Matan", FontWeight.BOLD, square.getWidth() / 3), square.widthProperty()));
-	        scoreText.fontProperty().bind(Bindings.createObjectBinding(() ->
-	                Font.font("BN Matan", FontWeight.BOLD, square.getWidth() / 4), square.widthProperty()));
+				ObservableList<Node> children = board.getChildren();
+				
+				// Remove all StackPanes in the specified cell
+				children.removeIf(node -> node instanceof StackPane && GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == col);
+				Rectangle square = new Rectangle();
+				Color color = Color.ANTIQUEWHITE;
+				Text letterText = new Text(Character.toString(letter));
+			    letterText.setFont(Font.font("BN Matan", FontWeight.BOLD, 20));
+			    Text scoreText = new Text(Integer.toString(value));
+			    scoreText.setFont(Font.font("BN Matan", FontWeight.BOLD, 16));
 
-	        temp.setAlignment(scoreText, Pos.BOTTOM_RIGHT);
+		        square.setFill(color);
+		        StackPane temp = new StackPane(square,letterText,scoreText);
+		     // Bind square size to cell size
+		        square.widthProperty().bind(board.widthProperty().divide(15));
+		        square.heightProperty().bind(board.heightProperty().divide(15));
+		        square.setStroke(Color.BLACK); // Add black border
+		        square.setStrokeWidth(1); // Set border width
+		        
+		        // Bind text size to square size
+		        letterText.fontProperty().bind(Bindings.createObjectBinding(() ->
+		                Font.font("BN Matan", FontWeight.BOLD, square.getWidth() / 3), square.widthProperty()));
+		        scoreText.fontProperty().bind(Bindings.createObjectBinding(() ->
+		                Font.font("BN Matan", FontWeight.BOLD, square.getWidth() / 4), square.widthProperty()));
 
-	        scoreText.setTranslateX(-5);
-	        scoreText.setTranslateY(-5);    
-			board.add(temp, this.col.getValue(), this.row.getValue());
-	    	}
-		}
-	}
+		        temp.setAlignment(scoreText, Pos.BOTTOM_RIGHT);
+
+		        scoreText.setTranslateX(-5);
+		        scoreText.setTranslateY(-5);
+				board.add(temp, col, row);
+		    	}
+			
+            }
+        }
 	
 	/*
 	Function name: setStage
@@ -451,8 +466,20 @@ public class BoardController implements Observer {
 		        
 	        }
 	    }
-	    redraw();
+	    Tile[][] b=new Tile[15][15];
+	    Bag bag = new Bag();
+	    b[7][7] = bag.getRand();
+	    b[7][8]=bag.getRand();
+	    redraw(b);
         this.wordFromUser.set(word);
+	}
+
+    public void skipHandler(){
+        this.skipPush.set(true);
+	}
+	
+	public void endHandler(){
+	        this.endPush.set(true);
 	}
 
 	
@@ -461,14 +488,6 @@ public class BoardController implements Observer {
 			mousePress=false;
 			System.out.println("up");
 		}
-	}
-
-	public void skipHandler(){
-		this.skipPush.set(true);
-	}
-
-	public void endHandler(){
-		this.endPush.set(true);
 	}
 	
 	/*

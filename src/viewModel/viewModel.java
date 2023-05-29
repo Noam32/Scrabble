@@ -28,7 +28,8 @@ import javafx.beans.property.StringProperty;
 public class viewModel extends Observable implements Observer {
 
 	public StringProperty wordFromUser;
-	public BooleanProperty isvertical,isvalid,isHost;
+	public BooleanProperty isvertical,isvalid,isHost, skipPush, endPush;
+
 	public IntegerProperty row,col;
 	public volatile IntegerProperty numberOfPlayers;
 	public MapProperty<StringProperty, IntegerProperty> userScore;
@@ -48,7 +49,9 @@ public class viewModel extends Observable implements Observer {
 	 * name: viewModel
 	 * input: Model m, String my_name
 	 * output: none
-	 * functionality: Constructor for the viewModel class. Initializes properties, adds an observer to the model if it is an instance of Observable, and sets up a listener for the wordFromUser property.
+	 * functionality: Constructor for the viewModel class. Initializes properties,
+	 *  adds an observer to the model if it is an instance of Observable, 
+	 *  and sets up a listener for the wordFromUser property.
 	 */
 	public viewModel(Model m, String my_name) {
 	    // Set the myName and m properties
@@ -69,6 +72,8 @@ public class viewModel extends Observable implements Observer {
 	    this.row = new SimpleIntegerProperty();
 	    this.col = new SimpleIntegerProperty();
 	    this.numberOfPlayers = new SimpleIntegerProperty();
+        this.skipPush = new SimpleBooleanProperty();
+        this.endPush = new SimpleBooleanProperty();
 	    gameState = m.getGameState();
 
 	    // Set the numberOfPlayers property based on the size of the listOfPlayers in the gameState
@@ -84,7 +89,8 @@ public class viewModel extends Observable implements Observer {
 	        userTilesScore[i] = new SimpleIntegerProperty();
 	    }
 
-	    // Add a listener to the wordFromUser property that calls the placeWordOnBoard method of the model when the property changes
+	    // Add a listener to the wordFromUser property that calls the placeWordOnBoard 
+	    //method of the model when the property changes
 	    wordFromUser.addListener((o, ov, nv) -> {
 	        try {
 	            m.placeWordOnBoard(createWord(nv));
@@ -93,6 +99,29 @@ public class viewModel extends Observable implements Observer {
 	        }
 	    });
 
+
+        // Add a listener to the skipPush property that calls the skipPlayerTurn
+        //method of the model when the property changes
+        skipPush.addListener((o, ov, nv) ->{
+                try {
+                        m.skipPlayerTurn();
+                        this.skipPush.set(false);
+                        System.out.println("this is the listener of skipPush");
+                } catch (Exception e) {
+                        e.printStackTrace();
+                }
+        });
+        endPush.addListener((o, ov, nv) ->{
+                try {
+                        m.endPlayerTurn();
+                        this.endPush.set(false);
+                        System.out.println("this is the listener of endPush");
+                } catch (Exception e) {
+                        e.printStackTrace();
+                }
+        });
+	    
+        
 	    // Get tiles from the model
 	    getTiles();
 	}
@@ -102,7 +131,8 @@ public class viewModel extends Observable implements Observer {
 	 * name: getTiles
 	 * input: none
 	 * output: none
-	 * functionality: Gets the tiles from the model and sets the userTiles and userTilesScore properties based on the tiles of the player with the same name as myName.
+	 * functionality: Gets the tiles from the model and sets the userTiles and
+	 *  userTilesScore properties based on the tiles of the player with the same name as myName.
 	 */
 	public void getTiles() {
 	    Tile[] tiles = new Tile[7];
