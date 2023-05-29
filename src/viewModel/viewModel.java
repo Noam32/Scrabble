@@ -162,6 +162,7 @@ public class viewModel extends Observable implements Observer {
 
 	/*
 	 * name: update
+	 * 
 	 * input: Observable o, Object arg
 	 * output: none
 	 * functionality: Updates the isvalid property based on whether the last placement was successful, 
