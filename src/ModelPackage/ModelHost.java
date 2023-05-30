@@ -1,10 +1,17 @@
 package ModelPackage;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
+import java.util.Scanner;
 
 import baseScrabble.Tile;
 import baseScrabble.Word;
@@ -16,16 +23,21 @@ import server.MyServer;
 
 public class ModelHost extends Observable implements Model {
 	private  GameState gamestate ;
-	public MyServer localServer;//server that servers the guest players
-	
+	public MyServer localServer;//server that servers the guest players  
+	private static boolean errorInLast_communication=false;//was there an error in the last TCP/IP communication
 	private static boolean wasLastPlacementSuccessful=false;
-	
+	private final static int Num_Of_Players=2;
 	public static final int playerIdNotFoundCode=-1;
-	
+	public boolean hasGameEnded=false;
+	public Player myPlayer; //the player controlled by this Model
+	public static int Host_PortFor_Communicating_With_Guests =8080;// Communicate
 	
 	public ModelHost(){
 		this.gamestate=new GameState();
+		this.addAplayer("HostPlayer");
+		this.myPlayer=this.gamestate.listOfPlayers.get(0);
 		initLocalServer();
+		
 	}
 	
 	//*******************************
@@ -82,28 +94,36 @@ public class ModelHost extends Observable implements Model {
 
 	@Override
 	public Player WhoseTurnIsIt() {
-		int index =gamestate.indexOfCurrentTurnPlayer;
-		return gamestate.listOfPlayers.get(index);
+		int index =gamestate.getIndexOfCurrentTurnPlayer();
+		return gamestate.listOfPlayers.get(index); //returns Player object
 		 
 	}
 
 	@Override
 	public int WhoseTurnIsIt_Id() {
-		return gamestate.indexOfCurrentTurnPlayer;
+		int index=gamestate.getIndexOfCurrentTurnPlayer();
+		int id=gamestate.listOfPlayers.get(index).playerId;
+		return id; //returns integer id.
 	}
 
 	@Override
 	public boolean wasLastPlacementSuccessful() {
 		return wasLastPlacementSuccessful;
 	}
-
+	@Override
+	public boolean wasThereAnErrorAtLastCommunication() {
+		return errorInLast_communication;
+	}
+	
 	//*******************************
 	//Change data method :
 	//*******************************
 	
 	public void addAplayer(String name) {
-		Player p1=new Player(name);
-		this.gamestate.listOfPlayers.add(p1);
+		//Player p1=new Player(name);
+		//this.gamestate.listOfPlayers.add(p1);
+		//Changed the method to be inside the game state object:
+		this.gamestate.addAPlayer(name);
 		
 	}
 
@@ -112,6 +132,7 @@ public class ModelHost extends Observable implements Model {
 	public void initGame() {
 		decideOnOrderOfPlayers();
 		giveAllPlayersSevenTiles();
+		
 		
 	}
 	
@@ -142,26 +163,66 @@ public class ModelHost extends Observable implements Model {
 	
 	@Override
 	public void givePlayerOneTile(int playerId) {
-		// TODO Auto-generated method stub
+		 int numOfPlayers = this.gamestate.listOfPlayers.size();
+		  Tile t1=this.gamestate.bag.getRand();
+		  for (int i = 0; i < numOfPlayers; i++) {
+		   if(this.gamestate.listOfPlayers.get(i).playerId==playerId &&t1!=null)
+		    this.gamestate.listOfPlayers.get(i).addTile(t1);
+		  }
 		
 	}
 
+	//Unfinished!
 	@Override
-	public void placeWordOnBoard(Word w) {
-		// TODO Auto-generated method stub
-		
+	public void placeWordOnBoard(Word w) throws Exception {
+		int numOfPoints = 0;
+		try {
+			numOfPoints = this.gamestate.gameBoard.tryPlaceWord(w);
+		} catch (Exception e) {
+			//take care of the Exception:if there was an exception it means that we failed to connect to the remote server.
+			//Therefore we notify the user of the program that there was a communication error:
+			String error_msg="error communicating with Dictionary server -cannot complete placeWordOnBoard() action";
+			throw (new Exception (error_msg));
+			
+		}
+		if (numOfPoints == 0) {
+			wasLastPlacementSuccessful = false;
+		}
+		else {
+			wasLastPlacementSuccessful = true;
+			//update player's points
+			int indexOfCurrentTurnPlayer = this.gamestate.getIndexOfCurrentTurnPlayer();
+			Player CurrentTurnPlayer = this.gamestate.listOfPlayers.get(indexOfCurrentTurnPlayer);
+			CurrentTurnPlayer.numOfPoints+=numOfPoints;
+			//update his tiles array after place on board.
+			ArrayList<Tile> MyTilesInHand = CurrentTurnPlayer.getMyTiles();
+			Tile [] MyWordTiles = w.getTiles();
+			for(int i=0;i<MyWordTiles.length;i++){
+				MyTilesInHand.remove(MyWordTiles[i]);
+			}
+		}
+		endPlayerTurn();
 	}
 
 	@Override
 	public void endPlayerTurn() {
-		// TODO Auto-generated method stub
-		
+		// making sure that the player has 7 tiles:
+		fillPlayersTileListToSeven(this.gamestate.getIdOfCurrentTurnPlayer());
+		//Advancing the turn to the next player
+		this.gamestate.inc_indexOfCurrentTurnPlayer();
+		//notify every one that the turn is over .
+		//change data:
+		setChanged();
+		this.notifyObservers();
 	}
 
+	
 	@Override
 	public void skipPlayerTurn() {
 		// TODO Auto-generated method stub
-		
+		this.gamestate.inc_indexOfCurrentTurnPlayer();
+		setChanged();
+		this.notifyObservers();
 	}
 	
 	
@@ -169,18 +230,76 @@ public class ModelHost extends Observable implements Model {
 	//should we create another class ? with client handler interface and etc ..?
 	//
 	
-	
-	
-	
-	public void initLocalServer() {
-		int maxNumOfPorts=4;
-		int portTolistenTo=8080;
-		
-
-		
-		this.localServer=new MyServer(portTolistenTo, null, maxNumOfPorts);
+	private void fillPlayersTileListToSeven(int player_Id) {
+		int indexInList=this.gamestate.getIndexOfPlayerWithId(player_Id);
+		Player p1=this.gamestate.listOfPlayers.get(indexInList);
+		int currNumOftile=p1.getMyTiles().size();
+		int numOfTilesToAdd=7-currNumOftile;
+		for(int i=0;i<numOfTilesToAdd;i++) {
+			givePlayerOneTile(player_Id);
+		}
 		
 	}
+	
+	//initializing the server that will handle requests from the guest players:
+	public void initLocalServer() {
+		int maxNumOfPorts=4;
+		int portTolistenTo=Host_PortFor_Communicating_With_Guests;
+		
+		GuestClientHandler clientHandler_ForModelHost= new GuestClientHandler(this,Num_Of_Players);
+		//passing the handler to handle string requests from the guests:
+		this.localServer=new MyServer(portTolistenTo, clientHandler_ForModelHost, maxNumOfPorts);
+		this.localServer.start();
+		
+	}
+	
+	
+	//This method creates a client that will communicate with the Dictionary 'remote' server.
+	//Q_or_C = 'Q' for query and 'C' for challenge
+	//throws exception if connection to the DictionaryServer failed !
+	public static Boolean runClientToDictionaryServer(int port,char Q_or_C ,String stringTosearch) throws Exception{
+		String bookNames="mobydick.txt"+","+"alice_in_wonderland.txt"+","+"Frank Herbert - Dune.txt"+","+"Harray Potter.txt";
+		try {
+			Socket server=new Socket("localhost",port);
+			PrintWriter out=new PrintWriter(server.getOutputStream());
+			Scanner in=new Scanner(server.getInputStream());
+			//template is : "Q,bookNames1,bookName2,...,stringTosearch"
+			String stringToSend=Q_or_C+","+bookNames+","+stringTosearch;
+			System.out.println("runClientToDictionaryServer:sending \""+ stringToSend+"\"");
+			//We send 2 string - one is all upper case - and one is all lower case 
+			//- if one of the challenges returns true-we return true:
+			out.println(stringToSend);//here we are sending the query/challenge string to the Client handler server
+			out.flush();
+			//System.out.println("in.hasNext()= "  +in.hasNext());
+			String res=in.next();//here we are receiving the query/challenge *result* string from the Client handler server
+			Boolean boolRes=Boolean.parseBoolean(res);
+			//closing :
+			in.close();
+			out.close();
+			server.close();
+			///returning :
+			return boolRes;
+		} catch (IOException e) {
+			System.out.println("your code ran into an IOException ");
+			e.printStackTrace();
+			System.out.println("is port available = " +isTcpPortAvailable(port) );
+			throw e;//query failed
+		}
+	}
+	
+	private static boolean isTcpPortAvailable(int port) {
+		try (ServerSocket serverSocket = new ServerSocket()) {
+			// setReuseAddress(false) is required only on macOS,
+			// otherwise the code will not work correctly on that platform
+			serverSocket.setReuseAddress(false);
+			serverSocket.bind(new InetSocketAddress(InetAddress.getByName("localhost"), port), 1);
+			return true;
+		} catch (Exception ex) {
+			return false;
+		}
+	}
+
+	
 	
 	//afterwards create a with threadpool? (or as a queue) a client handler 
 	

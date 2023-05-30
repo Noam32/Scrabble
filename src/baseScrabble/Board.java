@@ -1,17 +1,19 @@
 package baseScrabble;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Board {
+public class Board implements Serializable {
 
-	
+
+	private static final long serialVersionUID = 1L;
 	// indexes
 	final byte dl=2;	// double letter
 	final byte tl=3;	// triple letter
 	final byte dw=20;	// double word
 	final byte tw=30;	// triple word
 	
-	private byte[][] bonus= {
+	public byte[][] bonus= {
 			{tw,0,0,dl,0,0,0,tw,0,0,0,dl,0,0,tw},
 			{0,dw,0,0,0,tl,0,0,0,tl,0,0,0,dw,0},
 			{0,0,dw,0,0,0,dl,0,dl,0,0,0,dw,0,0},
@@ -29,14 +31,31 @@ public class Board {
 			{tw,0,0,dl,0,0,0,tw,0,0,0,dl,0,0,tw}	
 	};
 	
-	Tile[][] tiles;
+	public Tile[][] tiles;
 	
-	boolean isEmpty;
+	public boolean isEmpty;
 	
 	public Board() {
 		tiles=new Tile[15][15];
 		isEmpty=true;
 	}	
+	
+	public String toString() {
+		String str="{The Board 2d tile array:\n";
+		for(int i=0;i<15;i++) {
+			for(int j=0;j<15;j++) {
+				Tile currTile=tiles[i][j];
+				if(currTile==null) {
+					str+="{null}";}
+				else {
+					str+=currTile.toString();
+				}
+			}
+			str+="\n";
+		}
+		str+="}";
+		return str;
+	}
 	
 	public Tile[][] getTiles() {
 		return tiles.clone();
@@ -120,9 +139,9 @@ public class Board {
 	}
 	
 	
-	//change this method!!!//functionality
-	public boolean dictionaryLegal(Word w) {
-		System.out.println("dictionaryLegal doesnot have functionality - change me please!!");
+	//Deprecated
+	public boolean dictionaryLegal(Word w) throws Exception {
+		System.out.println("Deprecated: this method shouldnt run ! Board.dictionaryLegal doesnot have functionality - change me please!!");
 		return  true;
 		
 	}
@@ -211,7 +230,7 @@ public class Board {
 
 	}
 	
-	public int tryPlaceWord(Word w) {
+	public int tryPlaceWord(Word w) throws Exception {
 		
 		Tile[] ts = w.getTiles();
 		int row=w.getRow();

@@ -1,23 +1,33 @@
 package baseScrabble;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
-public class Tile {
+public class Tile implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	public final char letter;
 	public final int score;
 	
-	private Tile(char letter, int score) {
+	public Tile(char letter, int score) {
 		super();
 		this.letter = letter;
 		this.score = score;
 	}
-
+	
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(letter, score);
 	}
+	public String toString() {
+		String str="{\'"+letter+"\'"+","+score+"}";
+		return str;
+	}
+	
 
 	@Override
 	public boolean equals(Object obj) {
@@ -31,7 +41,28 @@ public class Tile {
 		return letter == other.letter && score == other.score;
 	}
 	
-	public static class Bag{
+	public static Tile[] arrayList_Tile_To_Arr(ArrayList<Tile> list) {
+		if(list==null||list.isEmpty())
+			return null;
+		Tile [] arr=new Tile[list.size()];
+		for(int i=0;i<arr.length;i++) {
+			arr[i]=list.get(i); // shallow copy - they need to be the same tile. Not a copy!
+		}
+		return arr;
+	}
+	
+	public static ArrayList<Tile> array_Tile_To_ArrayListTile(Tile [] arr){
+		if(arr==null||arr.length==0)
+			return null;
+		ArrayList<Tile> list=new ArrayList<Tile>( Arrays.asList(arr));
+		return list;
+		
+	}
+	
+	
+	
+	public static class Bag implements Serializable {
+		private static final long serialVersionUID = 1L;
 		private int[] maxQuantities = {9,2,2,4,12,2,3,2,9,1,1,4,2,6,8,2,1,6,4,6,4,2,2,1,2,1};
 		private int[] quantities = maxQuantities.clone();
 		private Tile[] tiles = {
@@ -107,6 +138,14 @@ public class Tile {
 			return quantities.clone();
 		}
 		
+		public String toString() {
+			String str="{";
+			for(Tile t:tiles)
+				str+=t.toString()+",";
+			str+="}";
+			return str;
+		}
+		
 	}
-	
+
 }

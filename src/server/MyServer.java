@@ -34,7 +34,7 @@ public class MyServer {
 	    public void startserver() {
 	        try {
 	            server = new ServerSocket(port);//server socket creation
-	            server.setSoTimeout(1000);//1000ms=1sec - waiting 1 sec for client to connect
+	            server.setSoTimeout(6*10000);//6*100000ms=60sec - waiting 60 seconds for client to connect
 	            while (!stop) {
 	                try {
 	                    Socket client = server.accept();
@@ -43,6 +43,10 @@ public class MyServer {
 	                	}
 	                catch (SocketTimeoutException e) {
 	                    // ignore and continue waiting for connections
+	                	//System.err.println("time out exception in MyServer.startserver()");
+	                }
+	                catch(Exception e) {
+	                	e.printStackTrace();
 	                }
 	            }
 	        }
@@ -54,11 +58,14 @@ public class MyServer {
 	        }
 	    }
 
-	    private void handleClient(Socket client) {
+	    private void handleClient(Socket client) throws Exception {
 	        try {
+	        	System.out.println("**My server:handleClient:trying to run ch.handleClient**");
 	            ch.handleClient(client.getInputStream(), client.getOutputStream());
+	            //System.out.println("**My server:HERE!!!!**");
 	        } catch (IOException e) {
-	            e.printStackTrace();
+	            System.out.println("**My server:handleClient:IO exception tring to run handleClient**");
+	        	e.printStackTrace();
 	        }
 	        //Here we are closing the interaction with the client after 1 query/challenge as instructed.
 	        finally {
@@ -72,12 +79,14 @@ public class MyServer {
 	    }
 
 	    public void stop() {
-	        stop = true;
+	        System.out.println("Server was stopped .The client handler is of type :"+ch.getClass().getSimpleName());
+	    	stop = true;
 	    }
 
 		// This method shuts down the thread pool and closes the server socket.
 	    public void close() {
 	        stop();//ensure that the server stops listening for new connections before shutting down the thread pool 
+	        System.out.println("Server is closed .The client handler was of type :"+ch.getClass().getSimpleName());
 	        try {
 	            threadPool.shutdown();
 	            if(server.isClosed())
