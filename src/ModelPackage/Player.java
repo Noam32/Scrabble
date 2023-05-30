@@ -58,4 +58,26 @@ public class Player implements Serializable {
 		
 	}
 	
+	public boolean equals(Player other) {
+		boolean res =true;
+		if(this.playerId!=other.playerId) {
+			return false;
+		}
+		if(!this.name.equals(other.name)) {
+			return false;
+		}
+		if(this.myTiles.size()!=other.myTiles.size()) {
+			return false;
+		}
+		for(int i=0;i<this.myTiles.size();i++) {
+			if(this.myTiles.get(i).letter!=other.myTiles.get(i).letter) {
+				return false;
+			}
+		}
+		if(this.numOfPoints!=other.numOfPoints) {
+			return false;
+		}
+		
+		return res;
+	}
 }

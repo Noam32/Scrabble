@@ -46,6 +46,17 @@ public class GameStateTest {
 		for (String str:out) {
 			System.out.println(str);
 		}
+		
+		System.out.println("\n Testing the equals method");
+		GameState gs_copy=gs;
+		System.out.println("testing equals with the same object -should be true:");
+		System.out.println(gs_copy.equals(gs));
+		System.out.println("testing equals with an differnt gameState- should be false:");
+		GameState other_gs=new GameState();
+		other_gs.addAPlayer("david");
+		System.out.println(gs_copy.equals(other_gs));
+		System.out.println();
+		
 		System.out.println("test ended");
 		
 		

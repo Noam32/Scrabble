@@ -98,5 +98,43 @@ public class GameState implements Serializable {
 		}
 		return strArr;
 	}
+	
+	//This methods compares a GameState object to another game state object
+	//if there is a change in any of the variables - we return true
+	//otherwise we return false
+	public boolean equals(GameState previousState) {
+		boolean res =true;
+		//checking changes in the tiles Bag:
+		int []bagQuatities_original =bag.getQuantities();
+		int []bagQuatities_other =previousState.bag.getQuantities();
+		for(int i=0;i<bagQuatities_original.length;i++) {
+			if(bagQuatities_original[i]!=bagQuatities_other[i]) {
+				return false;
+			}
+		}
+		//checking changes in the listOfPlayers:
+		ArrayList<Player> listOfPlayer_other=previousState.listOfPlayers;
+		if(listOfPlayer_other.size()!=this.listOfPlayers.size()) {
+			return false;
+		}
+		for(int i=0;i<listOfPlayers.size();i++) {
+			Player currPlayer=this.listOfPlayers.get(i);
+			Player currPlayer_other=listOfPlayer_other.get(i);
+			if(!currPlayer.equals(currPlayer_other)) {
+				return false;
+			}
+		}
+		//checking changes in the gameBoard:
+		ConnectedBoard currBoard=this.gameBoard;
+		ConnectedBoard otherBoard=previousState.gameBoard;
+		if(!currBoard.equals(otherBoard)) {
+			return false;
+		}
+		if(this.indexOfCurrentTurnPlayer!=previousState.indexOfCurrentTurnPlayer) {
+			return false;
+		}
+		return res;
+	}
+	
 
 }

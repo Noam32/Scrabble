@@ -147,7 +147,7 @@ public class ModelGuest extends Observable implements Model {
 	public boolean wasLastPlacementSuccessful() {
 		String []command=GuestClientHandler.createCommandStrings("wasLastPlacementSuccessful");
 		sendAllString(command);//sending request to host
-		String inputString = getMessageFromHost();//reading respone message from host:
+		String inputString = getMessageFromHost();//reading response message from host:
 		String [] splitString= inputString.split(":");
 		String res=splitString[1];
 		Boolean boolRes=Boolean.parseBoolean(res);
