@@ -208,13 +208,30 @@ public class viewModel extends Observable implements Observer {
 	public Word createWord(String word) {
 	    Tile[] tiles = new Tile[word.length()];
 	    gameState = m.getGameState();
+	    Tile [][] board = gameState.getBoard().getTiles();
+
 	    int index = gameState.getIndexOfCurrentTurnPlayer();
 	    Player p1 = gameState.listOfPlayers.get(index);
 	    ArrayList<Tile> userTile = p1.getMyTiles();
 
 	    // Set the tiles array based on the given word and the player's tiles
+	    int roworcol;
 	    for (int i = 0; i < word.length(); i++) {
 	        char temp = word.charAt(i);
+	        if(this.isvertical.getValue()) {
+	        	roworcol=this.row.getValue();
+	        	if(board[roworcol+i][this.col.getValue()]!=null) {
+	        		tiles[i] = null;
+	        		continue;
+	        	}
+	        }
+	        else {
+	        	roworcol=this.col.getValue();
+	        	if(board[this.row.getValue()][roworcol+i]!=null) {
+	        		tiles[i] = null;
+	        		continue;
+	        	}
+	        }
 	        for (int j = 0; j < userTile.size(); j++) {
 	            if (temp == userTile.get(j).letter) {
 	                tiles[i] = userTile.get(j);

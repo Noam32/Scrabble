@@ -475,26 +475,13 @@ public class BoardController implements Observer {
 	    this.row.set(board.getRowIndex(n1));
 	    this.col.set(board.getColumnIndex(n1));
 
-	    this.word = new char[word.length()];
-	    this.score = new int[word.length()];
-
-	    // Set the word and score arrays based on the user's input
-	    for (int i = 0; i < word.length(); i++) {
-	        this.word[i] = word.charAt(i);
-	        for (int j = 0; j < userTiles.length; j++) {
-	            if (this.word[i] == userTiles[j].get()) {
-	                this.score[i] = userTilesScore[j].getValue();
-	                break;
-	            }
-		        
-	        }
-	    }
+	    
 	    //Tile[][] b=new Tile[15][15];
 	    //Bag bag = new Bag();
 	   // b[7][7] = bag.getRand();
 	    //b[7][8]=bag.getRand();
 	    //redraw(b);
-        this.wordFromUser.set(word);
+        this.wordFromUser.set(word.toUpperCase());
 	}
 
     public void skipHandler(){
