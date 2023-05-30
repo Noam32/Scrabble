@@ -11,6 +11,9 @@ import ViewPackage.BoardController;
 import baseScrabble.Tile;
 import baseScrabble.Tile.Bag;
 import baseScrabble.Word;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ListProperty;
@@ -26,6 +29,8 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
+import javafx.concurrent.Task;
+import javafx.util.Duration;
 
 @SuppressWarnings("deprecation")
 public class viewModel extends Observable implements Observer {
@@ -136,11 +141,29 @@ public class viewModel extends Observable implements Observer {
                 } catch (Exception e) {
                         e.printStackTrace();
                 }
+                
         });
 	    
         getUserScore();
 	    // Get tiles from the model
 	    getTiles();
+	    
+	    /*
+	    Task<Void> task = new Task<Void>() {
+	        @Override
+	        protected Void call() throws Exception {
+	            // Call the checkboard() method on the background thread
+	            checkboard();
+
+	            return null;
+	        }
+	    };*/
+
+		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1000), e -> checkboard()));
+		timeline.setCycleCount(Timeline.INDEFINITE);
+		timeline.play();
+
+	   // new Thread(task).start();
 	}
 
 	public void getUserScore() {
@@ -227,19 +250,53 @@ public class viewModel extends Observable implements Observer {
 	    if (o == m) {
 	        // Set the isvalid property based on whether the last placement was successful
 	        isvalid.set(m.wasLastPlacementSuccessful());
-		    gameState = m.getGameState();//update the game state
-		    this.currentPlayerIndex.set(gameState.getIndexOfCurrentTurnPlayer());
-		    for(int i=0;i<numberOfPlayers.getValue();i++) {
-		    userScore[i].set(gameState.listOfPlayers.get(i).getNumOfPoints());
-		    }
-		    //userScore[this.currentPlayerIndex-1];
-	        getTiles();
-	        setChanged();
-		    notifyObservers(gameState.getBoard().getTiles());//get the board
-
+	        System.out.println(this.myName);
+	        //isvalid.getValue()
+			    gameState = m.getGameState();//update the game state
+			    this.currentPlayerIndex.set(gameState.getIndexOfCurrentTurnPlayer());
+			    for(int i=0;i<numberOfPlayers.getValue();i++) {
+			    userScore[i].set(gameState.listOfPlayers.get(i).getNumOfPoints());
+			    }
+			    //userScore[this.currentPlayerIndex-1];
+		        getTiles();
+		        setChanged();
+		        Platform.runLater(new Runnable() {
+		            @Override
+		            public void run() {
+		                notifyObservers(gameState.getBoard().getTiles());//get the board
+		            }
+		        });
+	        
 	        // Get tiles from the model
 	    }
 	}
+	
+	public void checkboard() {
+	    GameState gamenew = m.getGameState();//update the game state
+	    if(!gameState.equals(gamenew)){//if true do nothing
+	        isvalid.set(m.wasLastPlacementSuccessful());
+	        //if(isvalid.getValue()) {
+
+		        gameState = m.getGameState();//update the game state
+		        this.currentPlayerIndex.set(gameState.getIndexOfCurrentTurnPlayer());
+		        for(int i=0;i<numberOfPlayers.getValue();i++) {
+		            userScore[i].set(gameState.listOfPlayers.get(i).getNumOfPoints());
+		        }
+		        //userScore[this.currentPlayerIndex-1];
+		        getTiles();
+		        setChanged();
+	
+		        // Update the user interface on the JavaFX Application Thread
+		        Platform.runLater(new Runnable() {
+		            @Override
+		            public void run() {
+		                notifyObservers(gameState.getBoard().getTiles());//get the board
+		            }
+		        });
+	       // }
+	    }
+	}
+
 
 }
 

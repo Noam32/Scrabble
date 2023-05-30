@@ -36,9 +36,10 @@ public class BoardRun extends Application {
 		    // Code to run the ModelHost in a separate thread
 			Model m = new ModelHost();
 			//Model m1 = new ModelGuest("sssssss");
-			//Thread.sleep(10000);
+			Thread.sleep(10000);
 			viewModel vm =new viewModel(m,"HostPlayer");
 			view.init(vm);
+			primaryStage.setTitle("HostPlayer");
 			
 	
 		    // Code to run the ModelGuest in a separate thread

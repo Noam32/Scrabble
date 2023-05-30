@@ -36,12 +36,13 @@ public class BoardRun2 extends Application {
 			
 		
 			    // Code to run the ModelHost in a separate thread
-				Model m = new ModelGuest("xxx");
+				Model m = new ModelGuest("ModelGuest");
 				m.getGameState();
-				viewModel vm =new viewModel(m,"xxx");
+				viewModel vm =new viewModel(m,"ModelGuest");
 				view.init(vm);
 				//view.pauseScreen();
 				view.paint();
+				primaryStage.setTitle("ModelGuest");
 				primaryStage.show();
 				
 		

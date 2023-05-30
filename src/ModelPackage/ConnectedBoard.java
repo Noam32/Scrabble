@@ -10,14 +10,14 @@ import java.util.ArrayList;
 //This class implements the board which now has tcp/ip connectivity :
 
 public class ConnectedBoard extends Board implements Serializable {
-
+	private static final boolean isTestMode_ALL_WORDS_LEGAL=false;
 	private static final long serialVersionUID = 1L;
 	public boolean dictionaryLegal(Word w) throws Exception{
         String word = w.createSimpleString();
         Boolean queryRes = ModelHost.runClientToDictionaryServer(8000,'C',word);
         Boolean queryRes_lowerCase = ModelHost.runClientToDictionaryServer(8000,'C',word.toLowerCase());
         //we try for both lower and upper case:
-        return (queryRes||queryRes_lowerCase);
+        return (queryRes||queryRes_lowerCase|| isTestMode_ALL_WORDS_LEGAL);
     }
     //Overriding the methods used for word checking to include the new methods
     public int tryPlaceWord(Word w) throws Exception {

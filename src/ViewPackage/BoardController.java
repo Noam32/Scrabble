@@ -354,7 +354,7 @@ public class BoardController implements Observer {
 
 	    board.setGridLinesVisible(true);
 	    player.setGridLinesVisible(true);
-	    new Thread(() -> updateTime()).start();
+	    //new Thread(() -> updateTime()).start();
 	    updateTiles();
 	    initialPlayersName();
 	}
@@ -576,10 +576,13 @@ public class BoardController implements Observer {
 	@Override
 	public void update(java.util.Observable o, Object arg) {
 	    // Check if the isvalid property is true
-	    redraw((Tile[][]) arg);
-	    updateTiles();
+		if(isvalid.getValue()) {
+		    redraw((Tile[][]) arg);
+		    updateTiles();
+		}
 	    updatePlayerScore();
 	    updateTurnIndicator();
+	    //new Thread(() -> updateTime()).start();
 	}
 
 	/*

@@ -26,7 +26,6 @@ public class ModelHostTest {
 		// TODO Auto-generated method stub
 		
 		
-		
 		TestChallenge();
 		try {Thread.sleep(3000);} catch (InterruptedException e1) {e1.printStackTrace();}
 		
