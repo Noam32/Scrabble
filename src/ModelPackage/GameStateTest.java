@@ -34,7 +34,18 @@ public class GameStateTest {
 		System.out.println(gs.hashmap_name_to_id.get("Danit"));
 		System.out.println(gs.hashmap_name_to_id.get("yossi"));
 		System.out.println("gs.getIdofPlayerName(\"moshe\")="+gs.getIdofPlayerName("moshe"));
-		
+		System.out.println("\ntest the getStringOfScoreBoard");
+		gs.listOfPlayers.get(0).numOfPoints=77;
+		String [] out=gs.getStringOfScoreBoard();
+		for (String str:out) {
+			System.out.println(str);
+		}
+		gs.inc_indexOfCurrentTurnPlayer();
+		System.out.println("");
+		 out=gs.getStringOfScoreBoard();
+		for (String str:out) {
+			System.out.println(str);
+		}
 		System.out.println("test ended");
 		
 		

@@ -85,9 +85,18 @@ public class GameState implements Serializable {
 		Integer id=this.hashmap_name_to_id.get(playerName);
 		return (int)id;
 	}
-/*	public String getStringOfPlayersAndTheirPoints() {
+	//returns a string showing each player's name and number of points.
+	//also we mark Whose turn is it now
+	public String[] getStringOfScoreBoard() {
 		String [] strArr=new String[this.listOfPlayers.size()];
-		
-	}*/
+		for(int i=0;i<strArr.length;i++) {
+			Player currPlayer=this.listOfPlayers.get(i);
+			strArr[i]=currPlayer.name+":"+currPlayer.numOfPoints;
+			if(i==indexOfCurrentTurnPlayer) {
+				strArr[i]=strArr[i]+"(playing)"; //indicating Whose turn is it now.
+			}
+		}
+		return strArr;
+	}
 
 }
