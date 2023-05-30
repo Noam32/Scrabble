@@ -23,16 +23,18 @@ import javafx.beans.property.SimpleMapProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 
 @SuppressWarnings("deprecation")
 public class viewModel extends Observable implements Observer {
 
 	public StringProperty wordFromUser;
 	public BooleanProperty isvertical,isvalid,isHost, skipPush, endPush;
-
-	public IntegerProperty row,col;
-	public volatile IntegerProperty numberOfPlayers;
-	public MapProperty<StringProperty, IntegerProperty> userScore;
+	public IntegerProperty[] userScore;
+	public StringProperty[] userScorename;
+	public IntegerProperty row,col,currentPlayerIndex,numberOfPlayers;
 	public ObjectProperty<Character>[] userTiles = new ObjectProperty[7];
 	public IntegerProperty[] userTilesScore = new IntegerProperty[7];
 
@@ -68,26 +70,36 @@ public class viewModel extends Observable implements Observer {
 	    this.isvertical = new SimpleBooleanProperty();
 	    this.isHost = new SimpleBooleanProperty();
 	    this.isvalid = new SimpleBooleanProperty();
-	    this.userScore = new SimpleMapProperty<>();
 	    this.row = new SimpleIntegerProperty();
 	    this.col = new SimpleIntegerProperty();
 	    this.numberOfPlayers = new SimpleIntegerProperty();
         this.skipPush = new SimpleBooleanProperty();
         this.endPush = new SimpleBooleanProperty();
+		this.currentPlayerIndex=new SimpleIntegerProperty();
 	    gameState = m.getGameState();
+	    numberOfPlayers.set(gameState.listOfPlayers.size());
+		this.userScore = new IntegerProperty[numberOfPlayers.getValue()];
+		this.userScorename = new SimpleStringProperty[numberOfPlayers.getValue()];
+		
+	    //gameState = m.getGameState();
 
 	    // Set the numberOfPlayers property based on the size of the listOfPlayers in the gameState
 	    numberOfPlayers.set(gameState.listOfPlayers.size());
 
+	    for (int i = 0; i < userScore.length; i++) {
+	    	userScorename[i] = new SimpleStringProperty();
+	    	userScore[i] = new SimpleIntegerProperty();
+
+	    }
+
 	    // Initialize the userTiles array
 	    for (int i = 0; i < userTiles.length; i++) {
 	        userTiles[i] = new SimpleObjectProperty<>();
+	        userTilesScore[i] = new SimpleIntegerProperty();
+
 	    }
 
-	    // Initialize the userTilesScore array
-	    for (int i = 0; i < userTilesScore.length; i++) {
-	        userTilesScore[i] = new SimpleIntegerProperty();
-	    }
+	   
 
 	    // Add a listener to the wordFromUser property that calls the placeWordOnBoard 
 	    //method of the model when the property changes
@@ -104,28 +116,41 @@ public class viewModel extends Observable implements Observer {
         //method of the model when the property changes
         skipPush.addListener((o, ov, nv) ->{
                 try {
-                        m.skipPlayerTurn();
-                        this.skipPush.set(false);
-                        System.out.println("this is the listener of skipPush");
+                		if(nv==true) {
+	                        m.skipPlayerTurn();
+	                        this.skipPush.set(false);
+	                        System.out.println("this is the listener of skipPush");
+                		}
                 } catch (Exception e) {
                         e.printStackTrace();
                 }
         });
+        
         endPush.addListener((o, ov, nv) ->{
                 try {
-                        m.endPlayerTurn();
-                        this.endPush.set(false);
-                        System.out.println("this is the listener of endPush");
+                		if(nv==true) {
+	                        m.endPlayerTurn();
+	                        this.endPush.set(false);
+	                        System.out.println("this is the listener of endPush");
+                		}
                 } catch (Exception e) {
                         e.printStackTrace();
                 }
         });
 	    
-        
+        getUserScore();
 	    // Get tiles from the model
 	    getTiles();
 	}
 
+	public void getUserScore() {
+		gameState = m.getGameState();
+	    for(int i=0;i<gameState.listOfPlayers.size();i++) {
+	    	
+	    	userScorename[i].set(gameState.listOfPlayers.get(i).getName());
+	    	userScore[i].set(gameState.listOfPlayers.get(i).getNumOfPoints());
+	    }
+	}
 
 	/*
 	 * name: getTiles
@@ -137,7 +162,6 @@ public class viewModel extends Observable implements Observer {
 	public void getTiles() {
 	    Tile[] tiles = new Tile[7];
 	    gameState = m.getGameState();
-	    gameState.listOfPlayers.size();
 
 	    // Get the player with the same name as myName
 	    Player p1 = gameState.getPlayerWithName(myName);
@@ -203,13 +227,17 @@ public class viewModel extends Observable implements Observer {
 	    if (o == m) {
 	        // Set the isvalid property based on whether the last placement was successful
 	        isvalid.set(m.wasLastPlacementSuccessful());
+		    gameState = m.getGameState();//update the game state
+		    this.currentPlayerIndex.set(gameState.getIndexOfCurrentTurnPlayer());
+		    for(int i=0;i<numberOfPlayers.getValue();i++) {
+		    userScore[i].set(gameState.listOfPlayers.get(i).getNumOfPoints());
+		    }
+		    //userScore[this.currentPlayerIndex-1];
+	        getTiles();
+	        setChanged();
+		    notifyObservers(gameState.getBoard().getTiles());//get the board
 
 	        // Get tiles from the model
-	        getTiles();
-
-	        // Notify observers
-	        setChanged();
-	        notifyObservers();
 	    }
 	}
 

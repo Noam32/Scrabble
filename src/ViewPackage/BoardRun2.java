@@ -29,7 +29,7 @@ public class BoardRun2 extends Application {
 			BorderPane root = fxmlLoader.load(getClass().getResource("Board.fxml").openStream());
 			BoardController view = fxmlLoader.getController();
 			view.setStage(primaryStage);
-			Scene scene = new Scene(root,800,800);
+			Scene scene = new Scene(root,1200,800);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 

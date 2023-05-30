@@ -1,6 +1,10 @@
 package ViewPackage;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map.Entry;
+
 import static javafx.beans.binding.Bindings.bindBidirectional;
 import java.util.Observer;
 
@@ -8,6 +12,7 @@ import baseScrabble.Tile;
 import baseScrabble.Tile.Bag;
 import javafx.animation.Animation;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -19,7 +24,9 @@ import javafx.beans.property.SimpleMapProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -53,29 +60,32 @@ public class BoardController implements Observer {
 	viewModel vm;
 	private StringProperty wordFromUser;
 	private BooleanProperty isvertical,isvalid,isHost,skipPush,endPush;
-	private IntegerProperty row,col,numberOfPlayers;
-	private MapProperty<StringProperty, IntegerProperty> userScore;
+	private IntegerProperty row,col,numberOfPlayers,currentPlayerIndex;
+	@SuppressWarnings("unchecked")
 	public ObjectProperty<Character>[] userTiles = new ObjectProperty[7];
 	public IntegerProperty[] userTilesScore = new IntegerProperty[7];
+	public IntegerProperty[] userScore;
+	public StringProperty[] userScorename;
+
 	char[] word;
 	int[] score;
+	List<String> playerNames;
 	
 	@FXML
 	GridPane board;
 	@FXML
 	GridPane player;
 	@FXML
+	GridPane players_score;
+	@FXML
 	BorderPane borderPane;
 	@FXML
-    private Label timerLabel;
+    Label timerLabel;
     @FXML
     Button skipButton;
     @FXML
     Button endButton;
-	private static final int STARTTIME = 0;
-    private final IntegerProperty timeSeconds = new SimpleIntegerProperty(STARTTIME);
 
-    private Timeline timeline;
 	
     
     
@@ -113,18 +123,19 @@ public class BoardController implements Observer {
 	LinkedHashMap<Character, StackPane> map = new  LinkedHashMap<Character, StackPane>();
 
 	
-	 private void updateTime() {
-	        // increment seconds
-	        int seconds = timeSeconds.get();
-	        timeSeconds.set(seconds + 1);
+	private void updateTime() {
+	    for (int i = 60; i > 0; i--) {
+	        final int time = i;
+	        Platform.runLater(() -> timerLabel.setText(String.valueOf(time)));
+	        try {
+	            Thread.sleep(1000);
+	        } catch (InterruptedException e) {
+	            e.printStackTrace();
+	        }
 	    }
+	}
 
-	    public void handle(ActionEvent event) {
-	     //   timeline = new Timeline(new KeyFrame(Duration.seconds(1), evt -> updateTime()));
-	        timeline.setCycleCount(Animation.INDEFINITE); // repeat over and over again
-	        timeSeconds.set(STARTTIME);
-	        timeline.play();
-	    }
+
 	    
 	    /*
 		  Function name: BoardController
@@ -133,24 +144,21 @@ public class BoardController implements Observer {
 		  Functionality: Constructor for the BoardController class. Initializes various properties and arrays.
 	     */
 		public BoardController() {
+			playerNames = new ArrayList<>();
 			this.wordFromUser = new SimpleStringProperty();
 			this.isvertical = new SimpleBooleanProperty();
 			this.isHost = new SimpleBooleanProperty();
 			this.isvalid = new SimpleBooleanProperty();
-			this.userScore = new SimpleMapProperty<>();
 			this.row = new SimpleIntegerProperty();
 			this.col=new SimpleIntegerProperty();
+			this.currentPlayerIndex=new SimpleIntegerProperty();
 			this.numberOfPlayers = new SimpleIntegerProperty();
             this.skipPush = new SimpleBooleanProperty();
             this.endPush = new SimpleBooleanProperty();
-
-
 			for (int i = 0; i < userTiles.length; i++) {
 				userTiles[i] = new SimpleObjectProperty<>();
-			}
-
-			for (int i = 0; i < userTilesScore.length; i++) {
 				userTilesScore[i] = new SimpleIntegerProperty();
+
 			}
 		}
 		
@@ -168,11 +176,20 @@ public class BoardController implements Observer {
 			vm.isHost.bind(isHost);
 			vm.row.bind(row);
 			vm.col.bind(col);
-			userScore.bind(vm.userScore);
+			currentPlayerIndex.bind(vm.currentPlayerIndex);
 			isvalid.bind(vm.isvalid);
             skipPush.bindBidirectional(vm.skipPush);
             endPush.bindBidirectional(vm.endPush);
 			numberOfPlayers.bind(vm.numberOfPlayers);
+            this.userScore = new IntegerProperty[numberOfPlayers.getValue()];
+    		this.userScorename = new SimpleStringProperty[numberOfPlayers.getValue()];
+    		
+    		for(int i=0;i<userScore.length;i++) {
+    			userScorename[i] = new SimpleStringProperty();
+    			userScore[i] = new SimpleIntegerProperty();
+    			userScore[i].bind(vm.userScore[i]);
+    			userScorename[i].bind(vm.userScorename[i]);
+			}
 			for(int i=0;i<userTiles.length;i++) {
 				userTiles[i].bind(vm.userTiles[i]);
 				userTilesScore[i].bind(vm.userTilesScore[i]);
@@ -203,9 +220,9 @@ public class BoardController implements Observer {
 				Rectangle square = new Rectangle();
 				Color color = Color.ANTIQUEWHITE;
 				Text letterText = new Text(Character.toString(letter));
-			    letterText.setFont(Font.font("BN Matan", FontWeight.BOLD, 20));
+			    letterText.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 20));
 			    Text scoreText = new Text(Integer.toString(value));
-			    scoreText.setFont(Font.font("BN Matan", FontWeight.BOLD, 16));
+			    scoreText.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 16));
 
 		        square.setFill(color);
 		        StackPane temp = new StackPane(square,letterText,scoreText);
@@ -217,9 +234,9 @@ public class BoardController implements Observer {
 		        
 		        // Bind text size to square size
 		        letterText.fontProperty().bind(Bindings.createObjectBinding(() ->
-		                Font.font("BN Matan", FontWeight.BOLD, square.getWidth() / 3), square.widthProperty()));
+		                Font.font("Comic Sans MS", FontWeight.BOLD, square.getWidth() / 3), square.widthProperty()));
 		        scoreText.fontProperty().bind(Bindings.createObjectBinding(() ->
-		                Font.font("BN Matan", FontWeight.BOLD, square.getWidth() / 4), square.widthProperty()));
+		                Font.font("Comic Sans MS", FontWeight.BOLD, square.getWidth() / 4), square.widthProperty()));
 
 		        temp.setAlignment(scoreText, Pos.BOTTOM_RIGHT);
 
@@ -252,8 +269,9 @@ public class BoardController implements Observer {
 	 */
 	@SuppressWarnings("static-access")
 	public void paint() {
-	    mousePress = false;
-	    stack = new StackPane[15][15]; // Initialize the stack array
+		
+		
+		stack = new StackPane[15][15]; // Initialize the stack array
 
 	    // Create a star polygon
 	    Polygon star = new Polygon();
@@ -336,8 +354,9 @@ public class BoardController implements Observer {
 
 	    board.setGridLinesVisible(true);
 	    player.setGridLinesVisible(true);
-
+	    new Thread(() -> updateTime()).start();
 	    updateTiles();
+	    initialPlayersName();
 	}
 
 
@@ -356,6 +375,10 @@ public class BoardController implements Observer {
 	        // Get the letter and value of the current tile
 	        char letter = userTiles[i].getValue();
 	        int value = userTilesScore[i].getValue();
+	        ObservableList<Node> children = player.getChildren();
+			final int col = i; 
+			// Remove all StackPanes in the specified cell
+			children.removeIf(node -> node instanceof StackPane && GridPane.getRowIndex(node) == 0 && GridPane.getColumnIndex(node) == col);
 
 	        // Create a new square and set its color
 	        Rectangle square = new Rectangle();
@@ -363,9 +386,9 @@ public class BoardController implements Observer {
 
 	        // Create text for the letter and score
 	        Text letterText = new Text(Character.toString(letter));
-	        letterText.setFont(Font.font("BN Matan", FontWeight.BOLD, 20));
+	        letterText.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 20));
 	        Text scoreText = new Text(Integer.toString(value));
-	        scoreText.setFont(Font.font("BN Matan", FontWeight.BOLD, 16));
+	        scoreText.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 16));
 
 	        // Set the square's fill color and create a new StackPane with the square, letterText, and scoreText
 	        square.setFill(color);
@@ -379,9 +402,9 @@ public class BoardController implements Observer {
 
 	        // Bind text size to square size
 	        letterText.fontProperty().bind(Bindings.createObjectBinding(() ->
-	                Font.font("BN Matan", FontWeight.BOLD, square.getWidth() / 3), square.widthProperty()));
+	                Font.font("Comic Sans MS", FontWeight.BOLD, square.getWidth() / 3), square.widthProperty()));
 	        scoreText.fontProperty().bind(Bindings.createObjectBinding(() ->
-	                Font.font("BN Matan", FontWeight.BOLD, square.getWidth() / 4), square.widthProperty()));
+	                Font.font("Comic Sans MS", FontWeight.BOLD, square.getWidth() / 4), square.widthProperty()));
 
 	        // Set the alignment of the scoreText to bottom right
 	        temp.setAlignment(scoreText, Pos.BOTTOM_RIGHT);
@@ -466,11 +489,11 @@ public class BoardController implements Observer {
 		        
 	        }
 	    }
-	    Tile[][] b=new Tile[15][15];
-	    Bag bag = new Bag();
-	    b[7][7] = bag.getRand();
-	    b[7][8]=bag.getRand();
-	    redraw(b);
+	    //Tile[][] b=new Tile[15][15];
+	    //Bag bag = new Bag();
+	   // b[7][7] = bag.getRand();
+	    //b[7][8]=bag.getRand();
+	    //redraw(b);
         this.wordFromUser.set(word);
 	}
 
@@ -490,6 +513,60 @@ public class BoardController implements Observer {
 		}
 	}
 	
+
+	public void initialPlayersName() {
+		
+		for (int i=0;i<userScore.length;i++) {
+	    String playerName = userScorename[i].getValue();
+	    playerNames.add(playerName);
+	    int playerScore = userScore[i].getValue();
+	    Label turnIndicator;
+	    if(i==0) {
+	    	turnIndicator = new Label("->");
+	    }
+	    else {
+	    	turnIndicator = new Label();
+	    }
+	    Label playerNameLabel = new Label(playerName);
+	    Label playerScoreLabel = new Label(String.valueOf(playerScore));
+
+	    players_score.add(turnIndicator, 0, i);
+	    players_score.add(playerNameLabel, 1, i);
+	    players_score.add(playerScoreLabel, 2, i);
+		}
+	}
+
+
+	// Update the turn indicator when the current player changes
+	private void updateTurnIndicator() {
+		int previousPlayerIndex = currentPlayerIndex.getValue()-1;
+		if(previousPlayerIndex<0)previousPlayerIndex=numberOfPlayers.getValue()-1;
+		final int row=previousPlayerIndex;
+        ObservableList<Node> children = players_score.getChildren();
+		
+		// Remove all StackPanes in the specified cell
+		children.removeIf(node -> node instanceof Label && GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == 0);
+	    Label turnIndicator = new Label("->");
+
+		final int rownew=currentPlayerIndex.getValue();
+		players_score.add(turnIndicator, 0, rownew);
+	}
+	
+	private void updatePlayerScore() {
+		int previousPlayerIndex = currentPlayerIndex.getValue()-1;
+		if(previousPlayerIndex<0)previousPlayerIndex=numberOfPlayers.getValue()-1;
+		final int row=previousPlayerIndex;
+		int playerScore = userScore[previousPlayerIndex].getValue();
+
+	        ObservableList<Node> children = players_score.getChildren();
+			
+			// Remove all StackPanes in the specified cell
+			children.removeIf(node -> node instanceof Label && GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == 2);
+		    
+			Label playerScoreLabel = new Label(String.valueOf(playerScore));
+			players_score.add(playerScoreLabel, 2, row);
+	}
+
 	/*
 	 * name: update
 	 * input: java.util.Observable o, Object arg
@@ -499,11 +576,10 @@ public class BoardController implements Observer {
 	@Override
 	public void update(java.util.Observable o, Object arg) {
 	    // Check if the isvalid property is true
-	    if (isvalid.getValue()) {
-	        // Update the tiles and redraw the board
-	        //updateTiles();
-	        //redraw();
-	    }
+	    redraw((Tile[][]) arg);
+	    updateTiles();
+	    updatePlayerScore();
+	    updateTurnIndicator();
 	}
 
 	/*
