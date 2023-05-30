@@ -1,5 +1,7 @@
 # Scrable
 
+Link to the video of the 2nd milestone:
+https://1drv.ms/v/s!ArFBrb1bmLQPwXc8vaRVPJjMvCUs
 Two teams :
 1. Nadav and Noam (Blue)
 2. Lidor and Barak(Green)
