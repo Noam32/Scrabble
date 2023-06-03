@@ -159,6 +159,8 @@ public class ModelHost extends Observable implements Model {
 				this.gamestate.listOfPlayers.get(i).addTile(t1);
 			}
 		}
+		setChanged();
+		this.notifyObservers("start");
 	}
 	
 	@Override

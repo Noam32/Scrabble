@@ -42,6 +42,7 @@ public class viewModel extends Observable implements Observer {
 	public IntegerProperty row,col,currentPlayerIndex,numberOfPlayers;
 	public ObjectProperty<Character>[] userTiles = new ObjectProperty[7];
 	public IntegerProperty[] userTilesScore = new IntegerProperty[7];
+	public boolean gameStart=false;
 
 
 
@@ -82,6 +83,7 @@ public class viewModel extends Observable implements Observer {
         this.endPush = new SimpleBooleanProperty();
 		this.currentPlayerIndex=new SimpleIntegerProperty();
 	    gameState = m.getGameState();
+	    /*
 	    numberOfPlayers.set(gameState.listOfPlayers.size());
 		this.userScore = new IntegerProperty[numberOfPlayers.getValue()];
 		this.userScorename = new SimpleStringProperty[numberOfPlayers.getValue()];
@@ -89,7 +91,7 @@ public class viewModel extends Observable implements Observer {
 	    //gameState = m.getGameState();
 
 	    // Set the numberOfPlayers property based on the size of the listOfPlayers in the gameState
-	    numberOfPlayers.set(gameState.listOfPlayers.size());
+	    //numberOfPlayers.set(gameState.listOfPlayers.size());
 
 	    for (int i = 0; i < userScore.length; i++) {
 	    	userScorename[i] = new SimpleStringProperty();
@@ -102,7 +104,7 @@ public class viewModel extends Observable implements Observer {
 	        userTiles[i] = new SimpleObjectProperty<>();
 	        userTilesScore[i] = new SimpleIntegerProperty();
 
-	    }
+	    }*/
 
 	   
 
@@ -144,9 +146,9 @@ public class viewModel extends Observable implements Observer {
                 
         });
 	    
-        getUserScore();
+        //getUserScore();
 	    // Get tiles from the model
-	    getTiles();
+	    //getTiles();
 	    
 	    /*
 	    Task<Void> task = new Task<Void>() {
@@ -265,53 +267,94 @@ public class viewModel extends Observable implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 	    if (o == m) {
-	        // Set the isvalid property based on whether the last placement was successful
-	        isvalid.set(m.wasLastPlacementSuccessful());
-	        System.out.println(this.myName);
-	        //isvalid.getValue()
-			    gameState = m.getGameState();//update the game state
-			    this.currentPlayerIndex.set(gameState.getIndexOfCurrentTurnPlayer());
-			    for(int i=0;i<numberOfPlayers.getValue();i++) {
-			    userScore[i].set(gameState.listOfPlayers.get(i).getNumOfPoints());
-			    }
-			    //userScore[this.currentPlayerIndex-1];
-		        getTiles();
+	    	if(arg.equals("start")) {
+	    		 gameState = m.getGameState();//update the game state
+	    		 numberOfPlayers.set(gameState.listOfPlayers.size());
+	    			this.userScore = new IntegerProperty[numberOfPlayers.getValue()];
+	    			this.userScorename = new SimpleStringProperty[numberOfPlayers.getValue()];
+	    			
+	    		    //gameState = m.getGameState();
+
+	    		    // Set the numberOfPlayers property based on the size of the listOfPlayers in the gameState
+	    		    //numberOfPlayers.set(gameState.listOfPlayers.size());
+
+	    		    for (int i = 0; i < userScore.length; i++) {
+	    		    	userScorename[i] = new SimpleStringProperty();
+	    		    	userScore[i] = new SimpleIntegerProperty();
+
+	    		    }
+
+	    		    // Initialize the userTiles array
+	    		    for (int i = 0; i < userTiles.length; i++) {
+	    		        userTiles[i] = new SimpleObjectProperty<>();
+	    		        userTilesScore[i] = new SimpleIntegerProperty();
+
+	    		    }
+			        this.currentPlayerIndex.set(gameState.getIndexOfCurrentTurnPlayer());
+			        for(int i=0;i<numberOfPlayers.getValue();i++) {
+			            userScore[i].set(gameState.listOfPlayers.get(i).getNumOfPoints());
+			        }
+			    getUserScore();
+	    		getTiles();
 		        setChanged();
 		        Platform.runLater(new Runnable() {
 		            @Override
 		            public void run() {
-		                notifyObservers(gameState.getBoard().getTiles());//get the board
+		                notifyObservers("start");//get the board
 		            }
 		        });
-	        
-	        // Get tiles from the model
+	    	}
+	    	else {
+		        // Set the isvalid property based on whether the last placement was successful
+		        isvalid.set(m.wasLastPlacementSuccessful());
+		        System.out.println(this.myName);
+		        //isvalid.getValue()
+				    gameState = m.getGameState();//update the game state
+				    this.currentPlayerIndex.set(gameState.getIndexOfCurrentTurnPlayer());
+				    for(int i=0;i<numberOfPlayers.getValue();i++) {
+				    userScore[i].set(gameState.listOfPlayers.get(i).getNumOfPoints());
+				    }
+				    //userScore[this.currentPlayerIndex-1];
+			        getTiles();
+			        setChanged();
+			        Platform.runLater(new Runnable() {
+			            @Override
+			            public void run() {
+			                notifyObservers(gameState.getBoard().getTiles());//get the board
+			            }
+			        });
+		        
+		        // Get tiles from the model
+		    }
 	    }
 	}
 	
 	public void checkboard() {
-	    GameState gamenew = m.getGameState();//update the game state
-	    if(!gameState.equals(gamenew)){//if true do nothing
-	        isvalid.set(m.wasLastPlacementSuccessful());
-	        //if(isvalid.getValue()) {
-
-		        gameState = m.getGameState();//update the game state
-		        this.currentPlayerIndex.set(gameState.getIndexOfCurrentTurnPlayer());
-		        for(int i=0;i<numberOfPlayers.getValue();i++) {
-		            userScore[i].set(gameState.listOfPlayers.get(i).getNumOfPoints());
-		        }
-		        //userScore[this.currentPlayerIndex-1];
-		        getTiles();
-		        setChanged();
+		if(gameStart) {
+		    GameState gamenew = m.getGameState();//update the game state
+		    if(!gameState.equals(gamenew)){//if true do nothing
+		        isvalid.set(m.wasLastPlacementSuccessful());
+		        //if(isvalid.getValue()) {
 	
-		        // Update the user interface on the JavaFX Application Thread
-		        Platform.runLater(new Runnable() {
-		            @Override
-		            public void run() {
-		                notifyObservers(gameState.getBoard().getTiles());//get the board
-		            }
-		        });
-	       // }
-	    }
+			        gameState = m.getGameState();//update the game state
+			        this.currentPlayerIndex.set(gameState.getIndexOfCurrentTurnPlayer());
+			        for(int i=0;i<numberOfPlayers.getValue();i++) {
+			            userScore[i].set(gameState.listOfPlayers.get(i).getNumOfPoints());
+			        }
+			        //userScore[this.currentPlayerIndex-1];
+			        getTiles();
+			        setChanged();
+		
+			        // Update the user interface on the JavaFX Application Thread
+			        Platform.runLater(new Runnable() {
+			            @Override
+			            public void run() {
+			                notifyObservers(gameState.getBoard().getTiles());//get the board
+			            }
+			        });
+		       // }
+		    }
+		}
 	}
 
 

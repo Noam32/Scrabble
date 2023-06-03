@@ -263,6 +263,7 @@ public class ModelGuest extends Observable implements Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 	}
 
 

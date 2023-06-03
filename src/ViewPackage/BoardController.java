@@ -1,5 +1,6 @@
 package ViewPackage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map.Entry;
 import static javafx.beans.binding.Bindings.bindBidirectional;
 import java.util.Observer;
 
+import WaitScreen.WaitScreenController;
 import baseScrabble.Tile;
 import baseScrabble.Tile.Bag;
 import javafx.animation.Animation;
@@ -29,9 +31,11 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -41,6 +45,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -57,6 +62,7 @@ import viewModel.viewModel;
 @SuppressWarnings("deprecation")
 public class BoardController implements Observer {
 	
+    Dialog<String> inputDialog = new Dialog<>();
 	viewModel vm;
 	private StringProperty wordFromUser;
 	private BooleanProperty isvertical,isvalid,isHost,skipPush,endPush;
@@ -66,6 +72,7 @@ public class BoardController implements Observer {
 	public IntegerProperty[] userTilesScore = new IntegerProperty[7];
 	public IntegerProperty[] userScore;
 	public StringProperty[] userScorename;
+	public Scene boardScene;
 
 	char[] word;
 	int[] score;
@@ -168,7 +175,7 @@ public class BoardController implements Observer {
 		 Output: None
 		 Functionality: Initializes the BoardController with the provided view model and binds various properties.
 		 */
-		void init(viewModel vm) {
+		public void init(viewModel vm) {
 			this.vm=vm;
 			vm.addObserver(this);
 			vm.wordFromUser.bind(wordFromUser);
@@ -180,6 +187,7 @@ public class BoardController implements Observer {
 			isvalid.bind(vm.isvalid);
             skipPush.bindBidirectional(vm.skipPush);
             endPush.bindBidirectional(vm.endPush);
+            /*
 			numberOfPlayers.bind(vm.numberOfPlayers);
             this.userScore = new IntegerProperty[numberOfPlayers.getValue()];
     		this.userScorename = new SimpleStringProperty[numberOfPlayers.getValue()];
@@ -193,7 +201,7 @@ public class BoardController implements Observer {
 			for(int i=0;i<userTiles.length;i++) {
 				userTiles[i].bind(vm.userTiles[i]);
 				userTilesScore[i].bind(vm.userTilesScore[i]);
-			}
+			}*/
 			
 		}
 		
@@ -259,6 +267,9 @@ public class BoardController implements Observer {
 		this.primaryStage=stage;
 	}
 	
+	public void setBoardScene(Scene scene) {
+		this.boardScene=scene;
+	}
 	
 	
 	/*
@@ -355,8 +366,8 @@ public class BoardController implements Observer {
 	    board.setGridLinesVisible(true);
 	    player.setGridLinesVisible(true);
 	    //new Thread(() -> updateTime()).start();
-	    updateTiles();
-	    initialPlayersName();
+	    //updateTiles();
+	    //initialPlayersName();
 	}
 
 
@@ -562,14 +573,37 @@ public class BoardController implements Observer {
 	 */
 	@Override
 	public void update(java.util.Observable o, Object arg) {
-	    // Check if the isvalid property is true
-		if(isvalid.getValue()) {
-		    redraw((Tile[][]) arg);
-		    updateTiles();
+		if(arg.equals("start")) {
+			numberOfPlayers.bind(vm.numberOfPlayers);
+            this.userScore = new IntegerProperty[numberOfPlayers.getValue()];
+    		this.userScorename = new SimpleStringProperty[numberOfPlayers.getValue()];
+    		
+    		for(int i=0;i<userScore.length;i++) {
+    			userScorename[i] = new SimpleStringProperty();
+    			userScore[i] = new SimpleIntegerProperty();
+    			userScore[i].bind(vm.userScore[i]);
+    			userScorename[i].bind(vm.userScorename[i]);
+			}
+			for(int i=0;i<userTiles.length;i++) {
+				userTiles[i].bind(vm.userTiles[i]);
+				userTilesScore[i].bind(vm.userTilesScore[i]);
+			}
+			updateTiles();
+			initialPlayersName();
+		    primaryStage.setScene(boardScene);
+		    
 		}
-	    updatePlayerScore();
-	    updateTurnIndicator();
-	    //new Thread(() -> updateTime()).start();
+		else {
+			 // Check if the isvalid property is true
+			if(isvalid.getValue()) {
+			    redraw((Tile[][]) arg);
+			    updateTiles();
+			}
+		    updatePlayerScore();
+		    updateTurnIndicator();
+		    //new Thread(() -> updateTime()).start();
+		}
+	   
 	}
 
 	/*
@@ -579,31 +613,47 @@ public class BoardController implements Observer {
 	 * functionality: Displays a dialog with a message indicating that the game is waiting for players to join.
 	 */
 	public void pauseScreen() {
-	    // Create a new input dialog
-	    Dialog<String> inputDialog = new Dialog<>();
-	    inputDialog.setTitle("waiting zone");
-
-	    // Create a GridPane for the dialog's content
-	    GridPane grid = new GridPane();
-	    grid.setHgap(10);
-	    grid.setVgap(10);
-	    grid.setPadding(new Insets(20, 150, 10, 10));
-
-	    // Add a label to the grid with a message indicating that the game is waiting for players to join
-	    grid.add(new Label("Waiting for players..."), 0, 0);
-
-	    // Set the dialog's content and button types
-	    inputDialog.getDialogPane().setContent(grid);
-	    inputDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-	    // Show the dialog and wait for user input
-	    inputDialog.showAndWait();
-
-	    // Sleep for 5 seconds
-	    try {
-	        Thread.sleep(5000);
-	    } catch (InterruptedException e) {
-	        e.printStackTrace();
-	    }
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		AnchorPane root = null;
+		try {
+			root = fxmlLoader.load(getClass().getResource("/WaitScreen/WaitScreen.fxml").openStream());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		WaitScreenController view = fxmlLoader.getController();
+		view.setStage(primaryStage);
+		Scene scene = new Scene(root,1200,800);
+		scene.getStylesheets().add(getClass().getResource("/WaitScreen/application.css").toExternalForm());
+		primaryStage.setScene(scene);
+/*
+		while(this.numberOfPlayers.getValue()<2) {
+		    // Create a new input dialog
+		    inputDialog.setTitle("waiting zone");
+	
+		    // Create a GridPane for the dialog's content
+		    GridPane grid = new GridPane();
+		    grid.setHgap(10);
+		    grid.setVgap(10);
+		    grid.setPadding(new Insets(20, 150, 10, 10));
+	
+		    // Add a label to the grid with a message indicating that the game is waiting for players to join
+		    grid.add(new Label("Waiting for players..."), 0, 0);
+	
+		    // Set the dialog's content and button types
+		    inputDialog.getDialogPane().setContent(grid);
+		    //inputDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+	
+		    // Show the dialog and wait for user input
+		    inputDialog.showAndWait();
+	
+		    // Sleep for 5 seconds
+		    try {
+		        Thread.sleep(5000);
+		    } catch (InterruptedException e) {
+		        e.printStackTrace();
+		    }
+		}
+	*/	
 	}
 }
