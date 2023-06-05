@@ -62,7 +62,6 @@ import viewModel.viewModel;
 @SuppressWarnings("deprecation")
 public class BoardController implements Observer {
 	
-    Dialog<String> inputDialog = new Dialog<>();
 	viewModel vm;
 	private StringProperty wordFromUser;
 	private BooleanProperty isvertical,isvalid,isHost,skipPush,endPush;
@@ -626,34 +625,6 @@ public class BoardController implements Observer {
 		Scene scene = new Scene(root,1200,800);
 		scene.getStylesheets().add(getClass().getResource("/WaitScreen/application.css").toExternalForm());
 		primaryStage.setScene(scene);
-/*
-		while(this.numberOfPlayers.getValue()<2) {
-		    // Create a new input dialog
-		    inputDialog.setTitle("waiting zone");
-	
-		    // Create a GridPane for the dialog's content
-		    GridPane grid = new GridPane();
-		    grid.setHgap(10);
-		    grid.setVgap(10);
-		    grid.setPadding(new Insets(20, 150, 10, 10));
-	
-		    // Add a label to the grid with a message indicating that the game is waiting for players to join
-		    grid.add(new Label("Waiting for players..."), 0, 0);
-	
-		    // Set the dialog's content and button types
-		    inputDialog.getDialogPane().setContent(grid);
-		    //inputDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-	
-		    // Show the dialog and wait for user input
-		    inputDialog.showAndWait();
-	
-		    // Sleep for 5 seconds
-		    try {
-		        Thread.sleep(5000);
-		    } catch (InterruptedException e) {
-		        e.printStackTrace();
-		    }
-		}
-	*/	
+
 	}
 }

@@ -260,7 +260,7 @@ public class ModelHost extends Observable implements Model {
 	//Q_or_C = 'Q' for query and 'C' for challenge
 	//throws exception if connection to the DictionaryServer failed !
 	public static Boolean runClientToDictionaryServer(int port,char Q_or_C ,String stringTosearch) throws Exception{
-		String bookNames="mobydick.txt";
+		String bookNames="mobydick.txt"+","+"alice_in_wonderland.txt"+","+"Frank Herbert - Dune.txt"+","+"Harray Potter.txt";
 		try {
 			Socket server=new Socket("localhost",port);
 			PrintWriter out=new PrintWriter(server.getOutputStream());
