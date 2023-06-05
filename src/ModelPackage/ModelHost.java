@@ -31,6 +31,8 @@ public class ModelHost extends Observable implements Model {
 	public boolean hasGameEnded=false;
 	public Player myPlayer; //the player controlled by this Model
 	public static int Host_PortFor_Communicating_With_Guests =8080;// Communicate
+	private boolean hasGameStarted=false;
+
 	
 	public ModelHost(){
 		this.gamestate=new GameState();
@@ -132,7 +134,7 @@ public class ModelHost extends Observable implements Model {
 	public void initGame() {
 		decideOnOrderOfPlayers();
 		giveAllPlayersSevenTiles();
-		
+		this.hasGameStarted=true;
 		
 	}
 	
@@ -302,6 +304,9 @@ public class ModelHost extends Observable implements Model {
 	}
 
 	
+	public boolean hasGameStarted() {
+		return this.hasGameStarted;
+	}
 	
 	//afterwards create a with threadpool? (or as a queue) a client handler 
 	
