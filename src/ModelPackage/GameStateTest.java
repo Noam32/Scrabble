@@ -34,6 +34,28 @@ public class GameStateTest {
 		System.out.println(gs.hashmap_name_to_id.get("Danit"));
 		System.out.println(gs.hashmap_name_to_id.get("yossi"));
 		System.out.println("gs.getIdofPlayerName(\"moshe\")="+gs.getIdofPlayerName("moshe"));
+		System.out.println("\ntest the getStringOfScoreBoard");
+		gs.listOfPlayers.get(0).numOfPoints=77;
+		String [] out=gs.getStringOfScoreBoard();
+		for (String str:out) {
+			System.out.println(str);
+		}
+		gs.inc_indexOfCurrentTurnPlayer();
+		System.out.println("");
+		 out=gs.getStringOfScoreBoard();
+		for (String str:out) {
+			System.out.println(str);
+		}
+		
+		System.out.println("\n Testing the equals method");
+		GameState gs_copy=gs;
+		System.out.println("testing equals with the same object -should be true:");
+		System.out.println(gs_copy.equals(gs));
+		System.out.println("testing equals with an differnt gameState- should be false:");
+		GameState other_gs=new GameState();
+		other_gs.addAPlayer("david");
+		System.out.println(gs_copy.equals(other_gs));
+		System.out.println();
 		
 		System.out.println("test ended");
 		
