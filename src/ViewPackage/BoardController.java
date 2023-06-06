@@ -2,12 +2,14 @@ package ViewPackage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
 import static javafx.beans.binding.Bindings.bindBidirectional;
 import java.util.Observer;
+
 
 import WaitScreen.WaitScreenController;
 import baseScrabble.Tile;
@@ -46,7 +48,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -72,9 +79,12 @@ public class BoardController implements Observer {
 	public IntegerProperty[] userScore;
 	public StringProperty[] userScorename;
 	public Scene boardScene;
+	
 
-	char[] word;
-	int[] score;
+	StackPane selectedTileStackPane = null;
+	char selectedTileLetter=' ';
+	int selectedTileScore=0,selectedTileIndex;
+	List<int[]> placedTiles = new ArrayList<>();
 	List<String> playerNames;
 	
 	@FXML
@@ -130,6 +140,7 @@ public class BoardController implements Observer {
 
 	
 	private void updateTime() {
+		
 	    for (int i = 60; i > 0; i--) {
 	        final int time = i;
 	        Platform.runLater(() -> timerLabel.setText(String.valueOf(time)));
@@ -359,6 +370,35 @@ public class BoardController implements Observer {
 
 	            // Add mouse event handling
 	            stackPane.setOnMousePressed(evt -> this.mouseDown(evt));
+	            stackPane.setOnMouseClicked(event -> {
+	                // Check if a tile is selected
+	                if (selectedTileLetter != ' ') {
+	                    // Move the selected tile to the clicked cell on the game board
+	                    // Remove the selected tile from the user tile GridPane
+	                    ObservableList<Node> children = player.getChildren();
+	                    children.removeIf(node -> node instanceof StackPane && GridPane.getRowIndex(node) == 0 && GridPane.getColumnIndex(node) == selectedTileIndex);
+	                    // Add the selected tile to the clicked cell on the game board
+	                    Rectangle square1 = new Rectangle();
+	                    square.setFill(Color.ANTIQUEWHITE);
+	                    square.widthProperty().bind(board.widthProperty().divide(15));
+	                    square.heightProperty().bind(board.heightProperty().divide(15));
+	                    square.setStroke(Color.BLACK);
+	                    square.setStrokeWidth(1);
+	                    Text letterText = new Text(Character.toString(selectedTileLetter));
+	                    letterText.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 20));
+	                    Text scoreText = new Text(Integer.toString(selectedTileScore));
+	                    scoreText.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 16));
+	                    StackPane temp = new StackPane(square1, letterText, scoreText);
+	                    temp.setAlignment(scoreText, Pos.BOTTOM_RIGHT);
+	                    scoreText.setTranslateX(-5);
+	                    scoreText.setTranslateY(-5);
+	                    board.add(temp, column, rows);
+	                    placedTiles.add(new int[]{column, rows, (int) selectedTileLetter, selectedTileScore});
+	                    // Reset the selected tile
+	                    selectedTileLetter = ' ';
+	                    selectedTileScore=0;
+	                }
+	            });
 	        }
 	    }
 
@@ -423,6 +463,37 @@ public class BoardController implements Observer {
 	        scoreText.setTranslateX(-5);
 	        scoreText.setTranslateY(-5);
 
+	        temp.setOnMouseClicked(event -> {
+	        	
+
+	            // Check if the clicked StackPane is already selected
+	            if (temp == selectedTileStackPane) {
+	                // Deselect the clicked StackPane
+	                selectedTileStackPane.setBorder(Border.EMPTY);
+	                selectedTileStackPane = null;
+	                selectedTileLetter = ' ';
+	                selectedTileScore = 0;
+	            } else {
+	                // Reset the border of the previously selected tile StackPane
+	                if (selectedTileStackPane != null) {
+	                    selectedTileStackPane.setBorder(Border.EMPTY);
+	                }
+	             // Get the tile associated with the clicked StackPane
+		            int c1 = GridPane.getColumnIndex(temp);
+		            char tileLetter = userTiles[c1].getValue();
+		            int tileScore = userTilesScore[c1].getValue();
+		            
+		            // Set the selected tile
+		            selectedTileLetter = tileLetter;
+		            selectedTileScore = tileScore;
+		            selectedTileIndex=c1;
+	                selectedTileStackPane = temp;
+	                // Set the border of the selected tile StackPane
+	                temp.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+	            }
+	            
+	            
+	        });
 	        // Add the StackPane to the player board
 	        player.add(temp, i, 0);
 	    }
@@ -563,6 +634,47 @@ public class BoardController implements Observer {
 			Label playerScoreLabel = new Label(String.valueOf(playerScore));
 			players_score.add(playerScoreLabel, 2, row);
 	}
+	
+	
+	// Add a button to allow the user to submit their move
+	public void submitButton(){
+	    // Check if any tiles have been placed on the game board
+	    if (!placedTiles.isEmpty()) {
+	        // Sort the placed tiles by row and column
+	    	placedTiles.sort(Comparator.comparingInt((int[] a) -> a[0]).thenComparingInt((int[] a) -> a[1]));
+	        // Get the start row and column
+	        int startRow = placedTiles.get(0)[0];
+	        int startCol = placedTiles.get(0)[1];
+	        // Check if the tiles are in a horizontal or vertical line
+	        boolean isVertical = true;
+	        for (int i = 1; i < placedTiles.size(); i++) {
+	            if (placedTiles.get(i)[0] != startRow) {
+	                isVertical = false;
+	                break;
+	            }
+	        }
+	        
+	        boolean isHorizontal = true;
+	        for (int i = 1; i < placedTiles.size(); i++) {
+	            if (placedTiles.get(i)[1] != startCol) {
+	                isHorizontal = false;
+	                break;
+	            }
+	        }
+	        
+	        // Check if the tiles form a valid word
+	        StringBuilder wordBuilder = new StringBuilder();
+	        if (isVertical||isHorizontal) {
+	            for (int[] tile : placedTiles) {
+	                wordBuilder.append((char) tile[2]);
+	            }
+	        } else {
+	            // TODO: Handle case where tiles are not in a horizontal or vertical line
+	        }
+	        String word = wordBuilder.toString();
+	    }
+	}
+
 
 	/*
 	 * name: update

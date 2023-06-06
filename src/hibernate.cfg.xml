@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+		 <property name="connection.url">
+		jdbc:mysql://localhost:3306/myDatabase
+		</property>
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/my_database</property>
+		<property name="hibernate.connection.username">my_user</property>
+		<property name="hibernate.connection.password">my_password</property>
+    </session-factory>
+</hibernate-configuration>
