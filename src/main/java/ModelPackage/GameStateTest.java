@@ -1,7 +1,8 @@
 package ModelPackage;
 
 import baseScrabble.Tile.Bag;
-
+import org.mongojack.JacksonMongoCollection;
+import org.mongojack.MongoCollection;
 public class GameStateTest {
 
 	

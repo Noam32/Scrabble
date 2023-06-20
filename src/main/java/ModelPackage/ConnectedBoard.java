@@ -6,6 +6,10 @@ import baseScrabble.Word;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.bson.Document;
 
 //This class implements the board which now has tcp/ip connectivity :
 
@@ -87,4 +91,62 @@ public class ConnectedBoard extends Board implements Serializable {
     	
     	return true;
     }
+    
+    public Document toDocument() {
+    	Document document=new Document();
+    	document.append("isEmpty", this.isEmpty);
+    	Document embedded_document=new Document();//for 2d array
+    	for(int i=0;i<this.tiles[0].length;i++) {
+    		//System.out.println("len ="+this.tiles[i].length);
+    		ArrayList<Tile> list=new ArrayList<Tile>(Arrays.asList(tiles[i]));
+    		embedded_document.append(""+i, embedded_TilesDoc( list));
+    	}
+    	document.append("tiles", embedded_document);
+    	return document;
+    	
+    }
+    public Document embedded_TilesDoc(ArrayList<Tile> list) {
+		Document document= new Document();
+		for(int i=0;i<list.size();i++ ) {
+			if(list.get(i)==null)
+				document.append(""+i,null);
+			else
+				document.append(""+i, list.get(i).toDocument());
+		}
+		return document;
+	}
+    //converts mongoDB document that contains the object to ConnectedBoard object
+    public static ConnectedBoard fromDocument (Document document_ConnectedBoard) {
+    	ConnectedBoard board =new ConnectedBoard();
+    	//now we need to update the isEmpty and the tile 2d array:
+    	boolean isEmpty=(boolean)document_ConnectedBoard.getBoolean("isEmpty");
+    	board.isEmpty=isEmpty;
+    	//update 2d tile arr:
+    	Tile [][] tiles=board.tiles;
+    	int rows=15;
+    	int cols=15;
+    	Document document_2d_tiles_arr=document_ConnectedBoard.get("tiles", Document.class);
+    	for(int i=0;i<rows;i++) {
+    		for(int j=0;j<cols;j++) {
+    			Tile t=getTileFromDocument(i,j,document_2d_tiles_arr);
+    			tiles[i][j]=t;
+    		}
+    	}
+    	board.tiles=tiles;
+    	return board;
+    }
+    //untested!!! maybe  getList will not work?
+    public static Tile getTileFromDocument(int i ,int j,Document document_2d_tiles_arr ) {
+    	Tile t1;
+    	Document rowOfTileDocument=document_2d_tiles_arr.get(""+i, Document.class);
+    	//getting a list of 15 document representing one Tile each:
+    	Document tileDocumnet=rowOfTileDocument.get(""+j,Document.class);//getting the specific document
+    	if(tileDocumnet==null) {
+    		return null;
+    	}
+    	t1=Tile.fromDocument(tileDocumnet);
+    	return t1;
+    }
+    
+ 
 }
