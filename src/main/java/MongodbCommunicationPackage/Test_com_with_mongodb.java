@@ -28,7 +28,7 @@ import baseScrabble.Tile;
 
 public class Test_com_with_mongodb {
 	// Connection settings
-	public static String connectionString = "mongodb://localhost:27017";
+	public static String connectionString = "mongodb+srv://turbh:0525685974@atlascluster.ji8h963.mongodb.net/?retryWrites=true&w=majority";
 	public static String databaseName = "myDataBase";
 			// Create a MongoDB client
 	public static MongoClient  mongoClient = MongoClients.create(connectionString);

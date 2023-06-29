@@ -18,12 +18,12 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>11</version>
+            <version>19</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
-            <version>11</version>
+            <version>19</version>
         </dependency>
         <dependency>
     <groupId>org.slf4j</groupId>
@@ -39,7 +39,7 @@
     <dependency>
         <groupId>org.mongodb</groupId>
         <artifactId>mongodb-driver-sync</artifactId>
-        <version>4.3.0</version>
+        <version>4.10.0</version>
     </dependency>
     </dependencies>
 

@@ -3,8 +3,10 @@ package baseScrabble;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+
 import org.bson.Document;
 
 public class Tile implements Serializable {
@@ -59,13 +61,13 @@ public class Tile implements Serializable {
 		return list;
 		
 	}
-
+	
 	public Document toDocument() {
 		Document document =new Document();
 		document.append("letter", letter);
 		document.append("score", score);
 		return document;
-
+		
 	}
 	//converting a mongodb document representing a tile object to a Tile object
 	public static Tile fromDocument(Document document_tile) {
@@ -74,8 +76,6 @@ public class Tile implements Serializable {
 		Tile t=new Tile(letter,(int)score);
 		return t;
 	}
-	
-	
 	
 	public static class Bag implements Serializable {
 		private static final long serialVersionUID = 1L;
@@ -161,8 +161,7 @@ public class Tile implements Serializable {
 			str+="}";
 			return str;
 		}
-
-
+		
 		public Document toDocument() {
 			Document document =new Document();
 			ArrayList<Tile> list =array_Tile_To_ArrayListTile(this.tiles);
@@ -184,14 +183,26 @@ public class Tile implements Serializable {
 			}
 			return document;
 		}
-
 		public static Bag fromDocument(Document document_for_bag) {
 			Bag bag=new Bag();
-			ArrayList<Integer>quantities=new ArrayList<Integer>();
-			document_for_bag.getList("quantities", Integer.class);
-			bag.quantities=convert_list_IntegerToPrimitiveArray(quantities);
+			//ArrayList<Integer>quantities=new ArrayList<Integer>();
+			ArrayList<Integer> list=new ArrayList<Integer>( document_for_bag.getList("quantities",Integer.class));
+			//bag.quantities=getIntgerQuatitiesArrFromDocumnet(document_for_quantities);
+			bag.quantities=convert_list_IntegerToPrimitiveArray(list);
 			return bag;
 		}
+		
+	
+		
+		
+		private static int[] getIntgerQuatitiesArrFromDocumnet(List<Document> quantities2 ) {
+			int[] arr=new int[26];
+			for(int i =0 ; i<arr.length;i++) {
+				arr[i]=(int)((Document) quantities2).getInteger(""+i);		
+			}
+			return arr;
+		}
+		
 		private static int[] convert_list_IntegerToPrimitiveArray(ArrayList<Integer> list) {
 			int [] arr=new int[list.size()];
 			for(int i=0;i<list.size();i++) {
@@ -199,11 +210,7 @@ public class Tile implements Serializable {
 			}
 			return arr;
 		}
-
+		
 	}
 
-
 }
-
-
-

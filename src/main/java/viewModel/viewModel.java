@@ -324,19 +324,30 @@ public class viewModel extends Observable implements Observer {
 			        });
 		    	}
 	    	}
-	    	else {
-			    	if(arg.equals("resume")) {
+	    	else {  
+			    	if(arg!=null&&arg.equals("resume")) {
 			    		 gameState = m.getGameState();//update the game state
 						    this.currentPlayerIndex.set(gameState.getIndexOfCurrentTurnPlayer());
-						    for(int i=0;i<numberOfPlayers.getValue();i++) {
-						    userScore[i].set(gameState.listOfPlayers.get(i).getNumOfPoints());
-						    }
+						    getUserScore();
 						    //userScore[this.currentPlayerIndex-1];
 					        getTiles();
-					        setChanged();
 					        Platform.runLater(new Runnable() {
 					            @Override
 					            public void run() {
+							        setChanged();
+					                notifyObservers("resume");//get the board
+					            }
+					        });
+					        Platform.runLater(new Runnable() {
+					            @Override
+					            public void run() {
+					            	try {
+										Thread.sleep(1000);
+									} catch (InterruptedException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+							        setChanged();
 					                notifyObservers(gameState.getBoard().getTiles());//get the board
 					            }
 					        });
@@ -367,7 +378,6 @@ public class viewModel extends Observable implements Observer {
 		    }
 	    }
 	}
-	
 	public void checkboard() {
 	    if(m.hasGameStarted()) {
 
@@ -380,7 +390,45 @@ public class viewModel extends Observable implements Observer {
 					m.resumeGame(OpenScreenController.resumeGameChoosen);
 					//reset the resumeGameChoosen parameter
 					OpenScreenController.resumeGameChoosen=null;
+					
 				}
+				if(OpenScreenController.optionSelected.equals("resumeGuest")) {
+					//reset the resume parameter:
+					OpenScreenController.optionSelected="start";
+					try {
+						Thread.sleep(5000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					 gameState = m.getGameState();//update the game state
+					    this.currentPlayerIndex.set(gameState.getIndexOfCurrentTurnPlayer());
+					    getUserScore();
+					    //userScore[this.currentPlayerIndex-1];
+				        getTiles();
+				        Platform.runLater(new Runnable() {
+				            @Override
+				            public void run() {
+						        setChanged();
+				                notifyObservers("resume");//get the board
+				            }
+				        });
+				        Platform.runLater(new Runnable() {
+				            @Override
+				            public void run() {
+				            	try {
+									Thread.sleep(1000);
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+						        setChanged();
+				                notifyObservers(gameState.getBoard().getTiles());//get the board
+				            }
+				        });
+				}
+				 
 			    GameState gamenew = m.getGameState();//update the game state
 			    if(!gameState.equals(gamenew)){//if true do nothing
 			        isvalid.set(m.wasLastPlacementSuccessful());

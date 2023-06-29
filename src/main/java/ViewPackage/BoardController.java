@@ -693,6 +693,14 @@ public class BoardController implements Observer {
 	}
 
 
+	public void clearTableContent() {
+	    for (Node node : players_score.getChildren()) {
+	        if (node instanceof Label) {
+	            ((Label) node).setText("");
+	        }
+	    }
+	}
+
 	/*
 	 * name: update
 	 * input: java.util.Observable o, Object arg
@@ -727,12 +735,20 @@ public class BoardController implements Observer {
 		    primaryStage.setScene(boardScene);
 		    
 		}
+		else if(arg.equals("resume")) {
+			clearTableContent();
+			updateTiles();
+			initialPlayersName();
+			updatePlayerScore();
+		    updateTurnIndicator();
+		}
+
 		else {
 			 // Check if the isvalid property is true
-			if(isvalid.getValue()) {
+			//if(isvalid.getValue()) {
 			    redraw((Tile[][]) arg);
 			    updateTiles();
-			}
+			//}
 		    updatePlayerScore();
 		    updateTurnIndicator();
 		    //new Thread(() -> updateTime()).start();

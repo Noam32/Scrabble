@@ -27,7 +27,7 @@ import viewModel.viewModel;
 
 public class OpenScreenController {
 
-	public static String optionSelected;
+	public static String optionSelected="start";
 	public static GameState resumeGameChoosen;
 	Stage primaryStage;
 	@FXML
@@ -36,6 +36,8 @@ public class OpenScreenController {
 	Button joinButton;
 	@FXML
 	Button resumeButton;
+	@FXML
+	Button joinSavedButton;
 	@FXML
 	private AnchorPane anchorPane;
 	@FXML
@@ -47,16 +49,17 @@ public class OpenScreenController {
 	
 	public void paint() {
 	    startButton.prefWidthProperty().bind(anchorPane.widthProperty().multiply(0.4));
-	    startButton.prefHeightProperty().bind(anchorPane.heightProperty().multiply(0.2));
+	    startButton.prefHeightProperty().bind(anchorPane.heightProperty().multiply(0.1));
 	    resumeButton.prefWidthProperty().bind(anchorPane.widthProperty().multiply(0.4));
-	    resumeButton.prefHeightProperty().bind(anchorPane.heightProperty().multiply(0.2));
+	    resumeButton.prefHeightProperty().bind(anchorPane.heightProperty().multiply(0.1));
 	    joinButton.prefWidthProperty().bind(anchorPane.widthProperty().multiply(0.4));
-	    joinButton.prefHeightProperty().bind(anchorPane.heightProperty().multiply(0.2));
+	    joinButton.prefHeightProperty().bind(anchorPane.heightProperty().multiply(0.1));
+	    joinSavedButton.prefWidthProperty().bind(anchorPane.widthProperty().multiply(0.4));
+	    joinSavedButton.prefHeightProperty().bind(anchorPane.heightProperty().multiply(0.1));
 	}
 	
 	public void startGame() {
 		System.out.println("start");
-		optionSelected="start";
 		FXMLLoader fxmlLoader = new FXMLLoader();
 		BorderPane root = null;
 		try {
@@ -90,7 +93,6 @@ public class OpenScreenController {
 	
 	public void joinGame() {
 		System.out.println("join");
-		optionSelected="join";
 		FXMLLoader fxmlLoader = new FXMLLoader();
 		BorderPane root = null;
 		try {
@@ -136,16 +138,11 @@ public class OpenScreenController {
 		saveChoiceBox.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 		    if (newSelection != null) {
 		    	
-		    	 if (playerCounter == 0) {
 		    		 resumeGameChoosen =MongoDbMethods.getGameSaveFromMongo(newSelection);
-		    		 resumeHost();
-		    		 } else {
-		                joinGame();
-		            }
-		           // playerCounter = (playerCounter + 1) % 4;
-		        }		    
-		    
-		});
+		    		 startGame();
+		    		    
+		    	}
+		    });
 
 	    // Create a new dialog
 	    Dialog<String> dialog = new Dialog<>();
@@ -160,20 +157,21 @@ public class OpenScreenController {
 	    dialog.getDialogPane().getButtonTypes().addAll(resumeButtonType, ButtonType.CANCEL);
 
 	    // Show the dialog and wait for the user to close it
-	    Optional<String> result = dialog.showAndWait();
-
+	    dialog.showAndWait();
+	    //Optional<String> result = dialog.showAndWait();
+	    //String choice = result.get();
 	    // Handle the result of the dialog
-	    if (result.isPresent() && result.get().equals("Resume")) {
+	    //if (result.isPresent() && result.get().equals("Resume")) {
 	        // The user clicked the Resume button
-	        String selectedSave = saveChoiceBox.getSelectionModel().getSelectedItem();
+	       // String selectedSave = saveChoiceBox.getSelectionModel().getSelectedItem();
 	        // Load the selected saved game
-	    }
+	    //}
 		System.out.println("resume");
 	}
 	
-	public void resumeHost() {
-		System.out.println("start");
-		
+	public void joinSavedGame() {
+		System.out.println("resumeJoin");
+		optionSelected="resumeGuest";
 		FXMLLoader fxmlLoader = new FXMLLoader();
 		BorderPane root = null;
 		try {
@@ -188,20 +186,25 @@ public class OpenScreenController {
 		scene.getStylesheets().add(getClass().getResource("/ViewPackage/application.css").toExternalForm());
 		//primaryStage.setScene(scene);
 
+		TextInputDialog dialog = new TextInputDialog();
+	    dialog.setTitle("Join Game");
+	    dialog.setHeaderText("Enter your game name:");
+	    Optional<String> result = dialog.showAndWait();
 	    // Code to run the ModelHost in a separate thread
-		Model m = new ModelHost();
+		Model m = new ModelGuest(result.get());
 		/*try {
 			Thread.sleep(10000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
-		viewModel vm =new viewModel(m,"HostPlayer");
+		viewModel vm =new viewModel(m,result.get());
 		System.out.println("viewmodel");
 		view.init(vm);
 		view.setBoardScene(scene);
 		view.pauseScreen();
-		primaryStage.setTitle("HostPlayer");
+		primaryStage.setTitle("Scrabble"+result.get());
 		view.paint();
 	}
+
 }
