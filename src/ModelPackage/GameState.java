@@ -99,7 +99,7 @@ public class GameState implements Serializable {
 		return strArr;
 	}
 	
-	//This methods compares a GameState object to another game state object
+	//These methods compare a GameState object to another game state object
 	//if there is a change in any of the variables - we return true
 	//otherwise we return false
 	public boolean equals(GameState previousState) {
