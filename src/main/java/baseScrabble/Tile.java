@@ -3,6 +3,7 @@ package baseScrabble;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -182,14 +183,26 @@ public class Tile implements Serializable {
 			}
 			return document;
 		}
-		
 		public static Bag fromDocument(Document document_for_bag) {
 			Bag bag=new Bag();
-			ArrayList<Integer>quantities=new ArrayList<Integer>();
-			document_for_bag.getList("quantities", Integer.class);
-			bag.quantities=convert_list_IntegerToPrimitiveArray(quantities);
+			//ArrayList<Integer>quantities=new ArrayList<Integer>();
+			ArrayList<Integer> list=new ArrayList<Integer>( document_for_bag.getList("quantities",Integer.class));
+			//bag.quantities=getIntgerQuatitiesArrFromDocumnet(document_for_quantities);
+			bag.quantities=convert_list_IntegerToPrimitiveArray(list);
 			return bag;
 		}
+		
+	
+		
+		
+		private static int[] getIntgerQuatitiesArrFromDocumnet(List<Document> quantities2 ) {
+			int[] arr=new int[26];
+			for(int i =0 ; i<arr.length;i++) {
+				arr[i]=(int)((Document) quantities2).getInteger(""+i);		
+			}
+			return arr;
+		}
+		
 		private static int[] convert_list_IntegerToPrimitiveArray(ArrayList<Integer> list) {
 			int [] arr=new int[list.size()];
 			for(int i=0;i<list.size();i++) {

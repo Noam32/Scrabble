@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
-Built-By: noamh
-Build-Jdk: 17.0.7
+Built-By: barak
+Build-Jdk: 17.0.2
+Main-Class: scrabbleMongo.MainApp
 Created-By: Maven Integration for Eclipse
 

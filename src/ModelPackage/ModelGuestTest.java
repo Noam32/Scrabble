@@ -149,7 +149,7 @@ public class ModelGuestTest {
     
 
     
-    public static void printGameState(GameState game) {
+    private static void printGameState(GameState game) {
 		 Bag bag=game.bag;
 		 ArrayList<Player> listOfPlayers=game.listOfPlayers;
 		 Board board=game.gameBoard;

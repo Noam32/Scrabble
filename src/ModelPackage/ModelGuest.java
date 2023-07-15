@@ -27,8 +27,7 @@ public class ModelGuest extends Observable implements Model {
 	//BufferedReader inFromServer;
 	private ObjectInputStream inFromServer;
 	private ObjectStream myObjectStream;//ObjectStream:class for sending (Serializable)objects through TCP/IP:
-	private boolean hasGameStarted=false;
-
+	
 
 	public ModelGuest(String name){
 		//this.gamestate=new GameState();
@@ -148,7 +147,7 @@ public class ModelGuest extends Observable implements Model {
 	public boolean wasLastPlacementSuccessful() {
 		String []command=GuestClientHandler.createCommandStrings("wasLastPlacementSuccessful");
 		sendAllString(command);//sending request to host
-		String inputString = getMessageFromHost();//reading response message from host:
+		String inputString = getMessageFromHost();//reading respone message from host:
 		String [] splitString= inputString.split(":");
 		String res=splitString[1];
 		Boolean boolRes=Boolean.parseBoolean(res);
@@ -200,9 +199,6 @@ public class ModelGuest extends Observable implements Model {
 		//wait for response:
 		String ack_or_error_msg=getMessageFromHost();//reading response message from host(eeither an ACK or exception string)
 		System.out.println("modelguest.placeWordOnBoard() ack_or_error_msg = "+ack_or_error_msg);
-		//change data:
-		setChanged();
-		this.notifyObservers();
 
 	}
 
@@ -211,8 +207,6 @@ public class ModelGuest extends Observable implements Model {
 		String []command=GuestClientHandler.createCommandStrings("endPlayerTurn");
 		sendAllString(command);//sending request to host
 		getMessageFromHost();//reading response message from host:
-		setChanged();
-		this.notifyObservers();
 	}
 
 	@Override
@@ -220,8 +214,6 @@ public class ModelGuest extends Observable implements Model {
 		String []command=GuestClientHandler.createCommandStrings("skipPlayerTurn");
 		sendAllString(command);//sending request to host
 		getMessageFromHost();//reading response message from host:
-		setChanged();
-		this.notifyObservers();
 	}
 
 	public void initConnectiontoServer() {
@@ -252,7 +244,6 @@ public class ModelGuest extends Observable implements Model {
 		System.out.println("ModelGuest says :message received from server:"+inputString);
 		inputString=myObjectStream.readString();//reading good luck message for players from host:
 		System.out.println("ModelGuest says :message received from server:"+inputString);
-		this.hasGameStarted=true;
 		}
 		catch (IOException e) {
 			errorInLast_communication=true;
@@ -265,7 +256,6 @@ public class ModelGuest extends Observable implements Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
 
@@ -304,9 +294,5 @@ public class ModelGuest extends Observable implements Model {
 		return inputString;
 	}
 
-
-	public boolean hasGameStarted() {
-		return this.hasGameStarted;
-	}
 
 }

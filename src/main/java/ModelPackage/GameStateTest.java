@@ -5,7 +5,7 @@ import org.mongojack.JacksonMongoCollection;
 import org.mongojack.MongoCollection;
 public class GameStateTest {
 
-	
+
 	public static void main (String [] args) {
 		GameState gs=new GameState();
 		Bag b1=gs.bag;
@@ -28,7 +28,7 @@ public class GameStateTest {
 		index= gs.getIndexOfPlayerWithId(1);
 		System.out.println("getIndexOfPlayerWithId return = "+index);
 		System.out.println(gs.getPlayerWithName("moshe").toString());
-		
+
 		System.out.println("test the hashmap:");
 		System.out.println(gs.hashmap_name_to_id);
 		System.out.println(gs.hashmap_name_to_id.get("moshe"));
@@ -43,11 +43,11 @@ public class GameStateTest {
 		}
 		gs.inc_indexOfCurrentTurnPlayer();
 		System.out.println("");
-		 out=gs.getStringOfScoreBoard();
+		out=gs.getStringOfScoreBoard();
 		for (String str:out) {
 			System.out.println(str);
 		}
-		
+
 		System.out.println("\n Testing the equals method");
 		GameState gs_copy=gs;
 		System.out.println("testing equals with the same object -should be true:");
@@ -57,10 +57,10 @@ public class GameStateTest {
 		other_gs.addAPlayer("david");
 		System.out.println(gs_copy.equals(other_gs));
 		System.out.println();
-		
+
 		System.out.println("test ended");
-		
-		
+
+
 	}
-	
+
 }

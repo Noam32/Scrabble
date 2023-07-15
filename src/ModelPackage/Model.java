@@ -16,15 +16,11 @@ public interface Model {
 	public ArrayList<Tile> getTilesForPlayer(String name);//assuming name is unique
 	public Player WhoseTurnIsIt(); // returns which player has his turn now(returns player object)
 	public int WhoseTurnIsIt_Id(); //returns which player has his turn now (integer - players Id) 
-	
-	//new
-	public boolean hasGameStarted();
 	//Important:
 	//After the view Model calls placeWordOnBoard() - waits to be notified and then checks if the placement succeeded
 	public boolean wasLastPlacementSuccessful();
 	//Returns true if there was a communication exception in the model while running the TCP/ip communication
 	public boolean wasThereAnErrorAtLastCommunication() ;
-	
 	//*******************************
 	//change data:
 	//*******************************

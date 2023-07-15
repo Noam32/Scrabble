@@ -2,7 +2,6 @@ package ModelPackage;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
 import org.bson.Document;
 
 import baseScrabble.Tile;
@@ -12,7 +11,7 @@ public class Player implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static int currSerialNum=1;
 	final int playerId;
-	public String name;
+	String name;
 	public int numOfPoints;
 	public ArrayList<Tile> myTiles; //up to 7 tiles according to game logic.
 	
@@ -24,7 +23,7 @@ public class Player implements Serializable {
 		numOfPoints=0;
 		myTiles=new ArrayList<Tile>();
 	}
-	
+
 	public Player(String Name,int id) {
 		//Unique serial number for each player created:
 		playerId=id;
@@ -33,9 +32,6 @@ public class Player implements Serializable {
 		numOfPoints=0;
 		myTiles=new ArrayList<Tile>();
 	}
-	
-	
-	
 	
 	public int getplayerId() {
 		return playerId;
@@ -94,7 +90,7 @@ public class Player implements Serializable {
 		
 		return res;
 	}
-	
+
 	public Document toDocument() {
 		Document document= new Document();
 		document.append("name", name);
@@ -102,7 +98,7 @@ public class Player implements Serializable {
 		document.append("numOfPoints",(Integer)this.numOfPoints );
 		document.append("myTiles",embedded_myTilesDoc() );
 		return document;
-		
+
 	}
 	//creating an document that has multiple documents in it to include all of the tile objects:
 	public Document embedded_myTilesDoc() {
@@ -112,6 +108,7 @@ public class Player implements Serializable {
 		}
 		return document;
 	}
+
 	//convert mongodb doc to a Player object:
 	public static Player fromDocument(Document document_player) {
 		Player p1;
@@ -124,9 +121,9 @@ public class Player implements Serializable {
 		//listOfTileDoc=new ArrayList<Document>( document_player.getList("myTiles", Document.class));
 		listOfTileDoc=getListOfTilesFromDoc(document_player.get("myTiles", Document.class));
 		//now we get the tile from each document:
-		//ArrayList<Tile> tiles=new ArrayList<Tile> (); 
+		//ArrayList<Tile> tiles=new ArrayList<Tile> ();
 		//for(int i=0; i<listOfTileDoc.size();i++) {
-			
+
 		//	Tile t=Tile.fromDocument(listOfTileDoc.get(i) ) ;
 		//	tiles.add(t);
 		//}
@@ -135,9 +132,9 @@ public class Player implements Serializable {
 		//p1.playerId=id;
 		p1.numOfPoints=numOfPoints;
 		return p1;
-		
+
 	}
-	
+
 	public static ArrayList<Tile> getListOfTilesFromDoc(Document listOfTileDoc){
 		if(listOfTileDoc==null)
 			return null;
@@ -150,11 +147,9 @@ public class Player implements Serializable {
 			if(currTileDoc!=null) {
 				listOfTiles.add(Tile.fromDocument(currTileDoc));
 			}else {
-				done=true;//finished reading all tile documents 
+				done=true;//finished reading all tile documents
 			}
 		}
 		return listOfTiles;
 	}
-	
-	
 }

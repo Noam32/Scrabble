@@ -31,6 +31,8 @@ public class ModelHost extends Observable implements Model {
 	public boolean hasGameEnded=false;
 	public Player myPlayer; //the player controlled by this Model
 	public static int Host_PortFor_Communicating_With_Guests =8080;// Communicate
+	private boolean hasGameStarted=false;
+
 	
 	public ModelHost(){
 		this.gamestate=new GameState();
@@ -38,6 +40,17 @@ public class ModelHost extends Observable implements Model {
 		this.myPlayer=this.gamestate.listOfPlayers.get(0);
 		initLocalServer();
 		
+	}
+	
+	//use this method when resuming a save game
+	@Override
+	public void resumeGame(GameState game) {
+		this.gamestate=game;
+		myPlayer=game.listOfPlayers.get(0);//0 is the host BY DEFAULT
+		setChanged();
+		this.notifyObservers("resume");
+		//TODO wait for player to connect:
+		//init local server ...
 	}
 	
 	//*******************************
@@ -132,7 +145,7 @@ public class ModelHost extends Observable implements Model {
 	public void initGame() {
 		decideOnOrderOfPlayers();
 		giveAllPlayersSevenTiles();
-		
+		this.hasGameStarted=true;
 		
 	}
 	
@@ -159,6 +172,8 @@ public class ModelHost extends Observable implements Model {
 				this.gamestate.listOfPlayers.get(i).addTile(t1);
 			}
 		}
+		setChanged();
+		this.notifyObservers("start");
 	}
 	
 	@Override
@@ -258,7 +273,7 @@ public class ModelHost extends Observable implements Model {
 	//Q_or_C = 'Q' for query and 'C' for challenge
 	//throws exception if connection to the DictionaryServer failed !
 	public static Boolean runClientToDictionaryServer(int port,char Q_or_C ,String stringTosearch) throws Exception{
-		String bookNames="mobydick.txt";
+		String bookNames="mobydick.txt"+","+"alice_in_wonderland.txt"+","+"Frank Herbert - Dune.txt"+","+"Harray Potter.txt";
 		try {
 			Socket server=new Socket("localhost",port);
 			PrintWriter out=new PrintWriter(server.getOutputStream());
@@ -300,6 +315,9 @@ public class ModelHost extends Observable implements Model {
 	}
 
 	
+	public boolean hasGameStarted() {
+		return this.hasGameStarted;
+	}
 	
 	//afterwards create a with threadpool? (or as a queue) a client handler 
 	

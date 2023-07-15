@@ -149,7 +149,7 @@ public class ModelGuestTest {
     
 
     
-     public static void printGameState(GameState game) {
+    public static void printGameState(GameState game) {
 		 Bag bag=game.bag;
 		 ArrayList<Player> listOfPlayers=game.listOfPlayers;
 		 Board board=game.gameBoard;
@@ -159,8 +159,6 @@ public class ModelGuestTest {
 		 System.out.println("listOfPlayers :"+listOfPlayers.toString());
 		 System.out.println("board"+board.toString());
 		 System.out.println("indexOfCurrentTurnPlayer: "+indexOfCurrentTurnPlayer);
-		 System.out.println("hashmap_name_to_id"+game.hashmap_name_to_id);
-		 System.out.println("gameSaveName ="+game.gameSaveName);
 		 System.out.println("-------------------------------------");
 		 
 		

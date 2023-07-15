@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
-import org.bson.Document;
 
 public class Tile implements Serializable {
 
@@ -58,21 +57,6 @@ public class Tile implements Serializable {
 		ArrayList<Tile> list=new ArrayList<Tile>( Arrays.asList(arr));
 		return list;
 		
-	}
-
-	public Document toDocument() {
-		Document document =new Document();
-		document.append("letter", letter);
-		document.append("score", score);
-		return document;
-
-	}
-	//converting a mongodb document representing a tile object to a Tile object
-	public static Tile fromDocument(Document document_tile) {
-		char letter=document_tile.getString("letter").charAt(0);
-		Integer score=document_tile.getInteger("score");
-		Tile t=new Tile(letter,(int)score);
-		return t;
 	}
 	
 	
@@ -161,49 +145,7 @@ public class Tile implements Serializable {
 			str+="}";
 			return str;
 		}
-
-
-		public Document toDocument() {
-			Document document =new Document();
-			ArrayList<Tile> list =array_Tile_To_ArrayListTile(this.tiles);
-			document.append("tiles", embedded_TilesDoc(list) );
-			ArrayList<Integer> list_quantities=new ArrayList<Integer>();
-			for(int i=0;i<quantities.length;i++) {
-				list_quantities.add((Integer)quantities[i]);
-			}
-			document.append("quantities",list_quantities);
-			return document;
-		}
-		public Document embedded_TilesDoc(ArrayList<Tile> list) {
-			Document document= new Document();
-			for(int i=0;i<list.size();i++ ) {
-				if(list.get(i)==null)
-					document.append(""+i,null);
-				else
-					document.append(""+i, list.get(i).toDocument());
-			}
-			return document;
-		}
-
-		public static Bag fromDocument(Document document_for_bag) {
-			Bag bag=new Bag();
-			ArrayList<Integer>quantities=new ArrayList<Integer>();
-			document_for_bag.getList("quantities", Integer.class);
-			bag.quantities=convert_list_IntegerToPrimitiveArray(quantities);
-			return bag;
-		}
-		private static int[] convert_list_IntegerToPrimitiveArray(ArrayList<Integer> list) {
-			int [] arr=new int[list.size()];
-			for(int i=0;i<list.size();i++) {
-				arr[i]=(int)list.get(i);
-			}
-			return arr;
-		}
-
+		
 	}
 
-
 }
-
-
-

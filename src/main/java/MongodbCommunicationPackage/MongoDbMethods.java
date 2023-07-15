@@ -17,7 +17,7 @@ import ModelPackage.GameState;
 public class MongoDbMethods {
 	//SETTINGS FOR THE MONGODB SERVER:
 	// Connection settings
-	public static String connectionString = "mongodb://localhost:27017";
+	public static String connectionString = "mongodb+srv://turbh:0525685974@atlascluster.ji8h963.mongodb.net/?retryWrites=true&w=majority";
 	public static String databaseName = "myDataBase";
 	// Create a MongoDB client
 	public static MongoClient  mongoClient = MongoClients.create(connectionString);
@@ -61,7 +61,20 @@ public class MongoDbMethods {
 		return d;
 	}
 	
-	
+	//this method will return a string with all of the names of gamesaves in the database collection:
+		public static String getAllNamesOfGameSaves() {
+			// Find all documents and retrieve the "gameSaveName" field
+	        FindIterable<Document> documents = game_collection.find(); //getting all documents :
+	        MongoCursor<Document> cursor = documents.iterator();
+	        String output="";
+	        //List<String> gameSaveNames = new ArrayList<>();
+	        while (cursor.hasNext()) {
+	            Document document = cursor.next();
+	            String gameSaveName = document.getString("gameSaveName");
+	            output+=gameSaveName+"\n";
+	        }
+	        return output;
+		}
 	
 	
 }

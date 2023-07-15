@@ -7,7 +7,6 @@ import java.util.HashMap;
 import baseScrabble.Board;
 import baseScrabble.Tile;
 import baseScrabble.Tile.Bag;
-
 import org.bson.Document;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -18,7 +17,8 @@ import com.mongodb.MongoException;
 import org.bson.Document;
 import com.mongodb.client.model.Filters;
 
-//Data object that contains all the data about the game in it's current state:
+
+//Data object that contains all the data about the game in its current state:
 public class GameState implements Serializable {
 	private static final long serialVersionUID = 1L;
 	//
@@ -32,20 +32,16 @@ public class GameState implements Serializable {
 	public String gameSaveName="placeHoldergameSaveName";
 	
 	
-	
-	
-	
-	
 	public ConnectedBoard getBoard() {
 		return this.gameBoard;
 	}
 	
-	private void setIndexOfCurrentTurnPlayer(int index) {
-		this.indexOfCurrentTurnPlayer=index;
-	}
-	
 	public int getIndexOfCurrentTurnPlayer() {
 		return indexOfCurrentTurnPlayer;
+	}
+
+	private void setIndexOfCurrentTurnPlayer(int index) {
+		this.indexOfCurrentTurnPlayer=index;
 	}
 
 	public GameState() {
@@ -118,7 +114,7 @@ public class GameState implements Serializable {
 		return strArr;
 	}
 	
-	//This methods compares a GameState object to another game state object
+	//These methods compare a GameState object to another game state object
 	//if there is a change in any of the variables - we return true
 	//otherwise we return false
 	public boolean equals(GameState previousState) {
@@ -154,109 +150,100 @@ public class GameState implements Serializable {
 		}
 		return res;
 	}
-	
 
-	
-	
 	// methods to connect to Mongo DB send /retrieve :
-    // Method to convert GameState to a MongoDB document
-	  // Method to convert GameState to a MongoDB document
-    public Document toDocument() {
-        Document document = new Document();
-        document.append("bag", bag.toDocument());
-        document.append("listOfPlayers", embbeddedDocPlayers());
-        document.append("gameBoard", gameBoard.toDocument());
-        document.append("indexOfCurrentTurnPlayer", indexOfCurrentTurnPlayer);
-        document.append("hashmap_name_to_id", hashmap_name_to_id);
-        document.append("gameSaveName", gameSaveName);
-        //document.append("fieldname",document);
-        return document;
-    }
-    
-    
-    public Document embbeddedDocPlayers() {
-    	Document document = new Document();
-    	for(int i=0;i<this.listOfPlayers.size();i++) {
-    		document.append(""+i, this.listOfPlayers.get(i).toDocument());
-    	}
-    	return document;
-    }
-    
- // Method to save the GameState document to MongoDB collection(table)
-    public void saveToMongoDB(MongoCollection<Document> collection) {
-        Document document = this.toDocument();
-        collection.insertOne(document);
-    }
- // Method to retrieve the GameState from a MongoDB document
-    public static GameState  readGameStatefromDocument(Document game_document) {
-        GameState game = new GameState();
-        //getting the simple fields
-        game.indexOfCurrentTurnPlayer=game_document.getInteger("indexOfCurrentTurnPlayer");
-        game.gameSaveName=game_document.getString("gameSaveName");
-        
-        
-        //getting the complex object fields
-        try {
-       // game.hashmap_name_to_id=(HashMap<String,Integer>)game_document.get("hashmap_name_to_id", HashMap.class);
-        //game.hashmap_name_to_id = new HashMap<String,Integer>(game_document.get("hashmap_name_to_id", Document.class));
-        Document hashMapDoc=game_document.get("hashmap_name_to_id",Document.class);
-        game.hashmap_name_to_id=getHashmapFromDocument(hashMapDoc);
-        //bag:
-        Document bag_document=game_document.get("bag",Document.class);
-        game.bag=Bag.fromDocument(bag_document);
-        //listOfplayers:
-        Document playerListDoc=game_document.get("listOfPlayers", Document.class);
-        game.listOfPlayers=getListOfPlayersFromDocument(playerListDoc);
-        //gameBoard:
-        Document gameBoardDoc=game_document.get("gameBoard", Document.class);
-        game.gameBoard=ConnectedBoard.fromDocument(gameBoardDoc);
-        
-        
-        
-        }
-        catch (Exception e) {
-        	e.printStackTrace();
-        }
-        
-        return game;
-        
-    }
-    
-    //reading the list of players from document one by one and creating the arraylist :
-    private static ArrayList<Player> getListOfPlayersFromDocument(Document playerListDoc) {
-    	ArrayList<Player> list_of_players=new ArrayList<Player>();
-    	int maxNumOfplayers=4;
-    	boolean endLoopFlag=false;
-    	//iterating over the indices and getting the inner documents each representing a player:
-    	for(int i=0;i<maxNumOfplayers&& !endLoopFlag;i++) {
-    		Document currDocument =playerListDoc.get(""+i, Document.class);
-    		if(currDocument==null) {
-    			endLoopFlag=true;
-    		}
-    		else {
-    			list_of_players.add(Player.fromDocument(currDocument));
-    		}
-    	}
-    	return list_of_players;
-    }
-    
-    private static HashMap<String,Integer> getHashmapFromDocument(Document hashmapDocument){
-    	HashMap<String,Integer> map=new HashMap<>();
-    	
-    	if (hashmapDocument != null) {
-    		for (String key : hashmapDocument.keySet()) {
-    			Integer value = hashmapDocument.getInteger(key);
-    			map.put(key, value);
-    		}
-    	}
-    	return map;
-    	
-    }
-    
-    
-    
-	
-	
-	
-	
+	// Method to convert GameState to a MongoDB document
+	// Method to convert GameState to a MongoDB document
+	public Document toDocument() {
+		Document document = new Document();
+		document.append("bag", bag.toDocument());
+		document.append("listOfPlayers", embbeddedDocPlayers());
+		document.append("gameBoard", gameBoard.toDocument());
+		document.append("indexOfCurrentTurnPlayer", indexOfCurrentTurnPlayer);
+		document.append("hashmap_name_to_id", hashmap_name_to_id);
+		document.append("gameSaveName", gameSaveName);
+		//document.append("fieldname",document);
+		return document;
+	}
+
+
+	public Document embbeddedDocPlayers() {
+		Document document = new Document();
+		for(int i=0;i<this.listOfPlayers.size();i++) {
+			document.append(""+i, this.listOfPlayers.get(i).toDocument());
+		}
+		return document;
+	}
+
+	// Method to save the GameState document to MongoDB collection(table)
+	public void saveToMongoDB(MongoCollection<Document> collection) {
+		Document document = this.toDocument();
+		collection.insertOne(document);
+	}
+	// Method to retrieve the GameState from a MongoDB document
+	public static GameState  readGameStatefromDocument(Document game_document) {
+		GameState game = new GameState();
+		//getting the simple fields
+		game.indexOfCurrentTurnPlayer=game_document.getInteger("indexOfCurrentTurnPlayer");
+		game.gameSaveName=game_document.getString("gameSaveName");
+		//getting the complex object fields
+		try {
+			// game.hashmap_name_to_id=(HashMap<String,Integer>)game_document.get("hashmap_name_to_id", HashMap.class);
+			//game.hashmap_name_to_id = new HashMap<String,Integer>(game_document.get("hashmap_name_to_id", Document.class));
+			Document hashMapDoc=game_document.get("hashmap_name_to_id",Document.class);
+			game.hashmap_name_to_id=getHashmapFromDocument(hashMapDoc);
+			//bag:
+			Document bag_document=game_document.get("bag",Document.class);
+			game.bag=Bag.fromDocument(bag_document);
+			//listOfplayers:
+			Document playerListDoc=game_document.get("listOfPlayers", Document.class);
+			game.listOfPlayers=getListOfPlayersFromDocument(playerListDoc);
+			//gameBoard:
+			Document gameBoardDoc=game_document.get("gameBoard", Document.class);
+			game.gameBoard=ConnectedBoard.fromDocument(gameBoardDoc);
+
+
+
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return game;
+
+	}
+
+	//reading the list of players from document one by one and creating the arraylist :
+	private static ArrayList<Player> getListOfPlayersFromDocument(Document playerListDoc) {
+		ArrayList<Player> list_of_players=new ArrayList<Player>();
+		int maxNumOfplayers=4;
+		boolean endLoopFlag=false;
+		//iterating over the indices and getting the inner documents each representing a player:
+		for(int i=0;i<maxNumOfplayers&& !endLoopFlag;i++) {
+			Document currDocument =playerListDoc.get(""+i, Document.class);
+			if(currDocument==null) {
+				endLoopFlag=true;
+			}
+			else {
+				list_of_players.add(Player.fromDocument(currDocument));
+			}
+		}
+		return list_of_players;
+	}
+
+	private static HashMap<String,Integer> getHashmapFromDocument(Document hashmapDocument){
+		HashMap<String,Integer> map=new HashMap<>();
+
+		if (hashmapDocument != null) {
+			for (String key : hashmapDocument.keySet()) {
+				Integer value = hashmapDocument.getInteger(key);
+				map.put(key, value);
+			}
+		}
+		return map;
+
+	}
+
+
+
 }

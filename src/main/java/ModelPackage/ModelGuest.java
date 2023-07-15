@@ -27,12 +27,20 @@ public class ModelGuest extends Observable implements Model {
 	//BufferedReader inFromServer;
 	private ObjectInputStream inFromServer;
 	private ObjectStream myObjectStream;//ObjectStream:class for sending (Serializable)objects through TCP/IP:
-	
+	private boolean hasGameStarted=false;
+
 
 	public ModelGuest(String name){
 		//this.gamestate=new GameState();
 		this.name=name;
 		initConnectiontoServer();
+	}
+	//use this method when resuming a save game
+	@Override
+	public void resumeGame(GameState game) {
+		this.gamestate=game;
+		//TODO wait for player to connect:
+		//init local server ...
 	}
 
 
@@ -251,6 +259,7 @@ public class ModelGuest extends Observable implements Model {
 		System.out.println("ModelGuest says :message received from server:"+inputString);
 		inputString=myObjectStream.readString();//reading good luck message for players from host:
 		System.out.println("ModelGuest says :message received from server:"+inputString);
+		this.hasGameStarted=true;
 		}
 		catch (IOException e) {
 			errorInLast_communication=true;
@@ -263,6 +272,7 @@ public class ModelGuest extends Observable implements Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 
 
@@ -301,5 +311,9 @@ public class ModelGuest extends Observable implements Model {
 		return inputString;
 	}
 
+
+	public boolean hasGameStarted() {
+		return this.hasGameStarted;
+	}
 
 }
