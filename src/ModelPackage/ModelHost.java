@@ -31,15 +31,12 @@ public class ModelHost extends Observable implements Model {
 	public boolean hasGameEnded=false;
 	public Player myPlayer; //the player controlled by this Model
 	public static int Host_PortFor_Communicating_With_Guests =8080;// Communicate
-	private boolean hasGameStarted=false;
-
 	
 	public ModelHost(){
 		this.gamestate=new GameState();
 		this.addAplayer("HostPlayer");
 		this.myPlayer=this.gamestate.listOfPlayers.get(0);
 		initLocalServer();
-		
 	}
 	
 	//*******************************
@@ -122,10 +119,8 @@ public class ModelHost extends Observable implements Model {
 	//*******************************
 	
 	public void addAplayer(String name) {
-		//Player p1=new Player(name);
-		//this.gamestate.listOfPlayers.add(p1);
-		//Changed the method to be inside the game state object:
-		this.gamestate.addAPlayer(name);
+		Player p1=new Player(name);
+		this.gamestate.listOfPlayers.add(p1);
 		
 	}
 
@@ -134,7 +129,7 @@ public class ModelHost extends Observable implements Model {
 	public void initGame() {
 		decideOnOrderOfPlayers();
 		giveAllPlayersSevenTiles();
-		this.hasGameStarted=true;
+		
 		
 	}
 	
@@ -151,7 +146,7 @@ public class ModelHost extends Observable implements Model {
 	}
 	
 	//helper method to initGame - we give each player 7 tiles:
-	private void giveAllPlayersSevenTiles() {
+	public void giveAllPlayersSevenTiles() {
 		int howManyTilesToDraw=GameState.numOfTilesForPlayer;
 		//We iterate over all players:
 		for(int i=0;i<this.gamestate.listOfPlayers.size();i++) {
@@ -161,8 +156,6 @@ public class ModelHost extends Observable implements Model {
 				this.gamestate.listOfPlayers.get(i).addTile(t1);
 			}
 		}
-		setChanged();
-		this.notifyObservers("start");
 	}
 	
 	@Override
@@ -262,7 +255,7 @@ public class ModelHost extends Observable implements Model {
 	//Q_or_C = 'Q' for query and 'C' for challenge
 	//throws exception if connection to the DictionaryServer failed !
 	public static Boolean runClientToDictionaryServer(int port,char Q_or_C ,String stringTosearch) throws Exception{
-		String bookNames="mobydick.txt"+","+"alice_in_wonderland.txt"+","+"Frank Herbert - Dune.txt"+","+"Harray Potter.txt";
+		String bookNames="mobydick.txt";
 		try {
 			Socket server=new Socket("localhost",port);
 			PrintWriter out=new PrintWriter(server.getOutputStream());
@@ -270,8 +263,6 @@ public class ModelHost extends Observable implements Model {
 			//template is : "Q,bookNames1,bookName2,...,stringTosearch"
 			String stringToSend=Q_or_C+","+bookNames+","+stringTosearch;
 			System.out.println("runClientToDictionaryServer:sending \""+ stringToSend+"\"");
-			//We send 2 string - one is all upper case - and one is all lower case 
-			//- if one of the challenges returns true-we return true:
 			out.println(stringToSend);//here we are sending the query/challenge string to the Client handler server
 			out.flush();
 			//System.out.println("in.hasNext()= "  +in.hasNext());
@@ -304,9 +295,6 @@ public class ModelHost extends Observable implements Model {
 	}
 
 	
-	public boolean hasGameStarted() {
-		return this.hasGameStarted;
-	}
 	
 	//afterwards create a with threadpool? (or as a queue) a client handler 
 	

@@ -15,7 +15,6 @@ import baseScrabble.Tile.Bag;
 public class ObjectStreamTest {
 
 	public static void main(String[] args) {
-		System.out.println("\n*******This is the ObjectStreamTest*******");
 		testObjectSerialazation();
 	}
 	
@@ -89,7 +88,6 @@ public class ObjectStreamTest {
         /// cahnging the board inside gameState and sending it
         
         objStream.closeInputStream();
-        System.out.println("***End of test :ObjectStreamTest***");
 	}
 	
 	public static void startClient() throws UnknownHostException, IOException, ClassNotFoundException, InterruptedException {
@@ -150,14 +148,18 @@ public class ObjectStreamTest {
 	
 	
 	private static Word CreateWord() {
-		 Bag b1=new Bag();
-		 ArrayList<Tile> listOfTiles=new ArrayList<Tile>();
-		 listOfTiles.add(b1.getRand());
-		 listOfTiles.add(b1.getRand());
-		 listOfTiles.add(b1.getRand());
+		
+		 ModelHost model=new ModelHost();
+		 model.addAplayer("player1");
+		 model.addAplayer("player2");
+		 model.initGame();
+		 GameState gameState= model.getGameState();
+		 Player player=gameState.listOfPlayers.get(0);
+		 ArrayList<Tile> listOfTiles=player.getMyTiles();
 		 Tile [] tileArr=Tile.arrayList_Tile_To_Arr(listOfTiles);
 		 Word word=new Word(tileArr, 0, 0, false);
 		 System.out.println("word before sending ="+word.getString());
+		 model.localServer.close();
 		 return word;
 	}
 	
