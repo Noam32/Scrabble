@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorPane" style="-fx-background-image: url('/scrabble.png');" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="openScreen.OpenScreenController">
+   <children>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Button fx:id="startButton" mnemonicParsing="false" onAction="#startGame" prefHeight="50.0" prefWidth="100.0" text="Start Game" />
+            <Button fx:id="joinButton" mnemonicParsing="false" onAction="#joinGame" prefHeight="50.0" prefWidth="100.0" text="Join Game" />
+            <Button fx:id="resumeButton" mnemonicParsing="false" onAction="#resumeGame" prefHeight="50.0" prefWidth="100.0" text="Resume Game" />
+            <Button fx:id="joinSavedButton" mnemonicParsing="false" onAction="#joinSavedGame" prefHeight="50.0" prefWidth="100.0" text="Join Saved Game" />
+         </children>
+      </VBox>
+      <Label fx:id="titleLabel" alignment="CENTER" text="Scarbble Game" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+         <font>
+            <Font size="72.0" />
+         </font>
+         <textFill>
+            <RadialGradient centerX="0.5" centerY="0.5" radius="0.5">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.7473683953285217" green="0.0692007765173912" blue="0.0692007765173912" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.2024390243902439">
+                     <color>
+                        <Color red="0.9894737005233765" green="0.9638206362724304" blue="0.9638206362724304" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.9684210419654846" green="0.7603898644447327" blue="0.7603898644447327" />
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+         </textFill>
+      </Label>
+   </children>
+</AnchorPane>
