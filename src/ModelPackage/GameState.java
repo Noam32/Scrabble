@@ -85,9 +85,56 @@ public class GameState implements Serializable {
 		Integer id=this.hashmap_name_to_id.get(playerName);
 		return (int)id;
 	}
-/*	public String getStringOfPlayersAndTheirPoints() {
+	//returns a string showing each player's name and number of points.
+	//also we mark Whose turn is it now
+	public String[] getStringOfScoreBoard() {
 		String [] strArr=new String[this.listOfPlayers.size()];
-		
-	}*/
+		for(int i=0;i<strArr.length;i++) {
+			Player currPlayer=this.listOfPlayers.get(i);
+			strArr[i]=currPlayer.name+":"+currPlayer.numOfPoints;
+			if(i==indexOfCurrentTurnPlayer) {
+				strArr[i]=strArr[i]+"(playing)"; //indicating Whose turn is it now.
+			}
+		}
+		return strArr;
+	}
+	
+	//These methods compare a GameState object to another game state object
+	//if there is a change in any of the variables - we return true
+	//otherwise we return false
+	public boolean equals(GameState previousState) {
+		boolean res =true;
+		//checking changes in the tiles Bag:
+		int []bagQuatities_original =bag.getQuantities();
+		int []bagQuatities_other =previousState.bag.getQuantities();
+		for(int i=0;i<bagQuatities_original.length;i++) {
+			if(bagQuatities_original[i]!=bagQuatities_other[i]) {
+				return false;
+			}
+		}
+		//checking changes in the listOfPlayers:
+		ArrayList<Player> listOfPlayer_other=previousState.listOfPlayers;
+		if(listOfPlayer_other.size()!=this.listOfPlayers.size()) {
+			return false;
+		}
+		for(int i=0;i<listOfPlayers.size();i++) {
+			Player currPlayer=this.listOfPlayers.get(i);
+			Player currPlayer_other=listOfPlayer_other.get(i);
+			if(!currPlayer.equals(currPlayer_other)) {
+				return false;
+			}
+		}
+		//checking changes in the gameBoard:
+		ConnectedBoard currBoard=this.gameBoard;
+		ConnectedBoard otherBoard=previousState.gameBoard;
+		if(!currBoard.equals(otherBoard)) {
+			return false;
+		}
+		if(this.indexOfCurrentTurnPlayer!=previousState.indexOfCurrentTurnPlayer) {
+			return false;
+		}
+		return res;
+	}
+	
 
 }

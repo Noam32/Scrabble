@@ -59,5 +59,32 @@ public class ConnectedBoard extends Board implements Serializable {
         }
         return sum;
     }
-
+    
+    public boolean equals(ConnectedBoard other) {
+    	 Tile[][] other_tiles=other.tiles;
+    	 //boolean isEmpty;
+    	 if(this.isEmpty!=other.isEmpty) {
+    		 return false;
+    	 }
+    	 int rowLen=15;
+    	 int colLen=15;
+    	 for(int i=0;i<rowLen;i++) {
+    		 for(int j=0;j<colLen;j++) {
+    			 if(this.tiles[i][j]!=null &&other_tiles[i][j]==null) {
+    				 return false;
+    			 }
+    			  if(this.tiles[i][j]==null &&other_tiles[i][j]!=null) {
+    				 return false;
+    			 }
+    			  if(this.tiles[i][j]!=null &&other_tiles[i][j]!=null) {
+    				  if(this.tiles[i][j].letter!=other_tiles[i][j].letter) {
+    	    				 return false;
+    	    			 }
+    			  }
+    			  
+    		 }
+    	 }
+    	
+    	return true;
+    }
 }
