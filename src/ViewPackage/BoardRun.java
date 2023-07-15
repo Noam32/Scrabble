@@ -26,7 +26,7 @@ public class BoardRun extends Application {
 			BorderPane root = fxmlLoader.load(getClass().getResource("Board.fxml").openStream());
 			BoardController view = fxmlLoader.getController();
 			view.setStage(primaryStage);
-			Scene scene = new Scene(root,800,800);
+			Scene scene = new Scene(root,1200,800);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			BoardController view1 = fxmlLoader.getController();
@@ -36,8 +36,10 @@ public class BoardRun extends Application {
 		    // Code to run the ModelHost in a separate thread
 			Model m = new ModelHost();
 			//Model m1 = new ModelGuest("sssssss");
+			Thread.sleep(10000);
 			viewModel vm =new viewModel(m,"HostPlayer");
 			view.init(vm);
+			primaryStage.setTitle("HostPlayer");
 			
 	
 		    // Code to run the ModelGuest in a separate thread
