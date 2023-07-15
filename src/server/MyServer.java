@@ -43,7 +43,7 @@ public class MyServer {
 	                	}
 	                catch (SocketTimeoutException e) {
 	                    // ignore and continue waiting for connections
-	                	//System.err.println("time out exception in MyServer.startserver()");
+	                	System.err.println("time out exception in MyServer.startserver()");
 	                }
 	                catch(Exception e) {
 	                	e.printStackTrace();
