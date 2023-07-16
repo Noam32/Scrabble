@@ -17,7 +17,7 @@ import modelPackage.GameState;
 public class MongoDbMethods {
 	//SETTINGS FOR THE MONGODB SERVER:
 	// Connection settings
-	public static String connectionString = "mongodb+srv://turbh:0525685974@atlascluster.ji8h963.mongodb.net/?retryWrites=true&w=majority";
+	public static String connectionString = "mongodb://localhost:27017";
 	public static String databaseName = "myDataBase";
 	// Create a MongoDB client
 	public static MongoClient  mongoClient = MongoClients.create(connectionString);

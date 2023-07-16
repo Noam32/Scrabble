@@ -13,7 +13,7 @@ import org.bson.Document;
 
 public class MongoClientConnectionExample {
     public static void main(String[] args) {
-        String connectionString = "mongodb+srv://turbh:0525685974@atlascluster.ji8h963.mongodb.net/?retryWrites=true&w=majority";
+        String connectionString = "mongodb://localhost:27017";
 
         ServerApi serverApi = ServerApi.builder()
                 .version(ServerApiVersion.V1)
