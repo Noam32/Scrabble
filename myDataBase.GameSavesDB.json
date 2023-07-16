@@ -1,0 +1,2333 @@
+[{
+  "_id": {
+    "$oid": "649b43751ab2c6131f4cd9d9"
+  },
+  "bag": {
+    "tiles": {
+      "0": {
+        "letter": "A",
+        "score": 1
+      },
+      "1": {
+        "letter": "B",
+        "score": 3
+      },
+      "2": {
+        "letter": "C",
+        "score": 3
+      },
+      "3": {
+        "letter": "D",
+        "score": 2
+      },
+      "4": {
+        "letter": "E",
+        "score": 1
+      },
+      "5": {
+        "letter": "F",
+        "score": 4
+      },
+      "6": {
+        "letter": "G",
+        "score": 2
+      },
+      "7": {
+        "letter": "H",
+        "score": 4
+      },
+      "8": {
+        "letter": "I",
+        "score": 1
+      },
+      "9": {
+        "letter": "J",
+        "score": 8
+      },
+      "10": {
+        "letter": "K",
+        "score": 5
+      },
+      "11": {
+        "letter": "L",
+        "score": 1
+      },
+      "12": {
+        "letter": "M",
+        "score": 3
+      },
+      "13": {
+        "letter": "N",
+        "score": 1
+      },
+      "14": {
+        "letter": "O",
+        "score": 1
+      },
+      "15": {
+        "letter": "P",
+        "score": 3
+      },
+      "16": {
+        "letter": "Q",
+        "score": 10
+      },
+      "17": {
+        "letter": "R",
+        "score": 1
+      },
+      "18": {
+        "letter": "S",
+        "score": 1
+      },
+      "19": {
+        "letter": "T",
+        "score": 1
+      },
+      "20": {
+        "letter": "U",
+        "score": 1
+      },
+      "21": {
+        "letter": "V",
+        "score": 4
+      },
+      "22": {
+        "letter": "W",
+        "score": 4
+      },
+      "23": {
+        "letter": "X",
+        "score": 8
+      },
+      "24": {
+        "letter": "Y",
+        "score": 4
+      },
+      "25": {
+        "letter": "Z",
+        "score": 10
+      }
+    },
+    "quantities": [
+      7,
+      1,
+      2,
+      4,
+      12,
+      2,
+      3,
+      2,
+      9,
+      1,
+      1,
+      4,
+      2,
+      6,
+      8,
+      2,
+      1,
+      6,
+      4,
+      6,
+      4,
+      2,
+      2,
+      1,
+      1,
+      1
+    ]
+  },
+  "listOfPlayers": {
+    "0": {
+      "name": "yossi",
+      "playerId": 1,
+      "numOfPoints": 50,
+      "myTiles": {
+        "0": {
+          "letter": "A",
+          "score": 1
+        }
+      }
+    },
+    "1": {
+      "name": "dani",
+      "playerId": 2,
+      "numOfPoints": 160,
+      "myTiles": {
+        "0": {
+          "letter": "B",
+          "score": 3
+        }
+      }
+    }
+  },
+  "gameBoard": {
+    "isEmpty": true,
+    "tiles": {
+      "0": {
+        "0": {
+          "letter": "A",
+          "score": 1
+        },
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "1": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "2": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "3": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "4": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "5": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "6": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "7": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": {
+          "letter": "Y",
+          "score": 4
+        },
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "8": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "9": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "10": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "11": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "12": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "13": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "14": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      }
+    }
+  },
+  "indexOfCurrentTurnPlayer": 0,
+  "hashmap_name_to_id": {
+    "dani": 2,
+    "yossi": 1
+  },
+  "gameSaveName": "placeHoldergameSaveName"
+},
+{
+  "_id": {
+    "$oid": "649b43751ab2c6131f4cd9db"
+  },
+  "bag": {
+    "tiles": {
+      "0": {
+        "letter": "A",
+        "score": 1
+      },
+      "1": {
+        "letter": "B",
+        "score": 3
+      },
+      "2": {
+        "letter": "C",
+        "score": 3
+      },
+      "3": {
+        "letter": "D",
+        "score": 2
+      },
+      "4": {
+        "letter": "E",
+        "score": 1
+      },
+      "5": {
+        "letter": "F",
+        "score": 4
+      },
+      "6": {
+        "letter": "G",
+        "score": 2
+      },
+      "7": {
+        "letter": "H",
+        "score": 4
+      },
+      "8": {
+        "letter": "I",
+        "score": 1
+      },
+      "9": {
+        "letter": "J",
+        "score": 8
+      },
+      "10": {
+        "letter": "K",
+        "score": 5
+      },
+      "11": {
+        "letter": "L",
+        "score": 1
+      },
+      "12": {
+        "letter": "M",
+        "score": 3
+      },
+      "13": {
+        "letter": "N",
+        "score": 1
+      },
+      "14": {
+        "letter": "O",
+        "score": 1
+      },
+      "15": {
+        "letter": "P",
+        "score": 3
+      },
+      "16": {
+        "letter": "Q",
+        "score": 10
+      },
+      "17": {
+        "letter": "R",
+        "score": 1
+      },
+      "18": {
+        "letter": "S",
+        "score": 1
+      },
+      "19": {
+        "letter": "T",
+        "score": 1
+      },
+      "20": {
+        "letter": "U",
+        "score": 1
+      },
+      "21": {
+        "letter": "V",
+        "score": 4
+      },
+      "22": {
+        "letter": "W",
+        "score": 4
+      },
+      "23": {
+        "letter": "X",
+        "score": 8
+      },
+      "24": {
+        "letter": "Y",
+        "score": 4
+      },
+      "25": {
+        "letter": "Z",
+        "score": 10
+      }
+    },
+    "quantities": []
+  },
+  "listOfPlayers": {
+    "0": {
+      "name": "yossi",
+      "playerId": 1,
+      "numOfPoints": 50,
+      "myTiles": {
+        "0": {
+          "letter": "A",
+          "score": 1
+        }
+      }
+    },
+    "1": {
+      "name": "dani",
+      "playerId": 2,
+      "numOfPoints": 160,
+      "myTiles": {
+        "0": {
+          "letter": "B",
+          "score": 3
+        }
+      }
+    },
+    "2": {
+      "name": "newPlayerTest",
+      "playerId": 5,
+      "numOfPoints": 0,
+      "myTiles": {}
+    }
+  },
+  "gameBoard": {
+    "isEmpty": true,
+    "tiles": {
+      "0": {
+        "0": {
+          "letter": "A",
+          "score": 1
+        },
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "1": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "2": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "3": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "4": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "5": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "6": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "7": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": {
+          "letter": "Y",
+          "score": 4
+        },
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "8": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "9": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "10": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "11": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "12": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "13": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "14": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      }
+    }
+  },
+  "indexOfCurrentTurnPlayer": 0,
+  "hashmap_name_to_id": {
+    "dani": 2,
+    "newPlayerTest": 5,
+    "yossi": 1
+  },
+  "gameSaveName": "test_game_delete_after"
+},
+{
+  "_id": {
+    "$oid": "649b44436dd00946072ca7a2"
+  },
+  "bag": {
+    "tiles": {
+      "0": {
+        "letter": "A",
+        "score": 1
+      },
+      "1": {
+        "letter": "B",
+        "score": 3
+      },
+      "2": {
+        "letter": "C",
+        "score": 3
+      },
+      "3": {
+        "letter": "D",
+        "score": 2
+      },
+      "4": {
+        "letter": "E",
+        "score": 1
+      },
+      "5": {
+        "letter": "F",
+        "score": 4
+      },
+      "6": {
+        "letter": "G",
+        "score": 2
+      },
+      "7": {
+        "letter": "H",
+        "score": 4
+      },
+      "8": {
+        "letter": "I",
+        "score": 1
+      },
+      "9": {
+        "letter": "J",
+        "score": 8
+      },
+      "10": {
+        "letter": "K",
+        "score": 5
+      },
+      "11": {
+        "letter": "L",
+        "score": 1
+      },
+      "12": {
+        "letter": "M",
+        "score": 3
+      },
+      "13": {
+        "letter": "N",
+        "score": 1
+      },
+      "14": {
+        "letter": "O",
+        "score": 1
+      },
+      "15": {
+        "letter": "P",
+        "score": 3
+      },
+      "16": {
+        "letter": "Q",
+        "score": 10
+      },
+      "17": {
+        "letter": "R",
+        "score": 1
+      },
+      "18": {
+        "letter": "S",
+        "score": 1
+      },
+      "19": {
+        "letter": "T",
+        "score": 1
+      },
+      "20": {
+        "letter": "U",
+        "score": 1
+      },
+      "21": {
+        "letter": "V",
+        "score": 4
+      },
+      "22": {
+        "letter": "W",
+        "score": 4
+      },
+      "23": {
+        "letter": "X",
+        "score": 8
+      },
+      "24": {
+        "letter": "Y",
+        "score": 4
+      },
+      "25": {
+        "letter": "Z",
+        "score": 10
+      }
+    },
+    "quantities": [
+      9,
+      1,
+      2,
+      3,
+      11,
+      2,
+      3,
+      2,
+      9,
+      1,
+      1,
+      4,
+      2,
+      4,
+      8,
+      1,
+      0,
+      6,
+      4,
+      5,
+      2,
+      0,
+      1,
+      1,
+      1,
+      1
+    ]
+  },
+  "listOfPlayers": {
+    "0": {
+      "name": "HostPlayer",
+      "playerId": 1,
+      "numOfPoints": 0,
+      "myTiles": {
+        "0": {
+          "letter": "Y",
+          "score": 4
+        },
+        "1": {
+          "letter": "V",
+          "score": 4
+        },
+        "2": {
+          "letter": "U",
+          "score": 1
+        },
+        "3": {
+          "letter": "T",
+          "score": 1
+        },
+        "4": {
+          "letter": "D",
+          "score": 2
+        },
+        "5": {
+          "letter": "V",
+          "score": 4
+        },
+        "6": {
+          "letter": "E",
+          "score": 1
+        }
+      }
+    },
+    "1": {
+      "name": "barak",
+      "playerId": 2,
+      "numOfPoints": 0,
+      "myTiles": {
+        "0": {
+          "letter": "Q",
+          "score": 10
+        },
+        "1": {
+          "letter": "N",
+          "score": 1
+        },
+        "2": {
+          "letter": "N",
+          "score": 1
+        },
+        "3": {
+          "letter": "B",
+          "score": 3
+        },
+        "4": {
+          "letter": "U",
+          "score": 1
+        },
+        "5": {
+          "letter": "P",
+          "score": 3
+        },
+        "6": {
+          "letter": "W",
+          "score": 4
+        }
+      }
+    }
+  },
+  "gameBoard": {
+    "isEmpty": false,
+    "tiles": {
+      "0": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "1": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "2": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "3": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "4": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "5": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "6": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "7": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": {
+          "letter": "T",
+          "score": 1
+        },
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "8": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": {
+          "letter": "E",
+          "score": 1
+        },
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "9": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": {
+          "letter": "D",
+          "score": 2
+        },
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "10": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "11": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "12": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "13": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "14": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      }
+    }
+  },
+  "indexOfCurrentTurnPlayer": 0,
+  "hashmap_name_to_id": {
+    "HostPlayer": 1,
+    "barak": 2
+  },
+  "gameSaveName": "BARAK"
+},
+{
+  "_id": {
+    "$oid": "649b4863fc352c25d1ba40a8"
+  },
+  "bag": {
+    "tiles": {
+      "0": {
+        "letter": "A",
+        "score": 1
+      },
+      "1": {
+        "letter": "B",
+        "score": 3
+      },
+      "2": {
+        "letter": "C",
+        "score": 3
+      },
+      "3": {
+        "letter": "D",
+        "score": 2
+      },
+      "4": {
+        "letter": "E",
+        "score": 1
+      },
+      "5": {
+        "letter": "F",
+        "score": 4
+      },
+      "6": {
+        "letter": "G",
+        "score": 2
+      },
+      "7": {
+        "letter": "H",
+        "score": 4
+      },
+      "8": {
+        "letter": "I",
+        "score": 1
+      },
+      "9": {
+        "letter": "J",
+        "score": 8
+      },
+      "10": {
+        "letter": "K",
+        "score": 5
+      },
+      "11": {
+        "letter": "L",
+        "score": 1
+      },
+      "12": {
+        "letter": "M",
+        "score": 3
+      },
+      "13": {
+        "letter": "N",
+        "score": 1
+      },
+      "14": {
+        "letter": "O",
+        "score": 1
+      },
+      "15": {
+        "letter": "P",
+        "score": 3
+      },
+      "16": {
+        "letter": "Q",
+        "score": 10
+      },
+      "17": {
+        "letter": "R",
+        "score": 1
+      },
+      "18": {
+        "letter": "S",
+        "score": 1
+      },
+      "19": {
+        "letter": "T",
+        "score": 1
+      },
+      "20": {
+        "letter": "U",
+        "score": 1
+      },
+      "21": {
+        "letter": "V",
+        "score": 4
+      },
+      "22": {
+        "letter": "W",
+        "score": 4
+      },
+      "23": {
+        "letter": "X",
+        "score": 8
+      },
+      "24": {
+        "letter": "Y",
+        "score": 4
+      },
+      "25": {
+        "letter": "Z",
+        "score": 10
+      }
+    },
+    "quantities": [
+      6,
+      0,
+      2,
+      4,
+      12,
+      1,
+      3,
+      1,
+      8,
+      0,
+      1,
+      3,
+      1,
+      5,
+      8,
+      1,
+      1,
+      4,
+      4,
+      5,
+      4,
+      2,
+      2,
+      1,
+      1,
+      1
+    ]
+  },
+  "listOfPlayers": {
+    "0": {
+      "name": "bar",
+      "playerId": 2,
+      "numOfPoints": 6,
+      "myTiles": {
+        "0": {
+          "letter": "I",
+          "score": 1
+        },
+        "1": {
+          "letter": "J",
+          "score": 8
+        },
+        "2": {
+          "letter": "Y",
+          "score": 4
+        },
+        "3": {
+          "letter": "F",
+          "score": 4
+        },
+        "4": {
+          "letter": "A",
+          "score": 1
+        },
+        "5": {
+          "letter": "H",
+          "score": 4
+        },
+        "6": {
+          "letter": "L",
+          "score": 1
+        }
+      }
+    },
+    "1": {
+      "name": "HostPlayer",
+      "playerId": 1,
+      "numOfPoints": 0,
+      "myTiles": {
+        "0": {
+          "letter": "P",
+          "score": 3
+        },
+        "1": {
+          "letter": "R",
+          "score": 1
+        },
+        "2": {
+          "letter": "A",
+          "score": 1
+        },
+        "3": {
+          "letter": "B",
+          "score": 3
+        },
+        "4": {
+          "letter": "B",
+          "score": 3
+        },
+        "5": {
+          "letter": "T",
+          "score": 1
+        },
+        "6": {
+          "letter": "M",
+          "score": 3
+        }
+      }
+    }
+  },
+  "gameBoard": {
+    "isEmpty": false,
+    "tiles": {
+      "0": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "1": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "2": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "3": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "4": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "5": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "6": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "7": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": {
+          "letter": "R",
+          "score": 1
+        },
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "8": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": {
+          "letter": "A",
+          "score": 1
+        },
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "9": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": {
+          "letter": "N",
+          "score": 1
+        },
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "10": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "11": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "12": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "13": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "14": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      }
+    }
+  },
+  "indexOfCurrentTurnPlayer": 1,
+  "hashmap_name_to_id": {
+    "bar": 2,
+    "HostPlayer": 1
+  },
+  "gameSaveName": "save1"
+},
+{
+  "_id": {
+    "$oid": "64b3b5fe14f3a842df3b4a53"
+  },
+  "bag": {
+    "tiles": {
+      "0": {
+        "letter": "A",
+        "score": 1
+      },
+      "1": {
+        "letter": "B",
+        "score": 3
+      },
+      "2": {
+        "letter": "C",
+        "score": 3
+      },
+      "3": {
+        "letter": "D",
+        "score": 2
+      },
+      "4": {
+        "letter": "E",
+        "score": 1
+      },
+      "5": {
+        "letter": "F",
+        "score": 4
+      },
+      "6": {
+        "letter": "G",
+        "score": 2
+      },
+      "7": {
+        "letter": "H",
+        "score": 4
+      },
+      "8": {
+        "letter": "I",
+        "score": 1
+      },
+      "9": {
+        "letter": "J",
+        "score": 8
+      },
+      "10": {
+        "letter": "K",
+        "score": 5
+      },
+      "11": {
+        "letter": "L",
+        "score": 1
+      },
+      "12": {
+        "letter": "M",
+        "score": 3
+      },
+      "13": {
+        "letter": "N",
+        "score": 1
+      },
+      "14": {
+        "letter": "O",
+        "score": 1
+      },
+      "15": {
+        "letter": "P",
+        "score": 3
+      },
+      "16": {
+        "letter": "Q",
+        "score": 10
+      },
+      "17": {
+        "letter": "R",
+        "score": 1
+      },
+      "18": {
+        "letter": "S",
+        "score": 1
+      },
+      "19": {
+        "letter": "T",
+        "score": 1
+      },
+      "20": {
+        "letter": "U",
+        "score": 1
+      },
+      "21": {
+        "letter": "V",
+        "score": 4
+      },
+      "22": {
+        "letter": "W",
+        "score": 4
+      },
+      "23": {
+        "letter": "X",
+        "score": 8
+      },
+      "24": {
+        "letter": "Y",
+        "score": 4
+      },
+      "25": {
+        "letter": "Z",
+        "score": 10
+      }
+    },
+    "quantities": [
+      8,
+      1,
+      1,
+      3,
+      11,
+      2,
+      1,
+      2,
+      7,
+      1,
+      0,
+      1,
+      1,
+      6,
+      8,
+      2,
+      1,
+      6,
+      3,
+      5,
+      3,
+      2,
+      1,
+      0,
+      0,
+      0
+    ]
+  },
+  "listOfPlayers": {
+    "0": {
+      "name": "HostPlayer",
+      "playerId": 1,
+      "numOfPoints": 28,
+      "myTiles": {
+        "0": {
+          "letter": "Z",
+          "score": 10
+        },
+        "1": {
+          "letter": "U",
+          "score": 1
+        },
+        "2": {
+          "letter": "A",
+          "score": 1
+        },
+        "3": {
+          "letter": "G",
+          "score": 2
+        },
+        "4": {
+          "letter": "C",
+          "score": 3
+        },
+        "5": {
+          "letter": "L",
+          "score": 1
+        },
+        "6": {
+          "letter": "I",
+          "score": 1
+        }
+      }
+    },
+    "1": {
+      "name": "dani",
+      "playerId": 2,
+      "numOfPoints": 19,
+      "myTiles": {
+        "0": {
+          "letter": "W",
+          "score": 4
+        },
+        "1": {
+          "letter": "Y",
+          "score": 4
+        },
+        "2": {
+          "letter": "M",
+          "score": 3
+        },
+        "3": {
+          "letter": "X",
+          "score": 8
+        },
+        "4": {
+          "letter": "G",
+          "score": 2
+        },
+        "5": {
+          "letter": "D",
+          "score": 2
+        },
+        "6": {
+          "letter": "S",
+          "score": 1
+        }
+      }
+    }
+  },
+  "gameBoard": {
+    "isEmpty": false,
+    "tiles": {
+      "0": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "1": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "2": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "3": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "4": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "5": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "6": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "7": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": {
+          "letter": "K",
+          "score": 5
+        },
+        "8": {
+          "letter": "I",
+          "score": 1
+        },
+        "9": {
+          "letter": "L",
+          "score": 1
+        },
+        "10": {
+          "letter": "L",
+          "score": 1
+        },
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "8": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": {
+          "letter": "B",
+          "score": 3
+        },
+        "7": {
+          "letter": "E",
+          "score": 1
+        },
+        "8": {
+          "letter": "T",
+          "score": 1
+        },
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "9": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": {
+          "letter": "Y",
+          "score": 4
+        },
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "10": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "11": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "12": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "13": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      },
+      "14": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": null,
+        "4": null,
+        "5": null,
+        "6": null,
+        "7": null,
+        "8": null,
+        "9": null,
+        "10": null,
+        "11": null,
+        "12": null,
+        "13": null,
+        "14": null
+      }
+    }
+  },
+  "indexOfCurrentTurnPlayer": 0,
+  "hashmap_name_to_id": {
+    "dani": 2,
+    "HostPlayer": 1
+  },
+  "gameSaveName": "daniGAme"
+}]
