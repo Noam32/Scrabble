@@ -76,37 +76,29 @@ public abstract class MongoMethodsForServlet {
 			if(listOfPlayersDocument==null) { //if the hash map of players is not found
 				return null;
 			}
-			HashMap<String,Integer> hash_player_numOfPoints=getHashmapFromDocument(listOfPlayersDocument);
+			HashMap<String,Integer> hash_player_numOfPoints=getHashmapOfNameToPoints(listOfPlayersDocument);
 			return (hash_player_numOfPoints.toString());
 		}
 
 	
 		//This method builds the HashMap object from its corresponding document
-		private static HashMap<String,Integer> getHashmapFromDocument(Document hashmapDocument){
+		private static HashMap<String,Integer> getHashmapOfNameToPoints(Document listofPlayersDocument){
+			HashMap<String,Integer> hash_name_to_points=new HashMap<>();
 			int maxNumOfplayers=4;
 			boolean endLoopFlag=false;
 			//iterating over the indices and getting the inner documents each representing a player:
 			for(int i=0;i<maxNumOfplayers&& !endLoopFlag;i++) {
-			Document currDocument =playerListDoc.get(""+i, Document.class);
+			Document currPlayerDocument =listofPlayersDocument.get(""+i, Document.class);
 			if(currDocument==null) {
 				endLoopFlag=true;
 			}
 			else {
-				list_of_players.add(Player.fromDocument(currDocument));
+				Integer points=currPlayerDocument.getInteger("numOfPoints");
+				String name =currPlayerDocument.getString("name");
+				hash_name_to_points.put(name,points);
 			}
 		}
-		return list_of_players;
-
-			
-	    	HashMap<String,Integer> map=new HashMap<>();
-	    	
-	    	if (hashmapDocument != null) {
-	    		for (String key : hashmapDocument.keySet()) {
-	    			Integer value = hashmapDocument.getInteger(key);
-	    			map.put(key, value);
-	    		}
-	    	}
-	    	return map;
+		return hash_name_to_points;
 	    	
 	    }
 		
