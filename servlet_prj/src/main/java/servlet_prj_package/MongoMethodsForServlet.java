@@ -72,15 +72,32 @@ public abstract class MongoMethodsForServlet {
 			if(game_document==null) { //if the name is not found in the database
 				return null;
 			}
-			Document hashmapDocument=game_document.get("hashmap_name_to_id",Document.class);
-			if(hashmapDocument==null) { //if the hash map of players is not found
+			Document listOfPlayersDocument=game_document.get("listOfPlayers",Document.class);
+			if(listOfPlayersDocument==null) { //if the hash map of players is not found
 				return null;
 			}
-			HashMap<String,Integer> hash_player_numOfPoints=getHashmapFromDocument(hashmapDocument);
+			HashMap<String,Integer> hash_player_numOfPoints=getHashmapFromDocument(listOfPlayersDocument);
 			return (hash_player_numOfPoints.toString());
 		}
+
+	
 		//This method builds the HashMap object from its corresponding document
 		private static HashMap<String,Integer> getHashmapFromDocument(Document hashmapDocument){
+			int maxNumOfplayers=4;
+			boolean endLoopFlag=false;
+			//iterating over the indices and getting the inner documents each representing a player:
+			for(int i=0;i<maxNumOfplayers&& !endLoopFlag;i++) {
+			Document currDocument =playerListDoc.get(""+i, Document.class);
+			if(currDocument==null) {
+				endLoopFlag=true;
+			}
+			else {
+				list_of_players.add(Player.fromDocument(currDocument));
+			}
+		}
+		return list_of_players;
+
+			
 	    	HashMap<String,Integer> map=new HashMap<>();
 	    	
 	    	if (hashmapDocument != null) {
