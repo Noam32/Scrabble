@@ -89,7 +89,7 @@ public abstract class MongoMethodsForServlet {
 			//iterating over the indices and getting the inner documents each representing a player:
 			for(int i=0;i<maxNumOfplayers&& !endLoopFlag;i++) {
 			Document currPlayerDocument =listofPlayersDocument.get(""+i, Document.class);
-			if(currDocument==null) {
+			if(currPlayerDocument==null) {
 				endLoopFlag=true;
 			}
 			else {
