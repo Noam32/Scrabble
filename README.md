@@ -13,3 +13,5 @@ Gantt for project :
 
 
 ![scrabble-board](https://github.com/Noam32/Scrabble/assets/123992712/62b123f2-5449-487d-bad3-2fa93aecef98)
+![phone](https://github.com/Noam32/Scrabble/assets/123992712/981f72cb-c6a1-48d8-a076-bc3612198ca1)
+
