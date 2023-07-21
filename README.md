@@ -1,5 +1,5 @@
 # Scrable
-Link to the finel project https://drive.google.com/file/d/19MpIcbAUE1Izkz6fhmEmluxdcTNRUCWn/view?usp=sharing
+Link to the finel project: https://drive.google.com/file/d/1eQLgO2L0qLi8YHbYl9n1EOAen8nwjhiw/view?usp=sharing
 
 Link to the video of the 2nd milestone:
 https://1drv.ms/v/s!ArFBrb1bmLQPwXc8vaRVPJjMvCUs
